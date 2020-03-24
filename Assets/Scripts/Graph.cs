@@ -19,6 +19,7 @@ public class Graph : MonoBehaviour
 
   public void ShowGraph(List<float> valueList)
   {
+    ClearGraph();
     List<float> normalizedValueList = NormalizeHeights(valueList);
     float xDistance = NormalizedXDistance(valueList.Count);
     for (int i = 0; i < normalizedValueList.Count; i++)
@@ -29,9 +30,16 @@ public class Graph : MonoBehaviour
     }
   }
 
+  public void ClearGraph(){
+    foreach(GameObject dot in GameObject.FindGameObjectsWithTag("GraphDot")){
+      Destroy(dot);
+    }
+  }
+
   private void CreateCircle(Vector2 anchoredPosition)
   {
     GameObject newDot = new GameObject("graph_dot", typeof(Image));
+    newDot.gameObject.tag="GraphDot"; 
     newDot.transform.SetParent(graphContainer, false);
     newDot.GetComponent<Image>().sprite = dotSprite;
     RectTransform rectTransform = newDot.GetComponent<RectTransform>();

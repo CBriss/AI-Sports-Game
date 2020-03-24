@@ -1,10 +1,14 @@
 using System.IO;
 using System;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class Xor : MonoBehaviour
 {
   public NeuralNet neuralNet;
+  public Graph graph;
   bool trained = false;
 
   void Start()
@@ -35,12 +39,14 @@ public class Xor : MonoBehaviour
   // Note: Try convolutional NN?
   public void XorTrain()
   {
-    int numberOfInputs = 100000;
+    int numberOfInputs = 5000;
     float[,] possibleInputs = new float[,] { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 1 } };
     float[] possibleLabels = new float[] { 0, 1, 1, 0 };
     int batchSize = 16;
     int totalBatchCount = (int)Math.Ceiling((double)numberOfInputs / (double)batchSize);
     Debug.Log("Number of Training Batches: " + totalBatchCount);
+
+    List<float> errors = new List<float>();
 
     for (int batchNum = 0; batchNum < totalBatchCount - 1; batchNum++)
     {
@@ -61,7 +67,8 @@ public class Xor : MonoBehaviour
 
       // Figure out how to slice arrays
       // Maybe we modify the file I/O to only take it the batchSize number of image/label combos?
-      neuralNet.TrainUsingMiniBatch(inputValues, labelValues);
+      errors.Add(neuralNet.TrainUsingMiniBatch(inputValues, labelValues));
     }
+    graph.ShowGraph(errors);
   }
 }

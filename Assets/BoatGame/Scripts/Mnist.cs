@@ -111,13 +111,13 @@ public class Mnist : MonoBehaviour
     var trainingImageFile = new ImageFile(TrainImages); // Training Images
     var trainingLabelFile = new LabelFile(TrainLabels); // Training Labels
 
-    int batchSize = 32;
+    int batchSize = 8;
     int totalBatchCount = (int)Math.Ceiling((double)trainingLabelFile.numberOfLabels / (double)batchSize);
     Debug.Log("Number of Training Batches: " + totalBatchCount);
 
     List<float> errors = new List<float>();
 
-    for (int batchNum = 0; batchNum < 1000; batchNum++)
+    for (int batchNum = 0; batchNum < 100; batchNum++)
     {
       // Debug.Log("Doing batch: " + batchNum);
       int startPoint = batchNum * batchSize;

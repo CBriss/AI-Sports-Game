@@ -161,17 +161,17 @@ public partial class NeuralNet : MonoBehaviour
 
     // Process input
     FeedForward(inputs);
-    float derivativeMSE = 0.0f;
-    for (int neuronIndx = 0; neuronIndx < neurons[outputLayer].Length; neuronIndx++)
-      derivativeMSE += (neurons[outputLayer][neuronIndx] - expected_outputs[neuronIndx]);
+    // float derivativeMSE = 0.0f;
+    // for (int neuronIndx = 0; neuronIndx < neurons[outputLayer].Length; neuronIndx++)
+    //   derivativeMSE += (neurons[outputLayer][neuronIndx] - expected_outputs[neuronIndx]);
 
-    derivativeMSE = derivativeMSE * 2;
+    // derivativeMSE = derivativeMSE * 2;
     // For each ouput neuron
     for (int neuronIndx = 0; neuronIndx < neurons[outputLayer].Length; neuronIndx++)
     {
       // Adjusting Output Biases
       // Also the local gradient
-      deltaBiases[outputLayer][neuronIndx] += derivativeMSE * SigmoidDerivative(preActivatedNeurons[outputLayer][neuronIndx]);
+      deltaBiases[outputLayer][neuronIndx] += (neurons[outputLayer][neuronIndx] - expected_outputs[neuronIndx]) * SigmoidDerivative(preActivatedNeurons[outputLayer][neuronIndx]);
 
       // Adjusting Output Weights
       int previousLayer = outputLayer - 1;

@@ -786,8 +786,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1787655379}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1051,7 +1050,7 @@ GameObject:
   - component: {fileID: 1293051937}
   - component: {fileID: 1293051938}
   m_Layer: 0
-  m_Name: MnistGraph
+  m_Name: Graph
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1322,8 +1321,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1293051937}
-  m_Father: {fileID: 621653583}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1534,7 +1533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc4704376855a0c489aea30cd72d9d70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkShape: 1003000032000000140000000a000000
+  networkShape: 1003000064000000320000000a0000000a000000
   learningRate: 0.05
 --- !u!4 &1973996649
 Transform:
@@ -1580,6 +1579,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   neuralNet: {fileID: 512693496}
+  graph: {fileID: 1293051938}
 --- !u!4 &2090390876
 Transform:
   m_ObjectHideFlags: 0
