@@ -30,8 +30,6 @@ public class GameComponent : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.name == "MyGameObjectName") {}
-
         if (collision.gameObject.tag == "Obstacle")
         {
             gameObject.SetActive(false);

@@ -14,14 +14,15 @@ public partial class NeuralNet : MonoBehaviour
   public float[][][] weights;
   public float[][] deltaBiases;
   public float[][][] deltaWeights;
-
+  
+  public string activationFunction;
   public float learningRate;
 
-  /*
-  ##################
-  # Initialization #
-  ##################
-  */
+/*
+##################
+# Initialization #
+##################
+*/
   // Constructor
   void Awake()
   {
@@ -32,7 +33,7 @@ public partial class NeuralNet : MonoBehaviour
 
   public NeuralNet(string filePath = "")
   {
-    // If there is a file as a blueprint
+    // If creating from file
     if (filePath.Length > 0)
     {
       try
@@ -61,11 +62,11 @@ public partial class NeuralNet : MonoBehaviour
 
   }
 
-  /*
-  ################
-  # Network Input/Output #
-  ################
-  */
+/*
+################
+# Network Input/Output #
+################
+*/
   public void FeedForward(float[] inputs)
   {
     // Set input layer to inputs
@@ -91,12 +92,9 @@ public partial class NeuralNet : MonoBehaviour
         // Saving value before activation (for z in backpropagation)
         preActivatedNeurons[layer][neuron] = z;
         // Activation function on neuron
-        neurons[layer][neuron] = Sigmoid(z);
+        neurons[layer][neuron] = Activate(activationFunction, z);
       }
     }
-
-    // int lastLayer = networkShape.Length - 1;
-    // neurons[lastLayer] = SoftMax(neurons[lastLayer]);
   }
 
   public float TrainUsingMiniBatch(float[][] inputs, float[][] expected_outputs)
@@ -171,7 +169,7 @@ public partial class NeuralNet : MonoBehaviour
     {
       // Adjusting Output Biases
       // Also the local gradient
-      deltaBiases[outputLayer][neuronIndx] += (neurons[outputLayer][neuronIndx] - expected_outputs[neuronIndx]) * SigmoidDerivative(preActivatedNeurons[outputLayer][neuronIndx]);
+      deltaBiases[outputLayer][neuronIndx] += (neurons[outputLayer][neuronIndx] - expected_outputs[neuronIndx]) * Activate(activationFunction, preActivatedNeurons[outputLayer][neuronIndx]);
 
       // Adjusting Output Weights
       int previousLayer = outputLayer - 1;
@@ -206,11 +204,11 @@ public partial class NeuralNet : MonoBehaviour
     }
   }
 
-  /*
-  ############
-  # Misc #
-  ############
-  */
+/*
+############
+# Misc #
+############
+*/
   public float[] Outputs()
   {
     return neurons[networkShape.Length - 1];

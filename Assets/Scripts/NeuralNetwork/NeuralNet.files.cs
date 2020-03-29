@@ -8,7 +8,7 @@ public partial class NeuralNet
   {
     try
     {
-      using (StreamWriter writeStream = new StreamWriter(new FileStream("Assets/BoatGame/Scripts/test.txt", FileMode.OpenOrCreate, FileAccess.Write)))
+      using (StreamWriter writeStream = new StreamWriter(new FileStream("Assets/Scripts/test.txt", FileMode.OpenOrCreate, FileAccess.Write)))
       {
         writeStream.WriteLine(string.Join(",", networkShape));
 
@@ -71,13 +71,14 @@ public partial class NeuralNet
       int currentLayer = 0;
       int currentNeuronIndex = 0;
       string fileLine = readStream.ReadLine();
+      string[] line = fileLine.Split(' ');
       if (fileLine.Contains("Layer"))
       {
-        currentLayer = int.Parse(fileLine.Split(' ')[1]);
+        currentLayer = int.Parse(line[1]);
       }
       else if (fileLine.Contains("Destination Neuron Index"))
       {
-        currentNeuronIndex = int.Parse(fileLine.Split(' ')[-1]);
+        currentNeuronIndex = int.Parse(line[line.Length]);
       }
       else
       {

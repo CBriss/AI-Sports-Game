@@ -9,12 +9,6 @@ public class Xor : MonoBehaviour
 {
   public NeuralNet neuralNet;
   public Graph graph;
-  bool trained = false;
-
-  void Start()
-  {
-    trained = true;
-  }
 
   void Update()
   {
@@ -29,10 +23,6 @@ public class Xor : MonoBehaviour
       neuralNet.printOutputs();
       neuralNet.FeedForward(new float[] { 1, 1 });
       neuralNet.printOutputs();
-    }
-    else if (Input.GetKey("x"))
-    {
-      XorTrain();
     }
   }
 

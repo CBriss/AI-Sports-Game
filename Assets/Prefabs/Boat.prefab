@@ -11,11 +11,12 @@ GameObject:
   - component: {fileID: 6114853552604896431}
   - component: {fileID: 6114853552604896428}
   - component: {fileID: 6114853552604896429}
-  - component: {fileID: 6114853552604896426}
   - component: {fileID: 6490054724732056599}
   - component: {fileID: 895375713}
+  - component: {fileID: 1195476989431481119}
+  - component: {fileID: 3411776134562222227}
   m_Layer: 0
-  m_Name: boat
+  m_Name: Boat
   m_TagString: Bot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,6 +61,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -109,20 +111,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 1}
   m_EdgeRadius: 0
---- !u!114 &6114853552604896426
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6114853552604896427}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82abdcf9489a2de45af5f49379fb365d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  score: 0
-  distanceTraveled: 0
 --- !u!114 &6490054724732056599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,3 +148,33 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1195476989431481119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6114853552604896427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82abdcf9489a2de45af5f49379fb365d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 0
+  distanceTraveled: 0
+  brain: {fileID: 3411776134562222227}
+--- !u!114 &3411776134562222227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6114853552604896427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc4704376855a0c489aea30cd72d9d70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  networkShape: 020000001400000004000000
+  activationFunction: sigmoid
+  learningRate: 0.05

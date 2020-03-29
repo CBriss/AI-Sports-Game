@@ -7,7 +7,6 @@ using UnityEngine;
 public class ObjectPooling : MonoBehaviour
 {
     public static ObjectPooling SharedInstance;
-    // public List<GameObject> pooledObjects;
     Dictionary<string, List<GameObject>> pooledObjects;
     public List<GameObject> prefabsToPool;
     public int amountToPool;
@@ -24,11 +23,6 @@ public class ObjectPooling : MonoBehaviour
         {
             InstantiateOjbectsOfType(prefabsToPool[i]);
         }
-    }
-
-    void Update()
-    {
-        
     }
 
     void InstantiateOjbectsOfType(GameObject objectType)

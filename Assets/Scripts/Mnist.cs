@@ -15,11 +15,9 @@ public class Mnist : MonoBehaviour
 
   float gridSquareWidth;
   float gridSquareHeight;
-  bool trained = false;
 
   void Start()
   {
-    trained = true;
     // Split part of screen into 28x28 blocks
     gridSquareWidth = (float)Screen.width / 28;
     gridSquareHeight = (float)Screen.width / 28;
@@ -106,8 +104,8 @@ public class Mnist : MonoBehaviour
   // Note: Try convolutional NN?
   public void MnistTrain()
   {
-    string TrainImages = "Assets/BoatGame/mnist/train/train-images.idx3-ubyte";
-    string TrainLabels = "Assets/BoatGame/mnist/train/train-labels.idx1-ubyte";
+    string TrainImages = "Assets/mnist/train/train-images.idx3-ubyte";
+    string TrainLabels = "Assets/mnist/train/train-labels.idx1-ubyte";
     var trainingImageFile = new ImageFile(TrainImages); // Training Images
     var trainingLabelFile = new LabelFile(TrainLabels); // Training Labels
 

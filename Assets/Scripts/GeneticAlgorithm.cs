@@ -10,7 +10,6 @@ public class GeneticAlgorithm : MonoBehaviour
     public GameObject bestIndividual;
     public int generationCount;
 
-    // Start is called before the first frame update
     void Start()
     {
         generationCount = 1;
@@ -18,7 +17,6 @@ public class GeneticAlgorithm : MonoBehaviour
         NewGeneration(this.population);
     }
 
-    // Update is called once per frame
     void Update()
     {
         int activeObjects = 0;

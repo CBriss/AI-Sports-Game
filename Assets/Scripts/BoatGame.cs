@@ -14,24 +14,7 @@ public class BoatGame : MonoBehaviour
     void Start()
     {
         background = GameObject.Find("background");
-        InvokeRepeating("InsertObstacles", 0.5f, 0.5f);
-    }
-
-    void Update()
-    {
-    }
-
-    void InsertBoat()
-    {
-        Vector3 newObstacleNormalizedPosition = Camera.main.ViewportToWorldPoint(new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), 0));
-        newObstacleNormalizedPosition.z = 0;
-
-        GameObject boat = ObjectPooling.SharedInstance.GetPooledObject("Boat");
-        if (boat != null)
-        {
-            boat.transform.position = newObstacleNormalizedPosition;
-            boat.SetActive(true);
-        }
+        InvokeRepeating("InsertObstacles", 0.25f, 0.25f);
     }
 
     void InsertObstacles()

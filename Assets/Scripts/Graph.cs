@@ -44,7 +44,7 @@ public class Graph : MonoBehaviour
     newDot.GetComponent<Image>().sprite = dotSprite;
     RectTransform rectTransform = newDot.GetComponent<RectTransform>();
     rectTransform.anchoredPosition = anchoredPosition;
-    rectTransform.sizeDelta = new Vector2(5, 5);
+    rectTransform.sizeDelta = new Vector2(2, 2);
     rectTransform.anchorMin = new Vector2(0, 0);
     rectTransform.anchorMax = new Vector2(0, 0);
   }
