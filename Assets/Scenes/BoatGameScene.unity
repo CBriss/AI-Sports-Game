@@ -664,7 +664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34b517d5745bf1a40a45cdcfef13c238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  populationSize: 10
+  populationSize: 3
   indivualPrefab: {fileID: 6114853552604896427, guid: 74c78530f3c52a24aa813900f07e7e6a,
     type: 3}
   population: []

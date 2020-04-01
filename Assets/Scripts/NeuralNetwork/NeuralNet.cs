@@ -59,6 +59,11 @@ public partial class NeuralNet : MonoBehaviour
         Console.WriteLine(e.Message);
       }
     }
+    else {
+      initNeurons();
+      initBiases();
+      initWeights();
+    }
 
   }
 

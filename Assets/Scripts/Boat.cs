@@ -33,6 +33,10 @@ public class Boat : MonoBehaviour
         if (Input.GetKey("d")) { boatPos.x += gameSpeed * Time.deltaTime; }
         if (Input.GetKey("a")) { boatPos.x -= gameSpeed * Time.deltaTime; }
         transform.position = boatPos; 
+
+
+        Vector3 normalizedBoatPos = Camera.main.WorldToViewportPoint(boatPos);
+        Debug.Log(normalizedBoatPos.x);
     }
 
     void MoveFromThinking()
@@ -41,11 +45,19 @@ public class Boat : MonoBehaviour
         Vector3 boatPos = transform.position;
 
         Vector3 normalizedBoatPos = Camera.main.WorldToViewportPoint(boatPos);
-        Vector3 normalizedObstaclePos = Camera.main.WorldToViewportPoint(nearestObstacle.transform.position);
+        
+        float obstacleXCoord = 0.0f;
+        if(nearestObstacle != null){
+            Vector3 normalizedObstaclePos = Camera.main.WorldToViewportPoint(nearestObstacle.transform.position);
+            obstacleXCoord = normalizedObstaclePos.x;
+        }
+        
         float[] input = {
-            normalizedBoatPos.x / Camera.main.pixelRect.width,
-            normalizedObstaclePos.x / Camera.main.pixelRect.width
+            normalizedBoatPos.x,
+            obstacleXCoord
         };
+
+        Debug.Log(normalizedBoatPos.x + " " + obstacleXCoord);
 
         brain.FeedForward(input);
         float[] directions = brain.Outputs();
