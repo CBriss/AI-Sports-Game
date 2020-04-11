@@ -14,7 +14,7 @@ public class GeneticAlgorithm : MonoBehaviour
     {
         generationCount = 1;
         population = new List<GameObject>();
-        NewGeneration(this.population);
+        MakeGenerationZero();
     }
 
     void Update()
@@ -36,7 +36,7 @@ public class GeneticAlgorithm : MonoBehaviour
     void MakeGenerationZero(){
         for (int i = 0; i < populationSize; i++)
         {
-            population.Add( NewIndividual(parents[0].GetComponent<Boat>().brain.Clone()) );
+            population.Add(NewIndividual());
         }
     }
     void NewGeneration(List<GameObject> population)
@@ -74,6 +74,23 @@ public class GeneticAlgorithm : MonoBehaviour
             }
         }
         return currentBest;
+    }
+
+    public GameObject NewIndividual()
+    {
+        Vector3 newObstacleNormalizedPosition = Camera.main.ViewportToWorldPoint(
+            new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), 0)
+        );
+        newObstacleNormalizedPosition.z = 0;
+
+        GameObject individual = ObjectPooling.SharedInstance.GetPooledObject("Boat");
+        if (individual != null)
+        {
+            individual.transform.position = newObstacleNormalizedPosition;
+            individual.SetActive(true);
+        }
+
+        return individual;
     }
 
     public GameObject NewIndividual(NeuralNet brain)
