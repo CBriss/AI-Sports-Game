@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameComponent : MonoBehaviour
 {
@@ -32,7 +30,7 @@ public class GameComponent : MonoBehaviour
     {
         if (collision.gameObject.tag == "Obstacle")
         {
-            gameObject.SetActive(false);
+            GameEvents.current.CollisionDetected();
         }
     }
 }

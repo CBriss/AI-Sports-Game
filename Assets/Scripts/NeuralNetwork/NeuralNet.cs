@@ -14,23 +14,16 @@ public partial class NeuralNet : MonoBehaviour
   public float[][][] weights;
   public float[][] deltaBiases;
   public float[][][] deltaWeights;
-  
+
   public string activationFunction;
   public float learningRate;
 
-/*
-##################
-# Initialization #
-##################
-*/
+  /*
+  ##################
+  # Initialization #
+  ##################
+  */
   // Constructor
-  void Awake()
-  {
-    initNeurons();
-    initBiases();
-    initWeights();
-  }
-
   public NeuralNet(string filePath = "")
   {
     // If creating from file
@@ -59,7 +52,8 @@ public partial class NeuralNet : MonoBehaviour
         Console.WriteLine(e.Message);
       }
     }
-    else {
+    else
+    {
       initNeurons();
       initBiases();
       initWeights();
@@ -67,11 +61,11 @@ public partial class NeuralNet : MonoBehaviour
 
   }
 
-/*
-################
-# Network Input/Output #
-################
-*/
+  /*
+  ################
+  # Network Input/Output #
+  ################
+  */
   public void FeedForward(float[] inputs)
   {
     // Set input layer to inputs
@@ -209,11 +203,11 @@ public partial class NeuralNet : MonoBehaviour
     }
   }
 
-/*
-############
-# Misc #
-############
-*/
+  /*
+  ############
+  # Misc #
+  ############
+  */
   public float[] Outputs()
   {
     return neurons[networkShape.Length - 1];

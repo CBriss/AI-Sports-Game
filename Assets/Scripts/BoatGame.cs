@@ -15,6 +15,8 @@ public class BoatGame : MonoBehaviour
     {
         background = GameObject.Find("background");
         InvokeRepeating("InsertObstacles", 0.25f, 0.25f);
+
+        GameEvents.current.onCollisionDetected += DestroyBoat;
     }
 
     void InsertObstacles()
@@ -31,6 +33,12 @@ public class BoatGame : MonoBehaviour
                 obstacle.SetActive(true);
             }
         }
+    }
+
+    void DestroyBoat()
+    {
+        Debug.Log("Collision!");
+        // gameObject.SetActive(false);
     }
     
 }
