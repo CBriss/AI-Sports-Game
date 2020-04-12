@@ -22,8 +22,9 @@ public class GeneticAlgorithm : MonoBehaviour
     int activeObjects = 0;
     for (int i = 0; i < this.population.Count; i++)
     {
-      if (this.population[i].activeInHierarchy)
-        activeObjects += 1;
+        generationCount = 1;
+        population = new List<GameObject>();
+        MakeGenerationZero();
     }
 
     if (activeObjects <= 0)
@@ -67,11 +68,38 @@ public class GeneticAlgorithm : MonoBehaviour
         };
   }
 
-  private GameObject FindBestIndividual()
-  {
-    GameObject currentBest = this.population[0];
-    int currentHighScore = currentBest.GetComponent<Boat>().score;
-    foreach (GameObject individual in this.population)
+    private GameObject FindBestIndividual(){
+        GameObject currentBest = this.population[0];
+        int currentHighScore = currentBest.GetComponent<Boat>().score;
+        foreach (GameObject individual in this.population)
+        {
+            int currentScore = individual.GetComponent<Boat>().score;
+            if(currentScore > currentHighScore){
+                currentBest = individual;
+                currentHighScore = currentScore;
+            }
+        }
+        return currentBest;
+    }
+
+    public GameObject NewIndividual()
+    {
+        Vector3 newObstacleNormalizedPosition = Camera.main.ViewportToWorldPoint(
+            new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), 0)
+        );
+        newObstacleNormalizedPosition.z = 0;
+
+        GameObject individual = ObjectPooling.SharedInstance.GetPooledObject("Boat");
+        if (individual != null)
+        {
+            individual.transform.position = newObstacleNormalizedPosition;
+            individual.SetActive(true);
+        }
+
+        return individual;
+    }
+
+    public GameObject NewIndividual(NeuralNet brain)
     {
       int currentScore = individual.GetComponent<Boat>().score;
       if (currentScore > currentHighScore)
