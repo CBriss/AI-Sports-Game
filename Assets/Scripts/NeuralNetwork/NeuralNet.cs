@@ -5,7 +5,7 @@ using UnityEngine;
 
 using static DNA;
 
-public partial class NeuralNet
+public partial class NeuralNet : MonoBehaviour
 {
   public int[] networkShape;
   public float[][] neurons;
@@ -24,42 +24,40 @@ public partial class NeuralNet
   ##################
   */
   // Constructor
-  public NeuralNet(string filePath = "")
-  {
-    // If creating from file
-    if (filePath.Length > 0)
+
+    public NeuralNet(int[] networkShape)
     {
-      try
-      {
+        this.networkShape = networkShape;
+        initNeurons();
+        initBiases();
+        initWeights();
+    }
+
+    public NeuralNet(string filePath)
+    {
+        try
+        {
         using (StreamReader readStream = new StreamReader(filePath))
         {
-          string[] shape = readStream.ReadLine().Split(',');
-          for (int i = 0; i < shape.Length; i++)
-          {
+            string[] shape = readStream.ReadLine().Split(',');
+            for (int i = 0; i < shape.Length; i++)
+            {
             networkShape[i] = int.Parse(shape[i]);
-          }
+            }
 
-          if (readStream.ReadLine().Equals("Biases"))
-          {
+            if (readStream.ReadLine().Equals("Biases"))
+            {
             readBiasesFromFile(readStream);
-          }
-          readWeightsFromFile(readStream);
+            }
+            readWeightsFromFile(readStream);
         }
-      }
-      catch (IOException e)
-      {
+        }
+        catch (IOException e)
+        {
         Console.WriteLine("The file could not be read:");
         Console.WriteLine(e.Message);
-      }
+        }
     }
-    else
-    {
-      initNeurons();
-      initBiases();
-      initWeights();
-    }
-
-  }
 
   /*
   ################
@@ -215,7 +213,7 @@ public partial class NeuralNet
 
   public NeuralNet Clone()
   {
-    NeuralNet copy = new NeuralNet();
+    NeuralNet copy = new NeuralNet(this.networkShape);
     // Copy network shape
     copy.networkShape = this.networkShape;
 

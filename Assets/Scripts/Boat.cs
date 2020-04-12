@@ -1,21 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Boat : MonoBehaviour
+public class Boat : GameComponent
 {
     private float gameSpeed;
     private Vector2 bounds;
     public int score;
     public float distanceTraveled;
-    GameComponent component;
 
     public NeuralNet brain;
 
     void Start()
     {
         gameSpeed = GameObject.Find("BoatGameWrapper").GetComponent<BoatGame>().gameSpeed;
-        component = GetComponent<GameComponent>();
         distanceTraveled = 0;
     }
 

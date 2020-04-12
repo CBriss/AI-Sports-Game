@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Obstacle : MonoBehaviour
+public class Obstacle : GameComponent
 {
     public float gameSpeed;
 

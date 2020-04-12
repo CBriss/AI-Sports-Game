@@ -1,36 +1,47 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class GameComponent : MonoBehaviour
 {
-    public float width;
+    public GameComponentTemplate template;
     public float endX;
-    public float height;
     public float endY;
-    BoxCollider2D componentCollider;
+    BoxCollider2D collider;
+    private NeuralNet brain;
 
     void Start()
     {
-        componentCollider = GetComponent<BoxCollider2D>();
-        Vector2 size = componentCollider.bounds.size;
-        width = size.x;
-        height = size.y;
+
+        //Set Size
+        gameObject.GetComponent<RectTransform>().sizeDelta = template.colliderSize;
+
+        // Create Collider
+        BoxCollider2D collider = gameObject.AddComponent<BoxCollider2D>();
+        collider.size = template.colliderSize;
+        collider.isTrigger = true;
+
+        // Set image
+        gameObject.GetComponent<SpriteRenderer>().sprite = template.image;
+        gameObject.GetComponent<SpriteRenderer>().transform.localScale = template.imageSize;
+
+        // Create brain, if needed
+        if (template.hasBrain)
+            brain = new NeuralNet(new int[] { 2, 20, 4 });
     }
 
     void Update()
     {
-        endX = transform.position.x + width;
-        endY = transform.position.y + height;
+        endX = transform.position.x + template.colliderSize.x;
+        endY = transform.position.y + template.colliderSize.y;
     }
-
-    public float GetEndX() { return this.endX; }
-
-    public float GetEndY() { return this.endY; }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Obstacle")
         {
-            GameEvents.current.CollisionDetected();
+            gameObject.SetActive(false);
         }
     }
 }
