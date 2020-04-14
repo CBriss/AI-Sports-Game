@@ -29,6 +29,26 @@ public class GameComponent : MonoBehaviour
         // Create brain, if needed
         if (template.hasBrain)
             brain = new NeuralNet(new int[] { 2, 20, 4 });
+
+        // Add Movement Script
+        //gameObject.AddComponent(IMovab template.movable);
+    }
+
+    GameObject FindNearest(GameObject[] objects)
+    {
+        GameObject closestObject = null;
+        float distance = Mathf.Infinity;
+        Vector3 position = transform.position;
+        foreach (GameObject gameObject in objects)
+        {
+            float newDistance = (gameObject.transform.position - position).sqrMagnitude;
+            if (newDistance < distance)
+            {
+                closestObject = gameObject;
+                distance = newDistance;
+            }
+        }
+        return closestObject;
     }
 
     void Update()

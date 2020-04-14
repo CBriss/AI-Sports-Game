@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "new component", menuName = "Game Component")]
 public class GameComponentTemplate : ScriptableObject
@@ -9,4 +10,5 @@ public class GameComponentTemplate : ScriptableObject
     [SerializeField] public Sprite image;
     [SerializeField] public bool isPlayer;
     [SerializeField] public bool hasBrain;
+    [SerializeField] public Movement movement;
 }
