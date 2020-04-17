@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "new component", menuName = "Game Component")]
+[CreateAssetMenu(fileName = "new game component", menuName = "Game Components/Game Component")]
 public class GameComponentTemplate : ScriptableObject
 {
     [SerializeField] public Vector2 imageSize;
@@ -10,5 +10,5 @@ public class GameComponentTemplate : ScriptableObject
     [SerializeField] public Sprite image;
     [SerializeField] public bool isPlayer;
     [SerializeField] public bool hasBrain;
-    [SerializeField] public Movement movement;
+    [SerializeField] public MovementAbility movementAbility;
 }

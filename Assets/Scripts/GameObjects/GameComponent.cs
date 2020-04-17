@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class GameComponent : MonoBehaviour
 {
@@ -9,7 +6,6 @@ public class GameComponent : MonoBehaviour
     public float endX;
     public float endY;
     BoxCollider2D collider;
-    private NeuralNet brain;
 
     void Start()
     {
@@ -25,13 +21,14 @@ public class GameComponent : MonoBehaviour
         // Set image
         gameObject.GetComponent<SpriteRenderer>().sprite = template.image;
         gameObject.GetComponent<SpriteRenderer>().transform.localScale = template.imageSize;
+    }
 
-        // Create brain, if needed
-        if (template.hasBrain)
-            brain = new NeuralNet(new int[] { 2, 20, 4 });
-
-        // Add Movement Script
-        //gameObject.AddComponent(IMovab template.movable);
+    void Update()
+    {
+        if(template.movementAbility)
+            template.movementAbility.Move(gameObject);
+        endX = transform.position.x + template.colliderSize.x;
+        endY = transform.position.y + template.colliderSize.y;
     }
 
     GameObject FindNearest(GameObject[] objects)
@@ -51,14 +48,9 @@ public class GameComponent : MonoBehaviour
         return closestObject;
     }
 
-    void Update()
-    {
-        endX = transform.position.x + template.colliderSize.x;
-        endY = transform.position.y + template.colliderSize.y;
-    }
-
     void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("COLLISSION");
         if (collision.gameObject.tag == "Obstacle")
         {
             gameObject.SetActive(false);
