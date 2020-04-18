@@ -12,8 +12,9 @@ public class BoatGame : MonoBehaviour
     // public bool playerFlag;
     // public int speedMode = 1;
     public float gameSpeed = 0.5f;
+    public GeneticAlgorithm geneticAlgorithm;
 
-    public struct Player
+    public class Player
     {
         public GameObject playerObject { get; }
         public int score { get; set; }
@@ -27,12 +28,13 @@ public class BoatGame : MonoBehaviour
 
     void Start()
     {
+        players = new List<Player>();
         background = GameObject.Find("background");
         InvokeRepeating("InsertObstacles", 0.25f, 0.25f);
         AddPlayer();
     }
 
-    private void Update()
+    void LateUpdate()
     {
         UpdatePlayerScores();
         Debug.Log(players[0].score);

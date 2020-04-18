@@ -5,18 +5,8 @@ using UnityEngine;
 public class GeneticAlgorithm : MonoBehaviour
 {
   public int populationSize;
-  public GameObject indivualPrefab;
-  public List<GameObject> population;
   public GameObject bestIndividual;
   public int generationCount;
-
-    /*
-    void Start()
-    {
-        generationCount = 1;
-        population = new List<GameObject>();
-        MakeGenerationZero();
-    }
 
     void Update()
     {
@@ -102,5 +92,5 @@ public class GeneticAlgorithm : MonoBehaviour
 
         return individual;
     }
-    */
+    
 }

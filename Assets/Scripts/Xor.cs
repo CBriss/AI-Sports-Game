@@ -53,8 +53,6 @@ public class Xor : MonoBehaviour
         labelValues[i] = new float[] { possibleLabels[inputIndex] };
       }
 
-
-
       // Figure out how to slice arrays
       // Maybe we modify the file I/O to only take it the batchSize number of image/label combos?
       errors.Add(neuralNet.TrainUsingMiniBatch(inputValues, labelValues));

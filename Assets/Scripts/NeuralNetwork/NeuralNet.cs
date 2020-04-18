@@ -18,12 +18,18 @@ public partial class NeuralNet : MonoBehaviour
   public string activationFunction;
   public float learningRate;
 
-  /*
-  ##################
-  # Initialization #
-  ##################
-  */
-  // Constructor
+    /*
+    ##################
+    # Initialization #
+    ##################
+    */
+    // Constructor
+    private void Start()
+    {
+        initNeurons();
+        initBiases();
+        initWeights();
+    }
 
     public NeuralNet(int[] networkShape)
     {
