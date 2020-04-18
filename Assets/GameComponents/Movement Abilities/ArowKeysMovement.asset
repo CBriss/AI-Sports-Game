@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bca7afe6f7aab204588c929ae7379046, type: 3}
-  m_Name: WASDPlayerMovement
+  m_Name: ArowKeysMovement
   m_EditorClassIdentifier: 
   up_key: 273
   down_key: 274
   left_key: 276
   right_key: 275
-  movementSpeed: 20
+  movementSpeed: 15

@@ -11,4 +11,5 @@ public class GameComponentTemplate : ScriptableObject
     [SerializeField] public bool isPlayer;
     [SerializeField] public bool hasBrain;
     [SerializeField] public MovementAbility movementAbility;
+    [SerializeField] public string tagName;
 }

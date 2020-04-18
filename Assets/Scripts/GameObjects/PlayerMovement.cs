@@ -10,6 +10,7 @@ public class PlayerMovement : MovementAbility
     public KeyCode left_key;
     public KeyCode right_key;
     public float movementSpeed;
+
     public override void Move(GameObject gameObject)
     {
         Vector3 boatPos = gameObject.transform.position;
@@ -17,9 +18,10 @@ public class PlayerMovement : MovementAbility
         if (Input.GetKey(down_key)) { boatPos.y -= movementSpeed * Time.deltaTime; }
         if (Input.GetKey(left_key)) { boatPos.x -= movementSpeed * Time.deltaTime; }
         if (Input.GetKey(right_key)) { boatPos.x += movementSpeed * Time.deltaTime; }
-        gameObject.transform.position = boatPos;
-
 
         Vector3 normalizedBoatPos = Camera.main.WorldToViewportPoint(boatPos);
+        normalizedBoatPos.x = Mathf.Clamp01(normalizedBoatPos.x);
+        normalizedBoatPos.y = Mathf.Clamp01(normalizedBoatPos.y);
+        gameObject.transform.position = Camera.main.ViewportToWorldPoint(normalizedBoatPos);
     }
 }

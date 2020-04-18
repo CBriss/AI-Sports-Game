@@ -8,6 +8,7 @@ TagManager:
   - Obstacle
   - BlackSquare
   - GraphDot
+  - Boat
   layers:
   - Default
   - TransparentFX

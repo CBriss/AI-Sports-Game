@@ -5,7 +5,6 @@ public class GameComponent : MonoBehaviour
     public GameComponentTemplate template;
     public float endX;
     public float endY;
-    BoxCollider2D collider;
 
     void Start()
     {
@@ -21,6 +20,9 @@ public class GameComponent : MonoBehaviour
         // Set image
         gameObject.GetComponent<SpriteRenderer>().sprite = template.image;
         gameObject.GetComponent<SpriteRenderer>().transform.localScale = template.imageSize;
+
+        // Set Tag
+        gameObject.tag = template.tagName;
     }
 
     void Update()
@@ -50,10 +52,14 @@ public class GameComponent : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("COLLISSION");
-        if (collision.gameObject.tag == "Obstacle")
+        if (gameObject.tag == "Player" && collision.gameObject.tag == "Obstacle")
         {
             gameObject.SetActive(false);
         }
+    }
+
+    void OnBecameInvisible()
+    {
+        Destroy(gameObject);
     }
 }

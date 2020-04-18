@@ -19,3 +19,4 @@ MonoBehaviour:
   isPlayer: 1
   hasBrain: 0
   movementAbility: {fileID: 11400000, guid: 91542f7ad4249eb4d98bbea63caa282a, type: 2}
+  tagName: Player

@@ -10,6 +10,7 @@ public class GeneticAlgorithm : MonoBehaviour
   public GameObject bestIndividual;
   public int generationCount;
 
+    /*
     void Start()
     {
         generationCount = 1;
@@ -19,7 +20,6 @@ public class GeneticAlgorithm : MonoBehaviour
 
     void Update()
     {
-        /*
         int activeObjects = 0;
         for (int i = 0; i < population.Count; i++)
         {
@@ -33,8 +33,8 @@ public class GeneticAlgorithm : MonoBehaviour
             NewGeneration();
             generationCount += 1;
         }
-        */
     }
+
 
     void MakeGenerationZero()
     {
@@ -102,4 +102,5 @@ public class GeneticAlgorithm : MonoBehaviour
 
         return individual;
     }
+    */
 }
