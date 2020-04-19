@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BoatGame : MonoBehaviour
 {
@@ -30,14 +31,21 @@ public class BoatGame : MonoBehaviour
     {
         players = new List<Player>();
         background = GameObject.Find("background");
-        InvokeRepeating("InsertObstacles", 0.25f, 0.25f);
+        InvokeRepeating("AddObstacles", 0.25f, 0.25f);
         AddPlayer();
     }
 
     void LateUpdate()
     {
         UpdatePlayerScores();
-        Debug.Log(players[0].score);
+        int numberAlive = 0;
+        foreach(Player player in players)
+        {
+            if (player.playerObject.activeInHierarchy)
+                numberAlive++;
+        }
+        if (numberAlive <= 0)
+            GameOver();
     }
 
     void AddPlayer()
@@ -55,7 +63,7 @@ public class BoatGame : MonoBehaviour
         }
     }
 
-    void InsertObstacles()
+    void AddObstacles()
     {
         if (Random.Range(-1f, 1f) > 0.25f)
         {
@@ -82,6 +90,11 @@ public class BoatGame : MonoBehaviour
             float newDistanceTraveled = gameSpeed;
             player.score += Mathf.RoundToInt(Mathf.Ceil((newDistanceTraveled) * (heightOnScreen * 1.5f)));
         }
+    }
+
+    void GameOver()
+    {
+        SceneManager.LoadScene("MenuScene");
     }
 
 }

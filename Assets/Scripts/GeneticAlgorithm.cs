@@ -8,6 +8,7 @@ public class GeneticAlgorithm : MonoBehaviour
   public GameObject bestIndividual;
   public int generationCount;
 
+    /*
     void Update()
     {
         int activeObjects = 0;
@@ -92,5 +93,5 @@ public class GeneticAlgorithm : MonoBehaviour
 
         return individual;
     }
-    
+    */    
 }
