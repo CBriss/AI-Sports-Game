@@ -4,38 +4,40 @@ using UnityEngine;
 
 public class GeneticAlgorithm : MonoBehaviour
 {
-  public int populationSize;
-  public GameObject bestIndividual;
-  public int generationCount;
+    public int populationSize;
+    public GameObject bestIndividual;
+    public int generationCount;
+    public IGameManager game;
 
-    /*
+    private void Start()
+    {
+        generationCount = 1;
+        MakeGenerationZero();
+    }
     void Update()
     {
-        int activeObjects = 0;
-        for (int i = 0; i < population.Count; i++)
-        {
-            generationCount = 1;
-            population = new List<GameObject>();
-            MakeGenerationZero();
-        }
-
-        if (activeObjects <= 0)
+        /*
+        if (game.getActivePlayers().Count <= 0)
         {
             NewGeneration();
             generationCount += 1;
         }
+        */
     }
-
 
     void MakeGenerationZero()
     {
         for (int i = 0; i < populationSize; i++)
         {
-            GameObject individual = NewIndividual();
-            // individual.brain = new NeuralNet({ 2, 20, 4 });
-            this.population.Add(individual);
+            Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(
+                new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), 0)
+            );
+            newPlayerNormalizedPosition.z = 0;
+            game.AddPlayer(newPlayerNormalizedPosition);
         }
     }
+
+    /*
 
     void NewGeneration()
     {
@@ -77,21 +79,5 @@ public class GeneticAlgorithm : MonoBehaviour
         return currentBest;
     }
 
-    public GameObject NewIndividual()
-    {
-        Vector3 newObstacleNormalizedPosition = Camera.main.ViewportToWorldPoint(
-            new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), 0)
-        );
-        newObstacleNormalizedPosition.z = 0;
-
-        GameObject individual = ObjectPooling.SharedInstance.GetPooledObject("Boat");
-        if (individual != null)
-        {
-            individual.transform.position = newObstacleNormalizedPosition;
-            individual.SetActive(true);
-        }
-
-        return individual;
-    }
-    */    
+    */
 }
