@@ -10,6 +10,7 @@ public class GameComponentTemplate : ScriptableObject
     [SerializeField] public Sprite image;
     [SerializeField] public bool isPlayer;
     [SerializeField] public bool hasBrain;
+    [SerializeField] public int[] brainShape;
     [SerializeField] public MovementAbility movementAbility;
     [SerializeField] public string tagName;
 }

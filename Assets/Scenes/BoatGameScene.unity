@@ -628,7 +628,7 @@ MonoBehaviour:
   background: {fileID: 1637887112}
   gameComponentPrefab: {fileID: 2187530176264077803, guid: 1c16c68ba3252dd4fb09ac45bdfa5289,
     type: 3}
-  playerTemplate: {fileID: 11400000, guid: e04319a9627321b46a0b5351205cc4ea, type: 2}
+  playerTemplate: {fileID: 11400000, guid: b43d3f217e956f64781fd080b2e1dde8, type: 2}
   obstacleTemplate: {fileID: 11400000, guid: 3e8f49511eb592744aa4cc56f7d8cfbf, type: 2}
   gameSpeed: 10
 --- !u!4 &1084499477

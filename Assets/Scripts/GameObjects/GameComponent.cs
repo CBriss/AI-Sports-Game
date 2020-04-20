@@ -5,6 +5,7 @@ public class GameComponent : MonoBehaviour
     public GameComponentTemplate template;
     public float endX;
     public float endY;
+    public NeuralNet brain;
 
     void Start()
     {
@@ -23,6 +24,10 @@ public class GameComponent : MonoBehaviour
 
         // Set Tag
         gameObject.tag = template.tagName;
+
+        // Set Brain, If AI
+        if (template.hasBrain && template.brainShape != null)
+            brain = new NeuralNet(template.brainShape);
     }
 
     void Update()

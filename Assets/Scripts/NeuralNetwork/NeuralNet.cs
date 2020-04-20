@@ -5,7 +5,7 @@ using UnityEngine;
 
 using static DNA;
 
-public partial class NeuralNet : MonoBehaviour
+public partial class NeuralNet
 {
   public int[] networkShape;
   public float[][] neurons;
