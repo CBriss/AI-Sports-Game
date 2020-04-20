@@ -21,9 +21,22 @@ public class BoatGame : MonoBehaviour, IGameManager
         InvokeRepeating("AddObstacles", 0.25f, 0.25f);
     }
 
+    void Update()
+    {
+        for (int i = 0; i < activePlayers.Count; i++)
+        {
+            Player player = activePlayers[i];
+            if (player.playerObject == null)
+            {
+                activePlayers.Remove(player);
+                inactivePlayers.Add(player);
+                i--;
+            }
+        }
+        UpdatePlayers();
+    }
     void LateUpdate()
     {
-        UpdatePlayers();
         if (activePlayers.Count <= 0)
             GameOver();
     }

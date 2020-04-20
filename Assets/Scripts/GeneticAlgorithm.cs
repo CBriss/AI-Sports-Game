@@ -11,18 +11,18 @@ public class GeneticAlgorithm : MonoBehaviour
 
     private void Start()
     {
+        game = gameObject.GetComponent<IGameManager>();
         generationCount = 1;
         MakeGenerationZero();
     }
     void Update()
     {
-        /*
-        if (game.getActivePlayers().Count <= 0)
+        if (game.GetActivePlayers().Count <= 0)
         {
-            NewGeneration();
+            MakeGenerationZero();
+            // NewGeneration();
             generationCount += 1;
         }
-        */
     }
 
     void MakeGenerationZero()
