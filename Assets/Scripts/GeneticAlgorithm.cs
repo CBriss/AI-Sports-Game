@@ -19,9 +19,14 @@ public class GeneticAlgorithm : MonoBehaviour
     {
         if (game.GetActivePlayers().Count <= 0)
         {
-            MakeGenerationZero();
-            // NewGeneration();
+            NewGeneration(game.GetInactivePlayers());
+            foreach(Player player in game.GetInactivePlayers())
+            {
+                Destroy(player.playerObject);
+            }
+            game.SetInactivePlayers(new List<Player>());
             generationCount += 1;
+
         }
     }
 
@@ -37,12 +42,10 @@ public class GeneticAlgorithm : MonoBehaviour
         }
     }
 
-    /*
-
-    void NewGeneration()
+    void NewGeneration(List<Player> deadIndividuals)
     {
         // Determine Generation Parents
-        List<GameObject> parents = DetermineBestParents();
+        List<Player> parents = DetermineBestParents(deadIndividuals);
 
         // Combine parent genes
         // SKIPPING FOR NOW
@@ -50,34 +53,32 @@ public class GeneticAlgorithm : MonoBehaviour
         // Create new population with those genes and a mutation chance
         for (int i = 0; i < populationSize; i++)
         {
-            GameObject individual = NewIndividual();
-            individual.GetComponent<Boat>().brain = parents[0].GetComponent<Boat>().brain.Clone();
-            this.population.Add(individual);
+            Player newPlayer = game.AddPlayer();
+            newPlayer.playerObject.GetComponent<GameComponent>().brain = 
+                parents[0].playerObject.GetComponent<GameComponent>().brain.Clone();
         }
-        this.population = new List<GameObject>();
     }
 
-      private List<GameObject> DetermineBestParents()
+      private List<Player> DetermineBestParents(List<Player> deadIndividuals)
       {
-        return new List<GameObject>{
-                FindBestIndividual(),
-                this.population[ UnityEngine.Random.Range(0, this.population.Count)]
+        return new List<Player>{
+                FindBestIndividual(deadIndividuals),
+                deadIndividuals[ Random.Range(0, deadIndividuals.Count)]
             };
       }
 
-    private GameObject FindBestIndividual(){
-        GameObject currentBest = this.population[0];
-        int currentHighScore = currentBest.GetComponent<Boat>().score;
-        foreach (GameObject individual in this.population)
+    private Player FindBestIndividual(List<Player> deadIndividuals)
+    {
+        Player currentBest = deadIndividuals[0];
+        int currentHighScore = currentBest.score;
+        foreach (Player player in deadIndividuals)
         {
-            int currentScore = individual.GetComponent<Boat>().score;
+            int currentScore = player.score;
             if(currentScore > currentHighScore){
-                currentBest = individual;
+                currentBest = player;
                 currentHighScore = currentScore;
             }
         }
         return currentBest;
     }
-
-    */
 }

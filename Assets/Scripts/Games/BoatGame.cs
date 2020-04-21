@@ -26,7 +26,7 @@ public class BoatGame : MonoBehaviour, IGameManager
         for (int i = 0; i < activePlayers.Count; i++)
         {
             Player player = activePlayers[i];
-            if (player.playerObject == null)
+            if (!player.playerObject.activeSelf)
             {
                 activePlayers.Remove(player);
                 inactivePlayers.Add(player);
@@ -41,31 +41,37 @@ public class BoatGame : MonoBehaviour, IGameManager
             GameOver();
     }
 
-    public void AddPlayer()
+    public Player AddPlayer()
     {
         Vector3 newObstacleNormalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, 0.5f));
         newObstacleNormalizedPosition.z = 0;
 
-        GameObject player = Instantiate(gameComponentPrefab);
-        player.GetComponent<GameComponent>().template = playerTemplate;
-        if (player != null)
+        GameObject playerObject = Instantiate(gameComponentPrefab);
+        playerObject.GetComponent<GameComponent>().template = playerTemplate;
+        if (playerObject != null)
         {
-            player.transform.position = newObstacleNormalizedPosition;
-            player.SetActive(true);
-            activePlayers.Add(new Player(player));
+            playerObject.transform.position = newObstacleNormalizedPosition;
+            playerObject.SetActive(true);
+            Player player = new Player(playerObject);
+            activePlayers.Add(player);
+            return player;
         }
+        return null;
     }
 
-    public void AddPlayer(Vector3 newObstacleNormalizedPosition)
+    public Player AddPlayer(Vector3 newObstacleNormalizedPosition)
     {
-        GameObject player = Instantiate(gameComponentPrefab);
-        player.GetComponent<GameComponent>().template = playerTemplate;
-        if (player != null)
+        GameObject playerObject = Instantiate(gameComponentPrefab);
+        playerObject.GetComponent<GameComponent>().template = playerTemplate;
+        if (playerObject != null)
         {
-            player.transform.position = newObstacleNormalizedPosition;
-            player.SetActive(true);
-            activePlayers.Add(new Player(player));
+            playerObject.transform.position = newObstacleNormalizedPosition;
+            playerObject.SetActive(true);
+            Player player = new Player(playerObject);
+            activePlayers.Add(player);
+            return player;
         }
+        return null;
     }
 
     public List<Player> GetActivePlayers()

@@ -9,7 +9,7 @@ public interface IGameManager
     void SetActivePlayers(List<Player> playerList);
     void SetInactivePlayers(List<Player> playerList);
     void Start();
-    void AddPlayer();
-    void AddPlayer(Vector3 newObstacleNormalizedPosition);
+    Player AddPlayer();
+    Player AddPlayer(Vector3 newObstacleNormalizedPosition);
     void GameOver();
 }

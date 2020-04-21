@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using System;
+
 public partial class NeuralNet
 {
   // Set neurons, based on networkShape

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "new AI movement", menuName = "Game Components/AI Movement")]
 public class AIMovement : MovementAbility
@@ -8,11 +6,17 @@ public class AIMovement : MovementAbility
     public float movementSpeed;
     public override void Move(GameObject gameObject)
     {
-        GameObject nearestObstacle = FindNearest(gameObject, GameObject.FindGameObjectsWithTag("Obstacle"));
+        GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+        GameObject nearestObstacle = FindNearest(gameObject, obstacles);
         Vector3 boatPos = gameObject.transform.position;
 
         Vector3 normalizedBoatPos = Camera.main.WorldToViewportPoint(boatPos);
-        Vector3 normalizedObstaclePos = Camera.main.WorldToViewportPoint(nearestObstacle.transform.position);
+        Vector3 normalizedObstaclePos;
+        if (nearestObstacle == null)
+            normalizedObstaclePos = new Vector3(0.0f, 0.0f, 0.0f);
+        else
+            normalizedObstaclePos = Camera.main.WorldToViewportPoint(nearestObstacle.transform.position);
+
         float[] input = {
             normalizedBoatPos.x / Camera.main.pixelRect.width,
             normalizedObstaclePos.x / Camera.main.pixelRect.width
@@ -50,6 +54,11 @@ public class AIMovement : MovementAbility
                 break;
         }
         gameObject.transform.position = boatPos;
+
+        normalizedBoatPos = Camera.main.WorldToViewportPoint(boatPos);
+        normalizedBoatPos.x = Mathf.Clamp01(normalizedBoatPos.x);
+        normalizedBoatPos.y = Mathf.Clamp01(normalizedBoatPos.y);
+        gameObject.transform.position = Camera.main.ViewportToWorldPoint(normalizedBoatPos);
     }
 
 

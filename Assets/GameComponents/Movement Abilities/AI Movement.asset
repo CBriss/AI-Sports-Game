@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed681d9cf725d647961e1be9caf09c7, type: 3}
   m_Name: AI Movement
   m_EditorClassIdentifier: 
-  movementSpeed: 0
+  movementSpeed: 10

@@ -38,23 +38,6 @@ public class GameComponent : MonoBehaviour
         endY = transform.position.y + template.colliderSize.y;
     }
 
-    GameObject FindNearest(GameObject[] objects)
-    {
-        GameObject closestObject = null;
-        float distance = Mathf.Infinity;
-        Vector3 position = transform.position;
-        foreach (GameObject gameObject in objects)
-        {
-            float newDistance = (gameObject.transform.position - position).sqrMagnitude;
-            if (newDistance < distance)
-            {
-                closestObject = gameObject;
-                distance = newDistance;
-            }
-        }
-        return closestObject;
-    }
-
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (gameObject.tag == "Player" && collision.gameObject.tag == "Obstacle")
@@ -65,6 +48,7 @@ public class GameComponent : MonoBehaviour
 
     void OnBecameInvisible()
     {
-        Destroy(gameObject);
+        if (gameObject.tag == "Obstacle")
+            Destroy(gameObject);
     }
 }
