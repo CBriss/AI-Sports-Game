@@ -81,4 +81,34 @@ public class GeneticAlgorithm : MonoBehaviour
         }
         return currentBest;
     }
+
+    /*
+    combineParentGenes(parentA, parentB, child)
+    {
+        let parentA_input_layer = parentA.brain.input_weights.dataSync();
+        let parentA_output_layer = parentA.brain.output_weights.dataSync();
+        let parentB_input_layer = parentB.brain.input_weights.dataSync();
+        let parentB_output_layer = parentB.brain.output_weights.dataSync();
+
+        let crossoverPoint = Math.floor(
+          Math.random() * parentA_input_layer.length -
+            parentA_input_layer.length / 2
+        );
+        let child_in_dna = [
+          ...parentA_input_layer.slice(0, crossoverPoint),
+          ...parentB_input_layer.slice(crossoverPoint, parentB_input_layer.length)
+        ];
+        let child_out_dna = [
+          ...parentA_output_layer.slice(0, crossoverPoint),
+          ...parentB_output_layer.slice(crossoverPoint, parentB_output_layer.length)
+        ];
+
+        let input_shape = child.brain.input_weights.shape;
+        let output_shape = child.brain.output_weights.shape;
+        child.brain.dispose();
+        child.brain.input_weights = tf.tensor(child_in_dna, input_shape);
+        child.brain.output_weights = tf.tensor(child_out_dna, output_shape);
+        return child;
+    }
+    */
 }

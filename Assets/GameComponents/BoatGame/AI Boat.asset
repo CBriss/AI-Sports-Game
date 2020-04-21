@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7058287745db35547a23056fe03dda20, type: 3}
   m_Name: AI Boat
   m_EditorClassIdentifier: 
-  imageSize: {x: 1, y: 1}
-  colliderSize: {x: 0.5, y: 1}
+  imageSize: {x: 0.4, y: 0.4}
+  colliderSize: {x: 3, y: 5}
   health: 1
-  image: {fileID: 21300000, guid: 6622b93bf5bbbf74893b1549b51109c2, type: 3}
+  image: {fileID: 21300000, guid: 0ef360c006be2f1418b04d5f0d684f50, type: 3}
   isPlayer: 0
   hasBrain: 1
   brainShape: 040000000500000006000000

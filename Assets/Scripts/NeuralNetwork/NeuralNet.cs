@@ -237,4 +237,30 @@ public partial class NeuralNet
     return copy;
   }
 
+    /*
+     mutate(goalPercentage) {
+    function mutateWeight(weight) {
+      // if (Math.random(1) < 0.05) {
+      //   console.log("mutate");
+      //   return weight + randn_bm() * 0.5;
+      // }
+      // return weight;
+      if (Math.random(1) < (0.10 * (1-goalPercentage))) {
+        return weight + randn_bm() * 0.5;
+      }
+      return weight;
+    }
+
+    let input_weights = this.brain.input_weights.dataSync().map(mutateWeight);
+    let input_shape = this.brain.input_weights.shape;
+    this.brain.input_weights.dispose();
+    this.brain.input_weights = tf.tensor(input_weights, input_shape);
+
+    let output_weights = this.brain.output_weights.dataSync().map(mutateWeight);
+    let output_shape = this.brain.output_weights.shape;
+    this.brain.output_weights.dispose();
+    this.brain.output_weights = tf.tensor(output_weights, output_shape);
+  }
+     */
+
 }
