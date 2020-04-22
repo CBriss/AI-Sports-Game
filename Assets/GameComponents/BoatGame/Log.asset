@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7058287745db35547a23056fe03dda20, type: 3}
   m_Name: Log
   m_EditorClassIdentifier: 
-  imageSize: {x: 0.8, y: 0.5}
+  imageSize: {x: 0.7, y: 0.5}
   colliderSize: {x: 6, y: 2}
   health: 1
   image: {fileID: 21300000, guid: a2361e629dc167c4b8c2b541fd909424, type: 3}

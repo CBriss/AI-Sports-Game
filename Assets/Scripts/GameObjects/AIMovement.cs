@@ -18,8 +18,10 @@ public class AIMovement : MovementAbility
             normalizedObstaclePos = Camera.main.WorldToViewportPoint(nearestObstacle.transform.position);
 
         float[] input = {
-            normalizedBoatPos.x / Camera.main.pixelRect.width,
-            normalizedObstaclePos.x / Camera.main.pixelRect.width
+            normalizedBoatPos.x,
+            normalizedBoatPos.y,
+            normalizedObstaclePos.x,
+            normalizedObstaclePos.y
         };
 
         gameObject.GetComponent<GameComponent>().brain.FeedForward(input);

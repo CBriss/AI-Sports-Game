@@ -658,7 +658,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34b517d5745bf1a40a45cdcfef13c238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  populationSize: 10
+  populationSize: 40
   bestIndividual: {fileID: 0}
   generationCount: 0
 --- !u!1 &1637887112

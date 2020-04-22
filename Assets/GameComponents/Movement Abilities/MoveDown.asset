@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e13eeafd81c75dd4aa8e4f91985be88e, type: 3}
   m_Name: MoveDown
   m_EditorClassIdentifier: 
-  movementSpeed: 5
+  movementSpeed: 8.1
   direction: down

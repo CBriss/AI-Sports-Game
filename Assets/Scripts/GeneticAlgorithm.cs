@@ -53,7 +53,11 @@ public class GeneticAlgorithm : MonoBehaviour
         // Create new population with those genes and a mutation chance
         for (int i = 0; i < populationSize; i++)
         {
-            Player newPlayer = game.AddPlayer();
+            Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(
+                new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), 0)
+            );
+            newPlayerNormalizedPosition.z = 0;
+            Player newPlayer = game.AddPlayer(newPlayerNormalizedPosition);
             newPlayer.playerObject.GetComponent<GameComponent>().brain = 
                 parents[0].playerObject.GetComponent<GameComponent>().brain.Clone();
         }

@@ -216,51 +216,52 @@ public partial class NeuralNet
     return neurons[networkShape.Length - 1];
   }
 
-  public NeuralNet Clone()
-  {
-    NeuralNet copy = new NeuralNet(this.networkShape);
-    // Copy network shape
-    copy.networkShape = this.networkShape;
+    public NeuralNet Clone()
+    {
+        NeuralNet copy = new NeuralNet(this.networkShape);
+        // Copy network shape
+        copy.networkShape = this.networkShape;
 
-    // Copy neurons
-    copy.neurons = this.neurons;
+        // Copy neurons
+        copy.neurons = this.neurons;
 
-    // Copy biaees
-    copy.biases = this.biases;
+        // Copy biaees
+        copy.biases = this.biases;
 
-    // Copy weights
-    copy.weights = this.weights;
+        // Copy weights
+        copy.weights = this.weights;
 
-    // Copy Learning Rate
-    copy.learningRate = this.learningRate;
+        // Copy Learning Rate
+        copy.learningRate = this.learningRate;
 
-    return copy;
-  }
+        // Mutate
+        copy = Mutate(copy, 50.0f);
 
-    /*
-     mutate(goalPercentage) {
-    function mutateWeight(weight) {
-      // if (Math.random(1) < 0.05) {
-      //   console.log("mutate");
-      //   return weight + randn_bm() * 0.5;
-      // }
-      // return weight;
-      if (Math.random(1) < (0.10 * (1-goalPercentage))) {
-        return weight + randn_bm() * 0.5;
-      }
-      return weight;
+        return copy;
     }
 
-    let input_weights = this.brain.input_weights.dataSync().map(mutateWeight);
-    let input_shape = this.brain.input_weights.shape;
-    this.brain.input_weights.dispose();
-    this.brain.input_weights = tf.tensor(input_weights, input_shape);
 
-    let output_weights = this.brain.output_weights.dataSync().map(mutateWeight);
-    let output_shape = this.brain.output_weights.shape;
-    this.brain.output_weights.dispose();
-    this.brain.output_weights = tf.tensor(output_weights, output_shape);
-  }
-     */
+    public NeuralNet Mutate(NeuralNet neuralNet, float goalPercentage) {
+        // for each layer
+        for (int i = 0; i < neuralNet.weights.Length; i++)
+        {
+            for (int j = 0; j < neuralNet.weights[i].Length; j++)
+            {
+                for (int k = 0; k < neuralNet.weights[i][j].Length; k++)
+                {
+                    neuralNet.weights[i][j][k] = MutateWeight(neuralNet.weights[i][j][k], goalPercentage);
+                }
+            }
+        }
+        return neuralNet;
+    }
 
+    private float MutateWeight(float weight, float goalPercentage)
+    {
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < (0.10 * (1 - goalPercentage)))
+        {
+            return weight + UnityEngine.Random.Range(0.0f, 1.0f) * 0.5f;
+        }
+        return weight;
+    }
 }
