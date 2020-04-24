@@ -9,16 +9,14 @@ public class BoatGame : MonoBehaviour, IGameManager
     public GameObject gameComponentPrefab;
     public GameComponentTemplate playerTemplate;
     public GameComponentTemplate obstacleTemplate;
-    public List<Player> activePlayers;
-    public List<Player> inactivePlayers;
-    public float gameSpeed = 0.5f;
+    public List<Player> activePlayers = new List<Player>();
+    public List<Player> inactivePlayers = new List<Player>();
+    public float obstacleSpawnPeriod = 0.25f;
 
     public void Start()
     {
-        activePlayers = new List<Player>();
-        inactivePlayers = new List<Player>();
         background = GameObject.Find("background");
-        InvokeRepeating("AddObstacles", 0.25f, 0.25f);
+        InvokeRepeating("AddObstacles", 0.25f, obstacleSpawnPeriod);
     }
 
     void Update()
@@ -39,24 +37,6 @@ public class BoatGame : MonoBehaviour, IGameManager
     {
         if (activePlayers.Count <= 0)
             GameOver();
-    }
-
-    public Player AddPlayer()
-    {
-        Vector3 newObstacleNormalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, 0.5f));
-        newObstacleNormalizedPosition.z = 0;
-
-        GameObject playerObject = Instantiate(gameComponentPrefab);
-        playerObject.GetComponent<GameComponent>().template = playerTemplate;
-        if (playerObject != null)
-        {
-            playerObject.transform.position = newObstacleNormalizedPosition;
-            playerObject.SetActive(true);
-            Player player = new Player(playerObject);
-            activePlayers.Add(player);
-            return player;
-        }
-        return null;
     }
 
     public Player AddPlayer(Vector3 newObstacleNormalizedPosition)
@@ -98,7 +78,7 @@ public class BoatGame : MonoBehaviour, IGameManager
     {
         if (Random.Range(-1f, 1f) > 0.25f)
         {
-            Vector3 newObstacleNormalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(Random.Range(0f, 1f), 1.1f));
+            Vector3 newObstacleNormalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(Random.Range(-0.10f, 1.10f), 1.1f));
             newObstacleNormalizedPosition.z = 0;
 
             GameObject obstacle = Instantiate(gameComponentPrefab);
@@ -117,7 +97,7 @@ public class BoatGame : MonoBehaviour, IGameManager
         {
             Vector3 pos = Camera.main.WorldToViewportPoint(player.playerObject.transform.position);
             float heightOnScreen = pos.y;
-            float newDistanceTraveled = gameSpeed;
+            float newDistanceTraveled = 10.0f;
             player.score += Mathf.RoundToInt(Mathf.Ceil((newDistanceTraveled) * (heightOnScreen * 1.5f)));
         }
     }

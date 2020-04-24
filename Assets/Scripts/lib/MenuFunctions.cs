@@ -9,12 +9,17 @@ public class MenuFunctions : MonoBehaviour
     SceneManager.LoadScene("MenuScene");
   }
 
-  public void LoadBoatGame()
+  public void LoadBoatGamePlayer()
   {
-    SceneManager.LoadScene("BoatGameScene");
+    SceneManager.LoadScene("BoatGamePlayerScene");
   }
 
-  public void LoadNeuralNetworkGame()
+    public void LoadBoatGameAI()
+    {
+        SceneManager.LoadScene("BoatGameAIScene");
+    }
+
+    public void LoadNeuralNetworkGame()
   {
     SceneManager.LoadScene("NeuralNetworkTest");
   }

@@ -41,10 +41,10 @@ public class AIMovement : MovementAbility
         switch (indexOfBiggest)
         {
             case 0:
-                boatPos.y += movementSpeed * Time.deltaTime; // Up
+                boatPos.y += movementSpeed * Time.deltaTime;
                 break;
             case 1:
-                boatPos.y -= movementSpeed * Time.deltaTime; // Up
+                boatPos.y -= movementSpeed * Time.deltaTime;
                 break;
             case 2:
                 boatPos.x -= movementSpeed * Time.deltaTime;

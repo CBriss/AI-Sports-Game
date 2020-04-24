@@ -49,6 +49,6 @@ public class GameComponent : MonoBehaviour
     void OnBecameInvisible()
     {
         if (gameObject.tag == "Obstacle")
-            Destroy(gameObject);
+            gameObject.SetActive(false);
     }
 }

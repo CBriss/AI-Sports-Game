@@ -235,7 +235,7 @@ public partial class NeuralNet
         copy.learningRate = this.learningRate;
 
         // Mutate
-        copy = Mutate(copy, 50.0f);
+        copy = Mutate(copy, 0.25f);
 
         return copy;
     }

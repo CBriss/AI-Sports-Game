@@ -7,7 +7,7 @@ public partial class NeuralNet
   {
     try
     {
-      using (StreamWriter writeStream = new StreamWriter(new FileStream("Assets/Scripts/test.txt", FileMode.OpenOrCreate, FileAccess.Write)))
+      using (StreamWriter writeStream = new StreamWriter(new FileStream("Assets/Scripts/bestBoat.txt", FileMode.OpenOrCreate, FileAccess.Write)))
       {
         writeStream.WriteLine(string.Join(",", networkShape));
 
@@ -36,8 +36,6 @@ public partial class NeuralNet
       Console.WriteLine("The file could not be read:");
       Console.WriteLine(e.Message);
     }
-
-
   }
 
   public void readBiasesFromFile(StreamReader readStream)

@@ -1,19 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GeneticAlgorithm : MonoBehaviour
 {
     public int populationSize;
-    public GameObject bestIndividual;
+    public Player bestIndividual;
     public int generationCount;
     public IGameManager game;
+    public GameObject UI;
+
+    private GameObject InstanceUI;
 
     private void Start()
     {
         game = gameObject.GetComponent<IGameManager>();
         generationCount = 1;
         MakeGenerationZero();
+        InstanceUI = Instantiate(UI);
+        InstanceUI.GetComponentInChildren<Text>().text = "Generation: " + generationCount +
+                "\n" + "Current Champion's Score: " + (bestIndividual != null ? bestIndividual.score.ToString() : "0");
     }
     void Update()
     {
@@ -22,10 +29,13 @@ public class GeneticAlgorithm : MonoBehaviour
             NewGeneration(game.GetInactivePlayers());
             foreach(Player player in game.GetInactivePlayers())
             {
-                Destroy(player.playerObject);
+                if(player != bestIndividual)
+                    Destroy(player.playerObject);
             }
             game.SetInactivePlayers(new List<Player>());
             generationCount += 1;
+            InstanceUI.GetComponentInChildren<Text>().text = "Generation: " + generationCount +
+                "\n" + "Current Champion's Score: " + (bestIndividual != null ? bestIndividual.score.ToString() : "0");
 
         }
     }
@@ -47,6 +57,15 @@ public class GeneticAlgorithm : MonoBehaviour
         // Determine Generation Parents
         List<Player> parents = DetermineBestParents(deadIndividuals);
 
+
+        if (bestIndividual == null || parents[0].score > bestIndividual.score)
+        {
+            if(bestIndividual != null)
+                Destroy(bestIndividual.playerObject);
+            bestIndividual = parents[0];
+            bestIndividual.playerObject.GetComponent<GameComponent>().brain.SaveToFile();
+        }
+
         // Combine parent genes
         // SKIPPING FOR NOW
 
@@ -58,8 +77,8 @@ public class GeneticAlgorithm : MonoBehaviour
             );
             newPlayerNormalizedPosition.z = 0;
             Player newPlayer = game.AddPlayer(newPlayerNormalizedPosition);
-            newPlayer.playerObject.GetComponent<GameComponent>().brain = 
-                parents[0].playerObject.GetComponent<GameComponent>().brain.Clone();
+            newPlayer.playerObject.GetComponent<GameComponent>().brain =
+                bestIndividual.playerObject.GetComponent<GameComponent>().brain.Clone();
         }
     }
 
