@@ -205,31 +205,80 @@ public partial class NeuralNet
   # Misc #
   ############
   */
-  public float[] Outputs()
-  {
-    return neurons[networkShape.Length - 1];
-  }
+    public float[] Outputs()
+    {
+        return neurons[networkShape.Length - 1];
+    }
 
     public NeuralNet Clone()
     {
-        NeuralNet copy = new NeuralNet(this.networkShape);
+        NeuralNet copy = new NeuralNet(networkShape);
         // Copy network shape
-        copy.networkShape = this.networkShape;
-
-        // Copy neurons
-        copy.neurons = this.neurons;
+        copy.networkShape = networkShape;
 
         // Copy biaees
-        copy.biases = this.biases;
+        copy.biases = biases.Clone() as float[][];
 
         // Copy weights
-        copy.weights = this.weights;
+        copy.weights = weights.Clone() as float[][][];
 
         // Copy Learning Rate
-        copy.learningRate = this.learningRate;
+        copy.learningRate = learningRate;
 
         // Mutate
-        copy = Mutate(copy, 0.25f);
+        copy = Mutate(copy, 5.0f);
+
+        return copy;
+    }
+
+    public NeuralNet Breed(NeuralNet breedingPartner)
+    {
+        NeuralNet copy = new NeuralNet(networkShape);
+        // Copy network shape
+        copy.networkShape = networkShape;
+
+        // Copy biaees
+        copy.biases = biases.Clone() as float[][];
+        int layerIndex = UnityEngine.Random.Range(0,networkShape.Length-1);
+        int neuronIndex = UnityEngine.Random.Range(0, biases[layerIndex].Length-1);
+        for (int j = neuronIndex; j < biases[layerIndex].Length; j++)
+        {
+            copy.biases[layerIndex][j] = breedingPartner.biases[layerIndex][j];
+        }
+        for (int i=layerIndex; i < biases.Length; i++)
+        {
+            copy.biases[i] = breedingPartner.biases.Clone() as float[];
+        }
+
+        // Copy weights
+        copy.weights = weights.Clone() as float[][][];
+        layerIndex = UnityEngine.Random.Range(0, networkShape.Length-1);
+        neuronIndex = UnityEngine.Random.Range(0, weights[layerIndex].Length-1);
+        int prevNeuronIndex = UnityEngine.Random.Range(0, weights[layerIndex][neuronIndex].Length-1);
+
+        for (int i = prevNeuronIndex; i < weights[layerIndex][neuronIndex].Length; i++)
+        {
+            copy.weights[layerIndex][neuronIndex][i] = breedingPartner.weights[layerIndex][neuronIndex][i];
+        }
+
+        for (int i = layerIndex; i < weights.Length; i++)
+        {
+            for (int j = neuronIndex+1; j < weights[i].Length; j++)
+            {
+                for(int k = 0; k < weights[i][j].Length; k++)
+                {
+                    copy.weights[i][j][k] = breedingPartner.weights[i][j][k];
+                }
+            }
+        }
+
+        copy.weights = weights;
+
+        // Copy Learning Rate
+        copy.learningRate = learningRate;
+
+        // Mutate
+        copy = Mutate(copy, 5.0f);
 
         return copy;
     }
@@ -252,7 +301,7 @@ public partial class NeuralNet
 
     private float MutateWeight(float weight, float goalPercentage)
     {
-        if (UnityEngine.Random.Range(0.0f, 1.0f) < (0.10 * (1 - goalPercentage)))
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.01 * goalPercentage)
         {
             return weight + UnityEngine.Random.Range(0.0f, 1.0f) * 0.5f;
         }

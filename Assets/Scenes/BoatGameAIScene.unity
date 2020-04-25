@@ -630,7 +630,7 @@ MonoBehaviour:
     type: 3}
   playerTemplate: {fileID: 11400000, guid: b43d3f217e956f64781fd080b2e1dde8, type: 2}
   obstacleTemplate: {fileID: 11400000, guid: 3e8f49511eb592744aa4cc56f7d8cfbf, type: 2}
-  obstacleSpawnPeriod: 0.2
+  obstacleSpawnPeriod: 0.75
 --- !u!4 &1084499477
 Transform:
   m_ObjectHideFlags: 0

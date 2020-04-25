@@ -57,7 +57,6 @@ public class GeneticAlgorithm : MonoBehaviour
         // Determine Generation Parents
         List<Player> parents = DetermineBestParents(deadIndividuals);
 
-
         if (bestIndividual == null || parents[0].score > bestIndividual.score)
         {
             if(bestIndividual != null)
@@ -78,15 +77,15 @@ public class GeneticAlgorithm : MonoBehaviour
             newPlayerNormalizedPosition.z = 0;
             Player newPlayer = game.AddPlayer(newPlayerNormalizedPosition);
             newPlayer.playerObject.GetComponent<GameComponent>().brain =
-                bestIndividual.playerObject.GetComponent<GameComponent>().brain.Clone();
+                bestIndividual.playerObject.GetComponent<GameComponent>().brain.Breed(parents[1].playerObject.GetComponent<GameComponent>().brain);
         }
     }
 
-      private List<Player> DetermineBestParents(List<Player> deadIndividuals)
+    private List<Player> DetermineBestParents(List<Player> deadIndividuals)
       {
         return new List<Player>{
-                FindBestIndividual(deadIndividuals),
-                deadIndividuals[ Random.Range(0, deadIndividuals.Count)]
+                FindBestIndividual(deadIndividuals.GetRange(0, deadIndividuals.Count/2)),
+                FindBestIndividual(deadIndividuals.GetRange(deadIndividuals.Count/2, deadIndividuals.Count-deadIndividuals.Count/2))
             };
       }
 

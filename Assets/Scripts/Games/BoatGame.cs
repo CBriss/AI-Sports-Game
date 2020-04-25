@@ -76,18 +76,15 @@ public class BoatGame : MonoBehaviour, IGameManager
 
     void AddObstacles()
     {
-        if (Random.Range(-1f, 1f) > 0.25f)
-        {
-            Vector3 newObstacleNormalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(Random.Range(-0.10f, 1.10f), 1.1f));
-            newObstacleNormalizedPosition.z = 0;
+        Vector3 newObstacleNormalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(Random.Range(-0.10f, 1.10f), 1.1f));
+        newObstacleNormalizedPosition.z = 0;
 
-            GameObject obstacle = Instantiate(gameComponentPrefab);
-            obstacle.GetComponent<GameComponent>().template= obstacleTemplate;
-            if (obstacle != null)
-            {
-                obstacle.transform.position = newObstacleNormalizedPosition;
-                obstacle.SetActive(true);
-            }
+        GameObject obstacle = Instantiate(gameComponentPrefab);
+        obstacle.GetComponent<GameComponent>().template= obstacleTemplate;
+        if (obstacle != null)
+        {
+            obstacle.transform.position = newObstacleNormalizedPosition;
+            obstacle.SetActive(true);
         }
     }
 
@@ -104,6 +101,10 @@ public class BoatGame : MonoBehaviour, IGameManager
 
     public void GameOver()
     {
+        foreach(GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
+        {
+            Destroy(obstacle);
+        }
         SceneManager.LoadScene("MenuScene");
     }
 
