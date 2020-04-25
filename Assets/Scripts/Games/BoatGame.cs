@@ -18,7 +18,16 @@ public class BoatGame : MonoBehaviour, IGameManager
         background = GameObject.Find("background");
         InvokeRepeating("AddObstacles", 0.25f, obstacleSpawnPeriod);
     }
-
+    public void Clear(){
+        foreach(GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
+        {
+            Destroy(obstacle);
+        }
+        foreach(GameObject player in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            Destroy(player);
+        }
+    }
     void Update()
     {
         for (int i = 0; i < activePlayers.Count; i++)
@@ -76,19 +85,18 @@ public class BoatGame : MonoBehaviour, IGameManager
 
     void AddObstacles()
     {
-        if (Random.Range(-1f, 1f) > 0.25f)
-        {
-            Vector3 newObstacleNormalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(Random.Range(-0.10f, 1.10f), 1.1f));
-            newObstacleNormalizedPosition.z = 0;
+        
+        Vector3 newObstacleNormalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(Random.Range(-0.10f, 1.10f), 1.1f));
+        newObstacleNormalizedPosition.z = 0;
 
-            GameObject obstacle = Instantiate(gameComponentPrefab);
-            obstacle.GetComponent<GameComponent>().template= obstacleTemplate;
-            if (obstacle != null)
-            {
-                obstacle.transform.position = newObstacleNormalizedPosition;
-                obstacle.SetActive(true);
-            }
+        GameObject obstacle = Instantiate(gameComponentPrefab);
+        obstacle.GetComponent<GameComponent>().template= obstacleTemplate;
+        if (obstacle != null)
+        {
+            obstacle.transform.position = newObstacleNormalizedPosition;
+            obstacle.SetActive(true);
         }
+        
     }
 
     void UpdatePlayers()
@@ -98,7 +106,10 @@ public class BoatGame : MonoBehaviour, IGameManager
             Vector3 pos = Camera.main.WorldToViewportPoint(player.playerObject.transform.position);
             float heightOnScreen = pos.y;
             float newDistanceTraveled = 10.0f;
-            player.score += Mathf.RoundToInt(Mathf.Ceil((newDistanceTraveled) * (heightOnScreen * 1.5f)));
+            if(pos.x <= 0.01f || pos.x >= 0.99f || pos.y <= 0.01f || pos.y >= 0.99f){
+                player.playerObject.SetActive(false);
+            }
+            player.score += Mathf.RoundToInt(Mathf.Ceil((newDistanceTraveled)));
         }
     }
 

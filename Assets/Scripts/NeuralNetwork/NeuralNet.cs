@@ -212,21 +212,18 @@ public partial class NeuralNet
 
     public NeuralNet Clone()
     {
-        NeuralNet copy = new NeuralNet(this.networkShape);
+        NeuralNet copy = new NeuralNet(networkShape);
         // Copy network shape
-        copy.networkShape = this.networkShape;
-
-        // Copy neurons
-        copy.neurons = this.neurons;
+        copy.networkShape = networkShape;
 
         // Copy biaees
-        copy.biases = this.biases;
+        copy.biases = biases.Clone() as float[][];
 
         // Copy weights
-        copy.weights = this.weights;
+        copy.weights = weights.Clone() as float[][][];
 
         // Copy Learning Rate
-        copy.learningRate = this.learningRate;
+        copy.learningRate = learningRate;
 
         // Mutate
         copy = Mutate(copy, 0.25f);
@@ -252,7 +249,7 @@ public partial class NeuralNet
 
     private float MutateWeight(float weight, float goalPercentage)
     {
-        if (UnityEngine.Random.Range(0.0f, 1.0f) < (0.10 * (1 - goalPercentage)))
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < goalPercentage)
         {
             return weight + UnityEngine.Random.Range(0.0f, 1.0f) * 0.5f;
         }

@@ -27,11 +27,7 @@ public class GeneticAlgorithm : MonoBehaviour
         if (game.GetActivePlayers().Count <= 0)
         {
             NewGeneration(game.GetInactivePlayers());
-            foreach(Player player in game.GetInactivePlayers())
-            {
-                if(player != bestIndividual)
-                    Destroy(player.playerObject);
-            }
+            game.Clear();
             game.SetInactivePlayers(new List<Player>());
             generationCount += 1;
             InstanceUI.GetComponentInChildren<Text>().text = "Generation: " + generationCount +
@@ -45,7 +41,7 @@ public class GeneticAlgorithm : MonoBehaviour
         for (int i = 0; i < populationSize; i++)
         {
             Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(
-                new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), 0)
+                new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.1f, 0.5f), 0)
             );
             newPlayerNormalizedPosition.z = 0;
             game.AddPlayer(newPlayerNormalizedPosition);
@@ -73,7 +69,7 @@ public class GeneticAlgorithm : MonoBehaviour
         for (int i = 0; i < populationSize; i++)
         {
             Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(
-                new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), 0)
+                new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.1f, 0.5f), 0)
             );
             newPlayerNormalizedPosition.z = 0;
             Player newPlayer = game.AddPlayer(newPlayerNormalizedPosition);

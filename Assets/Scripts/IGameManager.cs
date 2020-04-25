@@ -11,4 +11,6 @@ public interface IGameManager
     void Start();
     Player AddPlayer(Vector3 newObstacleNormalizedPosition);
     void GameOver();
+    void Clear();
+    
 }
