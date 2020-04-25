@@ -536,52 +536,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 471410286}
   m_CullTransparentMesh: 0
---- !u!1 &512693495
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 512693497}
-  - component: {fileID: 512693496}
-  m_Layer: 0
-  m_Name: XorPlayer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &512693496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 512693495}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc4704376855a0c489aea30cd72d9d70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  networkShape: 020000000200000001000000
-  activationFunction: sigmoid
-  learningRate: 0.05
---- !u!4 &512693497
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 512693495}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.1475549, y: 0.019225953, z: -66.99162}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -773,10 +727,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0e06b09776770c40b4f84dd53e75bd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  neuralNet: {fileID: 1973996648}
   blackSquare: {fileID: 7806095109525428857, guid: 978412186be5a3146975dcfe56d8f85b,
     type: 3}
   graph: {fileID: 1293051938}
+  networkShape: 1003000064000000320000000a000000
 --- !u!4 &621653583
 Transform:
   m_ObjectHideFlags: 0
@@ -789,7 +743,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &727487890
 GameObject:
@@ -885,7 +839,7 @@ RectTransform:
   - {fileID: 70039532}
   - {fileID: 471410287}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1021,7 +975,7 @@ PrefabInstance:
     - target: {fileID: 1735967948181919702, guid: 0de588a4c551ca945afefcb349c6848c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1735967948181919702, guid: 0de588a4c551ca945afefcb349c6848c,
         type: 3}
@@ -1289,7 +1243,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1787655378
 GameObject:
@@ -1323,7 +1277,7 @@ RectTransform:
   m_Children:
   - {fileID: 1293051937}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1505,52 +1459,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1856916787}
   m_CullTransparentMesh: 0
---- !u!1 &1973996647
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1973996649}
-  - component: {fileID: 1973996648}
-  m_Layer: 0
-  m_Name: MnistPlayer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1973996648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1973996647}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc4704376855a0c489aea30cd72d9d70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  networkShape: 1003000064000000320000000a0000000a000000
-  activationFunction: sigmoid
-  learningRate: 0.05
---- !u!4 &1973996649
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1973996647}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2090390874
 GameObject:
   m_ObjectHideFlags: 0
@@ -1580,8 +1488,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35db86427538bcd47a575312aee60f60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  neuralNet: {fileID: 512693496}
   graph: {fileID: 1293051938}
+  networkShape: 02000000050000000500000001000000
 --- !u!4 &2090390876
 Transform:
   m_ObjectHideFlags: 0
@@ -1594,5 +1502,5 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
