@@ -15,21 +15,15 @@ public partial class NeuralNet
   public float[][][] deltaWeights;
 
   public string activationFunction;
-  public float learningRate;
+  public float learningRate = 0.05f;
 
     /*
     ##################
     # Initialization #
     ##################
+    
     */
     // Constructor
-    private void Start()
-    {
-        initNeurons();
-        initBiases();
-        initWeights();
-    }
-
     public NeuralNet(int[] networkShape)
     {
         this.networkShape = networkShape;
