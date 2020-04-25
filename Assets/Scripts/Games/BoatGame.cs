@@ -54,6 +54,22 @@ public class BoatGame : MonoBehaviour, IGameManager
         return null;
     }
 
+    public Player AddPlayer(Vector3 newObstacleNormalizedPosition, NeuralNet brain)
+    {
+        GameObject playerObject = Instantiate(gameComponentPrefab);
+        playerObject.GetComponent<GameComponent>().template = playerTemplate;
+        playerObject.GetComponent<GameComponent>().brain = brain.Clone();
+        if (playerObject != null)
+        {
+            playerObject.transform.position = newObstacleNormalizedPosition;
+            playerObject.SetActive(true);
+            Player player = new Player(playerObject);
+            activePlayers.Add(player);
+            return player;
+        }
+        return null;
+    }
+
     public List<Player> GetActivePlayers()
     {
         return activePlayers;

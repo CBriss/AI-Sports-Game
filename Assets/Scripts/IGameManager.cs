@@ -10,5 +10,6 @@ public interface IGameManager
     void SetInactivePlayers(List<Player> playerList);
     void Start();
     Player AddPlayer(Vector3 newObstacleNormalizedPosition);
+    Player AddPlayer(Vector3 newObstacleNormalizedPosition, NeuralNet brain);
     void GameOver();
 }

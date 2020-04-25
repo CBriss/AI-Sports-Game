@@ -9,7 +9,6 @@ public class GameComponent : MonoBehaviour
 
     void Start()
     {
-
         //Set Size
         gameObject.GetComponent<RectTransform>().sizeDelta = template.colliderSize;
 

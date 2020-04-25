@@ -36,25 +36,26 @@ public partial class NeuralNet
     {
         try
         {
-        using (StreamReader readStream = new StreamReader(filePath))
-        {
-            string[] shape = readStream.ReadLine().Split(',');
-            for (int i = 0; i < shape.Length; i++)
+            using (StreamReader readStream = new StreamReader(filePath))
             {
-            networkShape[i] = int.Parse(shape[i]);
-            }
+                string[] shape = readStream.ReadLine().Split(',');
+                networkShape = new int[shape.Length];
+                for (int i = 0; i < shape.Length; i++)
+                {
+                networkShape[i] = int.Parse(shape[i]);
+                }
 
-            if (readStream.ReadLine().Equals("Biases"))
-            {
-            readBiasesFromFile(readStream);
+                if (readStream.ReadLine().Equals("Biases"))
+                {
+                ReadBiasesFromFile(readStream);
+                }
+                ReadWeightsFromFile(readStream);
             }
-            readWeightsFromFile(readStream);
-        }
         }
         catch (IOException e)
         {
-        Console.WriteLine("The file could not be read:");
-        Console.WriteLine(e.Message);
+            Console.WriteLine("The file could not be read:");
+            Console.WriteLine(e.Message);
         }
     }
 
@@ -224,9 +225,6 @@ public partial class NeuralNet
 
         // Copy Learning Rate
         copy.learningRate = learningRate;
-
-        // Mutate
-        copy = Mutate(copy, 5.0f);
 
         return copy;
     }

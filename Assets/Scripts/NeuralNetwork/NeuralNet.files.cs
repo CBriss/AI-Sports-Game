@@ -1,13 +1,15 @@
 using System;
+using System.Diagnostics;
 using System.IO;
+using UnityEngine;
 
 public partial class NeuralNet
 {
-  public void SaveToFile()
+  public void SaveToFile(string filePath)
   {
     try
     {
-      using (StreamWriter writeStream = new StreamWriter(new FileStream("Assets/Scripts/bestBoat.txt", FileMode.OpenOrCreate, FileAccess.Write)))
+      using (StreamWriter writeStream = new StreamWriter(new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write)))
       {
         writeStream.WriteLine(string.Join(",", networkShape));
 
@@ -38,53 +40,58 @@ public partial class NeuralNet
     }
   }
 
-  public void readBiasesFromFile(StreamReader readStream)
-  {
-    while (true)
+    public void ReadBiasesFromFile(StreamReader readStream)
     {
-      int currentLayer = 0;
-      string fileLine = readStream.ReadLine();
-      if (fileLine.Equals("Weights"))
-        break;
-      if (fileLine.Contains("Layer"))
-      {
-        currentLayer = int.Parse(fileLine.Split(' ')[1]);
-      }
-      else
-      {
-        string[] inputBiases = fileLine.Split(',');
-        for (int i = 0; i < biases[currentLayer].Length; i++)
+        biases = new float[networkShape.Length][];
+        while (true)
         {
-          biases[currentLayer][i] = int.Parse(inputBiases[i]);
+            int currentLayer = 0;
+            string fileLine = readStream.ReadLine();
+            if (fileLine.Equals("Weights"))
+            break;
+            if (fileLine.Contains("Layer"))
+            {
+                currentLayer = int.Parse(fileLine.Split(' ')[1]);
+            }
+            else if (!fileLine.Equals("Biaes"))
+            {
+                string[] inputBiases = fileLine.Split(',');
+                biases[currentLayer] = new float[inputBiases.Length];
+                for (int i = 0; i < biases[currentLayer].Length; i++)
+                {
+                    biases[currentLayer][i] = float.Parse(inputBiases[i]);
+                }
+            }
         }
-      }
     }
-  }
 
-  public void readWeightsFromFile(StreamReader readStream)
-  {
-    while (readStream.Peek() >= 0)
+    public void ReadWeightsFromFile(StreamReader readStream)
     {
-      int currentLayer = 0;
-      int currentNeuronIndex = 0;
-      string fileLine = readStream.ReadLine();
-      string[] line = fileLine.Split(' ');
-      if (fileLine.Contains("Layer"))
-      {
-        currentLayer = int.Parse(line[1]);
-      }
-      else if (fileLine.Contains("Destination Neuron Index"))
-      {
-        currentNeuronIndex = int.Parse(line[line.Length]);
-      }
-      else
-      {
-        string[] inputWeights = fileLine.Split(',');
-        for (int i = 0; i < weights[currentLayer][currentNeuronIndex].Length; i++)
+        weights = new float[networkShape.Length][][];
+        while (readStream.Peek() >= 0)
         {
-          weights[currentLayer][currentNeuronIndex][i] = int.Parse(inputWeights[i]);
+            int currentLayer = 0;
+            int currentNeuronIndex = 0;
+            string fileLine = readStream.ReadLine();
+            string[] line = fileLine.Split(' ');
+            if (fileLine.Contains("Layer"))
+            {
+                currentLayer = int.Parse(line[1]);
+            }
+            else if (fileLine.Contains("Destination Neuron Index"))
+            {
+                currentNeuronIndex = int.Parse(line[line.Length-1]);
+            }
+            else
+            {
+                string[] inputWeights = fileLine.Split(',');
+                weights[currentLayer] = new float[networkShape[currentLayer]][];
+                weights[currentLayer][currentNeuronIndex] = new float[inputWeights.Length];
+                for (int i = 0; i < weights[currentLayer][currentNeuronIndex].Length; i++)
+                {
+                    weights[currentLayer][currentNeuronIndex][i] = float.Parse(inputWeights[i]);
+                }
+            }
         }
-      }
     }
-  }
 }

@@ -12,6 +12,7 @@ public class GeneticAlgorithm : MonoBehaviour
     public GameObject UI;
 
     private GameObject InstanceUI;
+    public bool useSeedBrain;
 
     private void Start()
     {
@@ -42,13 +43,17 @@ public class GeneticAlgorithm : MonoBehaviour
 
     void MakeGenerationZero()
     {
+        NeuralNet seedBrain = new NeuralNet("Assets/Scripts/bestBoat.txt");
         for (int i = 0; i < populationSize; i++)
         {
             Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(
                 new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), 0)
             );
             newPlayerNormalizedPosition.z = 0;
-            game.AddPlayer(newPlayerNormalizedPosition);
+            if (useSeedBrain)
+                game.AddPlayer(newPlayerNormalizedPosition);
+            else
+                game.AddPlayer(newPlayerNormalizedPosition, seedBrain);
         }
     }
 
@@ -62,11 +67,8 @@ public class GeneticAlgorithm : MonoBehaviour
             if(bestIndividual != null)
                 Destroy(bestIndividual.playerObject);
             bestIndividual = parents[0];
-            bestIndividual.playerObject.GetComponent<GameComponent>().brain.SaveToFile();
+            bestIndividual.playerObject.GetComponent<GameComponent>().brain.SaveToFile("Assets/Scripts/bestBoat.txt");
         }
-
-        // Combine parent genes
-        // SKIPPING FOR NOW
 
         // Create new population with those genes and a mutation chance
         for (int i = 0; i < populationSize; i++)
@@ -103,34 +105,4 @@ public class GeneticAlgorithm : MonoBehaviour
         }
         return currentBest;
     }
-
-    /*
-    combineParentGenes(parentA, parentB, child)
-    {
-        let parentA_input_layer = parentA.brain.input_weights.dataSync();
-        let parentA_output_layer = parentA.brain.output_weights.dataSync();
-        let parentB_input_layer = parentB.brain.input_weights.dataSync();
-        let parentB_output_layer = parentB.brain.output_weights.dataSync();
-
-        let crossoverPoint = Math.floor(
-          Math.random() * parentA_input_layer.length -
-            parentA_input_layer.length / 2
-        );
-        let child_in_dna = [
-          ...parentA_input_layer.slice(0, crossoverPoint),
-          ...parentB_input_layer.slice(crossoverPoint, parentB_input_layer.length)
-        ];
-        let child_out_dna = [
-          ...parentA_output_layer.slice(0, crossoverPoint),
-          ...parentB_output_layer.slice(crossoverPoint, parentB_output_layer.length)
-        ];
-
-        let input_shape = child.brain.input_weights.shape;
-        let output_shape = child.brain.output_weights.shape;
-        child.brain.dispose();
-        child.brain.input_weights = tf.tensor(child_in_dna, input_shape);
-        child.brain.output_weights = tf.tensor(child_out_dna, output_shape);
-        return child;
-    }
-    */
 }
