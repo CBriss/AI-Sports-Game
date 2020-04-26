@@ -18,7 +18,11 @@ public class BoatGame : MonoBehaviour, IGame
         background = GameObject.Find("background");
         InvokeRepeating("AddObstacle", 0.25f, obstacleSpawnPeriod);
     }
-
+    public void Clear(){
+        ClearActivePlayers();
+        ClearInactivePlayers();
+        ClearObstacles();
+    }
     void Update()
     {
         for (int i = 0; i < activePlayers.Count; i++)
@@ -100,12 +104,30 @@ public class BoatGame : MonoBehaviour, IGame
 
     public void ClearActivePlayers()
     {
+        foreach(Player player in activePlayers)
+        {
+            Destroy(player.playerObject);
+        }
+
         activePlayers = new List<Player>();
     }
 
     public void ClearInactivePlayers()
     {
+        foreach(Player player in inactivePlayers)
+        {
+            Destroy(player.playerObject);
+        }
+
         inactivePlayers = new List<Player>();
+    }
+
+    public void ClearObstacles()
+    {
+        foreach(GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
+        {
+            Destroy(obstacle);
+        }
     }
     
     public void UpdateScores()
@@ -115,7 +137,10 @@ public class BoatGame : MonoBehaviour, IGame
             Vector3 pos = Camera.main.WorldToViewportPoint(player.playerObject.transform.position);
             float heightOnScreen = pos.y;
             float newDistanceTraveled = 10.0f;
-            player.score += Mathf.RoundToInt(Mathf.Ceil((newDistanceTraveled) * (heightOnScreen * 1.5f)));
+            if(pos.x <= 0.01f || pos.x >= 0.99f || pos.y <= 0.01f || pos.y >= 0.99f){
+                player.playerObject.SetActive(false);
+            }
+            player.score += Mathf.RoundToInt(Mathf.Ceil((newDistanceTraveled)));
         }
     }
 

@@ -10,8 +10,10 @@ public interface IGame
     void AddObstacle(Vector3 normalizedPostion);
     List<Player> GetActivePlayers();
     List<Player> GetInactivePlayers();
+    void Clear();
     void ClearActivePlayers();
     void ClearInactivePlayers();
+    void ClearObstacles();
     void UpdateScores();
     void GameOver();
 }

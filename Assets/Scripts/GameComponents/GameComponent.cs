@@ -34,6 +34,8 @@ public class GameComponent : MonoBehaviour
         template.movementController.Move(gameObject);
         endX = transform.position.x + template.colliderSize.x;
         endY = transform.position.y + template.colliderSize.y;
+
+        
     }
 
 

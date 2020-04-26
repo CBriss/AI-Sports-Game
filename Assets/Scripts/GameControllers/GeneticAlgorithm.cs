@@ -27,12 +27,9 @@ public class GeneticAlgorithm : GameController
     {
         if (game.GetActivePlayers().Count <= 0)
         {
+            game.ClearActivePlayers();
+            game.ClearObstacles();
             NewGeneration(game.GetInactivePlayers());
-            foreach(Player player in game.GetInactivePlayers())
-            {
-                if(player != bestIndividual)
-                    Destroy(player.playerObject);
-            }
             game.ClearInactivePlayers();
             generationCount += 1;
             InstanceUI.GetComponentInChildren<Text>().text = "Generation: " + generationCount +
@@ -50,7 +47,7 @@ public class GeneticAlgorithm : GameController
         for (int i = 0; i < populationSize; i++)
         {
             Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(
-                new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), 0)
+                new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.1f, 0.5f), 0)
             );
             newPlayerNormalizedPosition.z = 0;
             if (useSeedBrain)
@@ -77,12 +74,12 @@ public class GeneticAlgorithm : GameController
         for (int i = 0; i < populationSize; i++)
         {
             Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(
-                new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), 0)
+                new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.1f, 0.5f), 0)
             );
             newPlayerNormalizedPosition.z = 0;
             Player newPlayer = game.AddPlayer(newPlayerNormalizedPosition);
             newPlayer.playerObject.GetComponent<GameComponent>().brain =
-                bestIndividual.playerObject.GetComponent<GameComponent>().brain.Breed(
+                parents[0].playerObject.GetComponent<GameComponent>().brain.Breed(
                     parents[1].playerObject.GetComponent<GameComponent>().brain,
                     mutationPercentage,
                     mutationAmount
