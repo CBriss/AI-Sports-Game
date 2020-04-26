@@ -19,5 +19,5 @@ MonoBehaviour:
   isPlayer: 0
   hasBrain: 0
   brainShape: 
-  movementAbility: {fileID: 11400000, guid: f161cecca749afa4fbdcc64725b697d6, type: 2}
+  movementController: {fileID: 11400000, guid: f161cecca749afa4fbdcc64725b697d6, type: 2}
   tagName: Obstacle
