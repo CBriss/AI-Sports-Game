@@ -12,6 +12,8 @@ public class BoatGame : MonoBehaviour, IGame
     public List<Player> activePlayers = new List<Player>();
     public List<Player> inactivePlayers = new List<Player>();
     public float obstacleSpawnPeriod = 0.25f;
+    public int playerLayer;
+    public int obstacleLayer;
 
     public void Start()
     {
@@ -51,6 +53,7 @@ public class BoatGame : MonoBehaviour, IGame
         if (playerObject != null)
         {
             playerObject.transform.position = normalizedPosition;
+            playerObject.layer = playerLayer;
             playerObject.SetActive(true);
             Player player = new Player(playerObject);
             activePlayers.Add(player);
@@ -67,6 +70,7 @@ public class BoatGame : MonoBehaviour, IGame
         if (playerObject != null)
         {
             playerObject.transform.position = normalizedPosition;
+            playerObject.layer = playerLayer;
             playerObject.SetActive(true);
             Player player = new Player(playerObject);
             activePlayers.Add(player);
@@ -86,6 +90,7 @@ public class BoatGame : MonoBehaviour, IGame
     {
         GameObject obstacle = Instantiate(gameComponentPrefab);
         obstacle.GetComponent<GameComponent>().template = obstacleTemplate;
+        obstacle.layer = obstacleLayer;
         if (obstacle != null)
         {
             obstacle.transform.position = normalizedPosition;

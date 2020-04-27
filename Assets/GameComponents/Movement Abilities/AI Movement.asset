@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: AI Movement
   m_EditorClassIdentifier: 
   movementSpeed: 5
-  nearestObstaclesCount: 1
+  nearestObstaclesCount: 0
