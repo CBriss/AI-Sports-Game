@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "new single direction movement", menuName = "Game Components/Single Direction Movement")]
-public class SingleDirectionMovement : MovementAbility
+public class SingleDirectionMovement : MovementController
 {
     public float movementSpeed;
     public string direction;
+
     public override void Move(GameObject gameObject)
     {
         Vector3 pos = gameObject.transform.position;

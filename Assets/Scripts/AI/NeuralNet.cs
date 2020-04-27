@@ -36,25 +36,26 @@ public partial class NeuralNet
     {
         try
         {
-        using (StreamReader readStream = new StreamReader(filePath))
-        {
-            string[] shape = readStream.ReadLine().Split(',');
-            for (int i = 0; i < shape.Length; i++)
+            using (StreamReader readStream = new StreamReader(filePath))
             {
-            networkShape[i] = int.Parse(shape[i]);
-            }
+                string[] shape = readStream.ReadLine().Split(',');
+                networkShape = new int[shape.Length];
+                for (int i = 0; i < shape.Length; i++)
+                {
+                networkShape[i] = int.Parse(shape[i]);
+                }
 
-            if (readStream.ReadLine().Equals("Biases"))
-            {
-            readBiasesFromFile(readStream);
+                if (readStream.ReadLine().Equals("Biases"))
+                {
+                ReadBiasesFromFile(readStream);
+                }
+                ReadWeightsFromFile(readStream);
             }
-            readWeightsFromFile(readStream);
-        }
         }
         catch (IOException e)
         {
-        Console.WriteLine("The file could not be read:");
-        Console.WriteLine(e.Message);
+            Console.WriteLine("The file could not be read:");
+            Console.WriteLine(e.Message);
         }
     }
 
@@ -205,10 +206,10 @@ public partial class NeuralNet
   # Misc #
   ############
   */
-  public float[] Outputs()
-  {
-    return neurons[networkShape.Length - 1];
-  }
+    public float[] Outputs()
+    {
+        return neurons[networkShape.Length - 1];
+    }
 
     public NeuralNet Clone()
     {
@@ -216,23 +217,66 @@ public partial class NeuralNet
         // Copy network shape
         copy.networkShape = networkShape;
 
-        // Copy biaees
+        // Copy biases
         copy.biases = biases.Clone() as float[][];
 
         // Copy weights
         copy.weights = weights.Clone() as float[][][];
 
-        // Copy Learning Rate
-        copy.learningRate = learningRate;
+        return copy;
+    }
+
+    public NeuralNet Breed(NeuralNet breedingPartner, float mutationPercentage, float mutationAmount)
+    {
+        NeuralNet copy = new NeuralNet(networkShape);
+        // Copy network shape
+        copy.networkShape = networkShape;
+
+        // Copy biaees
+        copy.biases = biases.Clone() as float[][];
+        int layerIndex = UnityEngine.Random.Range(0,networkShape.Length-1);
+        int neuronIndex = UnityEngine.Random.Range(0, biases[layerIndex].Length-1);
+        for (int j = neuronIndex; j < biases[layerIndex].Length; j++)
+        {
+            copy.biases[layerIndex][j] = breedingPartner.biases[layerIndex][j];
+        }
+        for (int i=layerIndex; i < biases.Length; i++)
+        {
+            copy.biases[i] = breedingPartner.biases.Clone() as float[];
+        }
+
+        // Copy weights
+        copy.weights = weights.Clone() as float[][][];
+        layerIndex = UnityEngine.Random.Range(0, networkShape.Length-1);
+        neuronIndex = UnityEngine.Random.Range(0, weights[layerIndex].Length-1);
+        int prevNeuronIndex = UnityEngine.Random.Range(0, weights[layerIndex][neuronIndex].Length-1);
+
+        for (int i = prevNeuronIndex; i < weights[layerIndex][neuronIndex].Length; i++)
+        {
+            copy.weights[layerIndex][neuronIndex][i] = breedingPartner.weights[layerIndex][neuronIndex][i];
+        }
+
+        for (int i = layerIndex; i < weights.Length; i++)
+        {
+            for (int j = neuronIndex+1; j < weights[i].Length; j++)
+            {
+                for(int k = 0; k < weights[i][j].Length; k++)
+                {
+                    copy.weights[i][j][k] = breedingPartner.weights[i][j][k];
+                }
+            }
+        }
+
+        copy.weights = weights;
 
         // Mutate
-        copy = Mutate(copy, 0.25f);
+        copy = Mutate(copy, mutationPercentage, mutationAmount);
 
         return copy;
     }
 
 
-    public NeuralNet Mutate(NeuralNet neuralNet, float goalPercentage) {
+    public NeuralNet Mutate(NeuralNet neuralNet, float mutationPercentage, float mutationAmount) {
         // for each layer
         for (int i = 0; i < neuralNet.weights.Length; i++)
         {
@@ -240,18 +284,18 @@ public partial class NeuralNet
             {
                 for (int k = 0; k < neuralNet.weights[i][j].Length; k++)
                 {
-                    neuralNet.weights[i][j][k] = MutateWeight(neuralNet.weights[i][j][k], goalPercentage);
+                    neuralNet.weights[i][j][k] = MutateWeight(neuralNet.weights[i][j][k], mutationPercentage, mutationAmount);
                 }
             }
         }
         return neuralNet;
     }
 
-    private float MutateWeight(float weight, float goalPercentage)
+    private float MutateWeight(float weight, float mutationPercentage, float mutationAmount)
     {
-        if (UnityEngine.Random.Range(0.0f, 1.0f) < goalPercentage)
+        if (UnityEngine.Random.Range(0.0f, 1.0f) < 0.01 * mutationPercentage)
         {
-            return weight + UnityEngine.Random.Range(0.0f, 1.0f) * 0.5f;
+            return weight + UnityEngine.Random.Range(0.0f, 1.0f) * mutationAmount;
         }
         return weight;
     }

@@ -630,7 +630,9 @@ MonoBehaviour:
     type: 3}
   playerTemplate: {fileID: 11400000, guid: b43d3f217e956f64781fd080b2e1dde8, type: 2}
   obstacleTemplate: {fileID: 11400000, guid: 3e8f49511eb592744aa4cc56f7d8cfbf, type: 2}
-  obstacleSpawnPeriod: 0.2
+  obstacleSpawnPeriod: 0.75
+  playerLayer: 9
+  obstacleLayer: 8
 --- !u!4 &1084499477
 Transform:
   m_ObjectHideFlags: 0
@@ -661,6 +663,9 @@ MonoBehaviour:
   populationSize: 300
   generationCount: 1
   UI: {fileID: 2024007002270626767, guid: 1278e8a7de5a9ec41bc30ba9b276131b, type: 3}
+  useSeedBrain: 0
+  mutationPercentage: 15
+  mutationAmount: 0.05
 --- !u!1 &1637887112
 GameObject:
   m_ObjectHideFlags: 0

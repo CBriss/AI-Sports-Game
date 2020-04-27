@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new player movement", menuName = "Game Components/Player Movement")]
-public class PlayerMovement : MovementAbility
+public class PlayerMovement : MovementController
 {
     public KeyCode up_key;
     public KeyCode down_key;

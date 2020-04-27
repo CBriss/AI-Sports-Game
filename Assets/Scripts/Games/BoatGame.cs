@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class BoatGame : MonoBehaviour, IGameManager
+public class BoatGame : MonoBehaviour, IGame
 {
     public GameObject background;
     public GameObject gameComponentPrefab;
@@ -12,21 +12,18 @@ public class BoatGame : MonoBehaviour, IGameManager
     public List<Player> activePlayers = new List<Player>();
     public List<Player> inactivePlayers = new List<Player>();
     public float obstacleSpawnPeriod = 0.25f;
+    public int playerLayer;
+    public int obstacleLayer;
 
     public void Start()
     {
         background = GameObject.Find("background");
-        InvokeRepeating("AddObstacles", 0.25f, obstacleSpawnPeriod);
+        InvokeRepeating("AddObstacle", 0.25f, obstacleSpawnPeriod);
     }
     public void Clear(){
-        foreach(GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
-        {
-            Destroy(obstacle);
-        }
-        foreach(GameObject player in GameObject.FindGameObjectsWithTag("Player"))
-        {
-            Destroy(player);
-        }
+        ClearActivePlayers();
+        ClearInactivePlayers();
+        ClearObstacles();
     }
     void Update()
     {
@@ -40,21 +37,23 @@ public class BoatGame : MonoBehaviour, IGameManager
                 i--;
             }
         }
-        UpdatePlayers();
+        UpdateScores();
     }
+    
     void LateUpdate()
     {
         if (activePlayers.Count <= 0)
             GameOver();
     }
 
-    public Player AddPlayer(Vector3 newObstacleNormalizedPosition)
+    public Player AddPlayer(Vector3 normalizedPosition)
     {
         GameObject playerObject = Instantiate(gameComponentPrefab);
         playerObject.GetComponent<GameComponent>().template = playerTemplate;
         if (playerObject != null)
         {
-            playerObject.transform.position = newObstacleNormalizedPosition;
+            playerObject.transform.position = normalizedPosition;
+            playerObject.layer = playerLayer;
             playerObject.SetActive(true);
             Player player = new Player(playerObject);
             activePlayers.Add(player);
@@ -63,6 +62,41 @@ public class BoatGame : MonoBehaviour, IGameManager
         return null;
     }
 
+    public Player AddPlayer(Vector3 normalizedPosition, NeuralNet brain)
+    {
+        GameObject playerObject = Instantiate(gameComponentPrefab);
+        playerObject.GetComponent<GameComponent>().template = playerTemplate;
+        playerObject.GetComponent<GameComponent>().brain = brain.Clone();
+        if (playerObject != null)
+        {
+            playerObject.transform.position = normalizedPosition;
+            playerObject.layer = playerLayer;
+            playerObject.SetActive(true);
+            Player player = new Player(playerObject);
+            activePlayers.Add(player);
+            return player;
+        }
+        return null;
+    }
+
+    public void AddObstacle()
+    {
+        Vector3 normalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(Random.Range(-0.10f, 1.10f), 1.1f));
+        normalizedPosition.z = 0;
+        AddObstacle(normalizedPosition);
+    }
+
+    public void AddObstacle(Vector3 normalizedPosition)
+    {
+        GameObject obstacle = Instantiate(gameComponentPrefab);
+        obstacle.GetComponent<GameComponent>().template = obstacleTemplate;
+        obstacle.layer = obstacleLayer;
+        if (obstacle != null)
+        {
+            obstacle.transform.position = normalizedPosition;
+            obstacle.SetActive(true);
+        }
+    }
     public List<Player> GetActivePlayers()
     {
         return activePlayers;
@@ -73,33 +107,35 @@ public class BoatGame : MonoBehaviour, IGameManager
         return inactivePlayers;
     }
 
-    public void SetActivePlayers(List<Player> playerList)
+    public void ClearActivePlayers()
     {
-        activePlayers = playerList;
-    }
-
-    public void SetInactivePlayers(List<Player> playerList)
-    {
-        inactivePlayers = playerList;
-    }
-
-    void AddObstacles()
-    {
-        
-        Vector3 newObstacleNormalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(Random.Range(-0.10f, 1.10f), 1.1f));
-        newObstacleNormalizedPosition.z = 0;
-
-        GameObject obstacle = Instantiate(gameComponentPrefab);
-        obstacle.GetComponent<GameComponent>().template= obstacleTemplate;
-        if (obstacle != null)
+        foreach(Player player in activePlayers)
         {
-            obstacle.transform.position = newObstacleNormalizedPosition;
-            obstacle.SetActive(true);
+            Destroy(player.playerObject);
         }
-        
+
+        activePlayers = new List<Player>();
     }
 
-    void UpdatePlayers()
+    public void ClearInactivePlayers()
+    {
+        foreach(Player player in inactivePlayers)
+        {
+            Destroy(player.playerObject);
+        }
+
+        inactivePlayers = new List<Player>();
+    }
+
+    public void ClearObstacles()
+    {
+        foreach(GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
+        {
+            Destroy(obstacle);
+        }
+    }
+    
+    public void UpdateScores()
     {
         foreach(Player player in activePlayers)
         {
@@ -115,6 +151,10 @@ public class BoatGame : MonoBehaviour, IGameManager
 
     public void GameOver()
     {
+        foreach(GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
+        {
+            Destroy(obstacle);
+        }
         SceneManager.LoadScene("MenuScene");
     }
 

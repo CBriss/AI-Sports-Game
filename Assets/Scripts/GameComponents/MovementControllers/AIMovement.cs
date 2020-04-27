@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "new AI movement", menuName = "Game Components/AI Movement")]
-public class AIMovement : MovementAbility
+public class AIMovement : MovementController
 {
     public float movementSpeed;
     public int nearestObstaclesCount = 2;
@@ -11,7 +11,7 @@ public class AIMovement : MovementAbility
         Vector3 boatPos = gameObject.transform.position;
         Vector3 normalizedBoatPos = Camera.main.WorldToViewportPoint(boatPos);
         
-        if(nearestObstaclesCount>0){
+        if(nearestObstaclesCount > 0) {
             GameObject[] nearestObstacles = FindNearest(gameObject, obstacles, nearestObstaclesCount);
             float[] input = new float[2+(2*nearestObstaclesCount)];
             input[0] = normalizedBoatPos.x;
@@ -32,36 +32,30 @@ public class AIMovement : MovementAbility
             }
             gameObject.GetComponent<GameComponent>().brain.FeedForward(input);
         } else {
-            float hitDistanceUp = 1f;
-            float hitDistanceRight = 1f;
-            //float hitDistanceDown = 0f;
-            float hitDistanceLeft = 1f;
-            RaycastHit2D hitUp = Physics2D.Raycast(normalizedBoatPos, -Vector2.up);
-            if (hitUp.collider != null)
-            {
-                hitDistanceUp=hitUp.distance;
-                //Debug.DrawLine(normalizedBoatPos, hitUp.collider.transform.position, Color.red);
-            }
-            RaycastHit2D hitRight = Physics2D.Raycast(normalizedBoatPos, -Vector2.right);
-            if (hitRight.collider != null && hitRight.collider.tag == "Obstacle")
-            {
-                hitDistanceRight=hitRight.distance;
-                //Debug.DrawLine(normalizedBoatPos, hitRight.collider.transform.position, Color.red);
-            }
-            /*RaycastHit2D hitDown = Physics2D.Raycast(normalizedBoatPos, -Vector2.down);
-            if (hitDown.collider != null && hitDown.collider.tag == "Obstacle")
-            {
-                hitDistanceDown=hitDown.distance;
-            }*/
-            RaycastHit2D hitLeft = Physics2D.Raycast(normalizedBoatPos, -Vector2.left);
-            if (hitLeft.collider != null && hitLeft.collider.tag == "Obstacle")
-            {
-                hitDistanceLeft=hitLeft.distance;
-                //Debug.DrawLine(normalizedBoatPos, hitLeft.collider.transform.position, Color.red);
+            
+            Vector2 topOfObject = new Vector2(boatPos.x, boatPos.y + gameObject.GetComponent<Renderer>().bounds.size.y / 2);
+
+            int layerMask = 1 << gameObject.layer;
+            layerMask = ~layerMask;
+            //Vector2[] vectors = {Vector2.up, new Vector2(-0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(-1f, 0.0f), new Vector2(1f, 0.0f) };
+            Vector2[] vectors = {Vector2.up, new Vector2(-0.5f, 0.5f), new Vector2(0.5f, 0.5f)};
+            //Vector2[] vectors = {Vector2.up, new Vector2(-1f, 0.0f), new Vector2(1f, 0.0f) };
+            Color[] vectorColors = {Color.red, Color.blue, Color.green, Color.yellow, Color.white};
+            float[] hitDistances = new float[vectors.Length];
+            float[] input = new float[vectors.Length+2];
+            input[0]=topOfObject.x;
+            input[1]=topOfObject.x;
+            
+            for(int i = 0; i < vectors.Length; i++){
+                RaycastHit2D hit = Physics2D.Raycast(topOfObject, vectors[i], Mathf.Infinity, layerMask);
+                if (hit.collider != null)
+                {
+                    Debug.DrawLine(topOfObject, hit.collider.transform.position, vectorColors[i]);
+                    input[i+2] = hit.distance;
+                }
             }
             
-            //float[] input={normalizedBoatPos.x, normalizedBoatPos.y, hitDistanceUp, hitDistanceRight, hitDistanceDown, hitDistanceLeft};
-            float[] input={normalizedBoatPos.x, normalizedBoatPos.y, hitDistanceUp, hitDistanceRight, hitDistanceLeft};
+            // Debug.Log(input[0] + ", " + input[1] + ", " + input[2] + ", " + input[3] + ", " + input[4]);
             gameObject.GetComponent<GameComponent>().brain.FeedForward(input);
         }
         

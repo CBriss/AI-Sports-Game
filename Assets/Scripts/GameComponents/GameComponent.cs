@@ -9,7 +9,6 @@ public class GameComponent : MonoBehaviour
 
     void Start()
     {
-
         //Set Size
         gameObject.GetComponent<RectTransform>().sizeDelta = template.colliderSize;
 
@@ -32,14 +31,15 @@ public class GameComponent : MonoBehaviour
 
     void Update()
     {
-        if(template.movementAbility)
-            template.movementAbility.Move(gameObject);
+        template.movementController.Move(gameObject);
         endX = transform.position.x + template.colliderSize.x;
         endY = transform.position.y + template.colliderSize.y;
 
         
     }
 
+
+    // Note, these will likely be bettwe in the Game, not here
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (gameObject.tag == "Player" && collision.gameObject.tag == "Obstacle")
