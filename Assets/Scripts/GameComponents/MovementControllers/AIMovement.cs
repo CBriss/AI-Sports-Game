@@ -32,32 +32,29 @@ public class AIMovement : MovementController
             }
             gameObject.GetComponent<GameComponent>().brain.FeedForward(input);
         } else {
-            float hitDistanceUp = 0.0f;
-            float hitDistanceRight = 0.0f;
-            float hitDistanceLeft = 0.0f;
+            
             Vector2 topOfObject = new Vector2(boatPos.x, boatPos.y + gameObject.GetComponent<Renderer>().bounds.size.y / 2);
 
             int layerMask = 1 << gameObject.layer;
             layerMask = ~layerMask;
-            RaycastHit2D hitUp = Physics2D.Raycast(topOfObject, Vector2.up, Mathf.Infinity, layerMask);
-            if (hitUp.collider != null)
-            {
-                hitDistanceUp=hitUp.distance;
-                Debug.DrawLine(topOfObject, hitUp.collider.transform.position, Color.red);
+            //Vector2[] vectors = {Vector2.up, new Vector2(-0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(-1f, 0.0f), new Vector2(1f, 0.0f) };
+            Vector2[] vectors = {Vector2.up, new Vector2(-0.5f, 0.5f), new Vector2(0.5f, 0.5f)};
+            //Vector2[] vectors = {Vector2.up, new Vector2(-1f, 0.0f), new Vector2(1f, 0.0f) };
+            Color[] vectorColors = {Color.red, Color.blue, Color.green, Color.yellow, Color.white};
+            float[] hitDistances = new float[vectors.Length];
+            float[] input = new float[vectors.Length+2];
+            input[0]=topOfObject.x;
+            input[1]=topOfObject.x;
+            
+            for(int i = 0; i < vectors.Length; i++){
+                RaycastHit2D hit = Physics2D.Raycast(topOfObject, vectors[i], Mathf.Infinity, layerMask);
+                if (hit.collider != null)
+                {
+                    Debug.DrawLine(topOfObject, hit.collider.transform.position, vectorColors[i]);
+                    input[i+2] = hit.distance;
+                }
             }
-            RaycastHit2D hitRight = Physics2D.Raycast(topOfObject, new Vector2(-0.5f, 0.5f), Mathf.Infinity, layerMask);
-            if (hitRight.collider != null && hitRight.collider.tag == "Obstacle")
-            {
-                hitDistanceRight=hitRight.distance;
-                Debug.DrawLine(topOfObject, hitRight.collider.transform.position, Color.blue);
-            }
-            RaycastHit2D hitLeft = Physics2D.Raycast(topOfObject, new Vector2(0.5f, 0.5f), Mathf.Infinity, layerMask);
-            if (hitLeft.collider != null && hitLeft.collider.tag == "Obstacle")
-            {
-                hitDistanceLeft=hitLeft.distance;
-                Debug.DrawLine(topOfObject, hitLeft.collider.transform.position, Color.green);
-            }
-            float[] input={topOfObject.x, topOfObject.y, hitDistanceUp, hitDistanceRight, hitDistanceLeft};
+            
             // Debug.Log(input[0] + ", " + input[1] + ", " + input[2] + ", " + input[3] + ", " + input[4]);
             gameObject.GetComponent<GameComponent>().brain.FeedForward(input);
         }
