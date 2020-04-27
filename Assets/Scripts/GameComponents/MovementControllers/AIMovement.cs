@@ -37,8 +37,8 @@ public class AIMovement : MovementController
 
             int layerMask = 1 << gameObject.layer;
             layerMask = ~layerMask;
-            //Vector2[] vectors = {Vector2.up, new Vector2(-0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(-1f, 0.0f), new Vector2(1f, 0.0f) };
-            Vector2[] vectors = {Vector2.up, new Vector2(-0.5f, 0.5f), new Vector2(0.5f, 0.5f)};
+            Vector2[] vectors = {Vector2.up, new Vector2(-0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(-1f, 0.0f), new Vector2(1f, 0.0f) };
+            //Vector2[] vectors = {Vector2.up, new Vector2(-0.5f, 0.5f), new Vector2(0.5f, 0.5f)};
             //Vector2[] vectors = {Vector2.up, new Vector2(-1f, 0.0f), new Vector2(1f, 0.0f) };
             Color[] vectorColors = {Color.red, Color.blue, Color.green, Color.yellow, Color.white};
             float[] hitDistances = new float[vectors.Length];
@@ -52,6 +52,8 @@ public class AIMovement : MovementController
                 {
                     Debug.DrawLine(topOfObject, hit.collider.transform.position, vectorColors[i]);
                     input[i+2] = hit.distance;
+                }else{
+                    input[i+2] = 999f;
                 }
             }
             

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class GeneticAlgorithm : GameController
 {
@@ -47,7 +48,7 @@ public class GeneticAlgorithm : GameController
         for (int i = 0; i < populationSize; i++)
         {
             Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(
-                new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.1f, 0.5f), 0)
+                new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.1f, 0.9f), 0)
             );
             newPlayerNormalizedPosition.z = 0;
             if (useSeedBrain)
@@ -60,30 +61,43 @@ public class GeneticAlgorithm : GameController
     void NewGeneration(List<Player> deadIndividuals)
     {
         // Determine Generation Parents
-        List<Player> parents = DetermineBestParents(deadIndividuals);
-
-        if (bestIndividual == null || parents[0].score > bestIndividual.score)
+        //List<Player> parents = DetermineBestParents(deadIndividuals);
+        
+        List<Player> sortedParents = deadIndividuals.OrderByDescending(p=>p.score).ToList();
+        Debug.Log(sortedParents[0].score);
+        if (bestIndividual == null || sortedParents[0].score > bestIndividual.score)
         {
             if(bestIndividual != null)
                 Destroy(bestIndividual.playerObject);
-            bestIndividual = parents[0];
+            bestIndividual = sortedParents[0];
             bestIndividual.playerObject.GetComponent<GameComponent>().brain.SaveToFile("Assets/Scripts/bestBoat.txt");
         }
-
-        // Create new population with those genes and a mutation chance
+        //Replace bottom half of the population with the best genes and some mutation
         for (int i = 0; i < populationSize; i++)
         {
             Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(
-                new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.1f, 0.5f), 0)
+                new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.1f, 0.9f), 0)
             );
             newPlayerNormalizedPosition.z = 0;
             Player newPlayer = game.AddPlayer(newPlayerNormalizedPosition);
-            newPlayer.playerObject.GetComponent<GameComponent>().brain =
-                parents[0].playerObject.GetComponent<GameComponent>().brain.Breed(
-                    parents[1].playerObject.GetComponent<GameComponent>().brain,
+            //bottom half get a breed of the two best
+            if(i >= populationSize/2){
+                newPlayer.playerObject.GetComponent<GameComponent>().brain =
+                    sortedParents[0].playerObject.GetComponent<GameComponent>().brain.Breed(
+                    sortedParents[1].playerObject.GetComponent<GameComponent>().brain,
                     mutationPercentage,
                     mutationAmount
                 );
+            }else{
+                //top half breed with each other
+                newPlayer.playerObject.GetComponent<GameComponent>().brain =
+                    sortedParents[i].playerObject.GetComponent<GameComponent>().brain.Breed(
+                    sortedParents[i+1].playerObject.GetComponent<GameComponent>().brain,
+                    mutationPercentage,
+                    mutationAmount
+                );
+            }
+            
         }
     }
 
