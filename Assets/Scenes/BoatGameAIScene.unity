@@ -661,7 +661,7 @@ MonoBehaviour:
   populationSize: 300
   generationCount: 1
   UI: {fileID: 2024007002270626767, guid: 1278e8a7de5a9ec41bc30ba9b276131b, type: 3}
-  useSeedBrain: 1
+  useSeedBrain: 0
   mutationPercentage: 15
   mutationAmount: 0.05
 --- !u!1 &1637887112
