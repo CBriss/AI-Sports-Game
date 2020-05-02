@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface IGame
 {
+    void StartGame();
+    bool IsActive();
     Player AddPlayer(Vector3 normalizedPostion);
     Player AddPlayer(Vector3 normalizedPostion, NeuralNet brain);
     void AddObstacle();

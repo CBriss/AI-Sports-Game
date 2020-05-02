@@ -14,9 +14,13 @@ public class GeneticAlgorithm : GameController
     public float mutationPercentage;
     public float mutationAmount;
 
-    public override void Start()
+    public void Start()
     {
         game = gameObject.GetComponent<IGame>();
+    }
+
+    public override void StartGame()
+    {
         generationCount = 1;
         MakeGenerationZero();
         InstanceUI = Instantiate(UI);
@@ -25,6 +29,9 @@ public class GeneticAlgorithm : GameController
     }
     public override void Update()
     {
+        if (!game.IsActive())
+            return;
+
         if (game.GetActivePlayers().Count <= 0)
         {
             game.ClearActivePlayers();

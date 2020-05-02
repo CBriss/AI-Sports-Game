@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class BoatGame : MonoBehaviour, IGame
 {
@@ -15,10 +16,24 @@ public class BoatGame : MonoBehaviour, IGame
     public int playerLayer;
     public int obstacleLayer;
 
+    public bool activeGame = false;
+    public GameObject playButton;
+
     public void Start()
     {
+        Loader.LoaderCallback();
+    }
+    public void StartGame()
+    {
+        playButton.SetActive(false);
         background = GameObject.Find("background");
         InvokeRepeating("AddObstacle", 0.25f, obstacleSpawnPeriod);
+        activeGame = true;
+    }
+
+    public bool IsActive()
+    {
+        return activeGame;
     }
     public void Clear(){
         ClearActivePlayers();
@@ -27,6 +42,8 @@ public class BoatGame : MonoBehaviour, IGame
     }
     void Update()
     {
+        if (!activeGame)
+            return;
         for (int i = 0; i < activePlayers.Count; i++)
         {
             Player player = activePlayers[i];
@@ -42,8 +59,13 @@ public class BoatGame : MonoBehaviour, IGame
     
     void LateUpdate()
     {
+        if (!activeGame)
+            return;
         if (activePlayers.Count <= 0)
+        {
+            activeGame = false;
             GameOver();
+        }
     }
 
     public Player AddPlayer(Vector3 normalizedPosition)

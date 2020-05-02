@@ -4,6 +4,6 @@ using UnityEngine;
 
 public abstract class GameController: MonoBehaviour
 {
-    public abstract void Start();
+    public abstract void StartGame();
     public abstract void Update();
 }
