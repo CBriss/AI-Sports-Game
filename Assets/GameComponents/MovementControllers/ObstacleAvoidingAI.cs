@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "new AI movement", menuName = "Game Components/AI Movement")]
-public class AIMovement : MovementController
+public class ObstacleAvoidingAI : MovementController
 {
     public float movementSpeed;
     public int nearestObstaclesCount = 2;

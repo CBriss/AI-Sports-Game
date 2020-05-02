@@ -1,13 +1,31 @@
 ﻿using System;
-using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public static class Loader
 {
+    public enum Scenes
+    {
+        BoatGameScene,
+        MainMenuScene,
+        NeuralNetworkTest
+    }
+
+    public enum GameControllers
+    {
+        GeneticAlgorithm,
+        PlayerGame
+    }
+
     private static Action onLoaderCallback;
 
-    public static void Load(string sceneName, string gameController)
+
+    public static void Load(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public static void Load(string sceneName, GameControllers gameController)
     {
         onLoaderCallback = () =>
         {
@@ -27,15 +45,14 @@ public static class Loader
         onLoaderCallback = null;
     }
 
-    private static void LoadGameScene(Scene scene, string gameController)
+    private static void LoadGameScene(Scene scene, GameControllers gameController)
     {
         GameObject[] sceneObjects = scene.GetRootGameObjects();
         foreach (GameObject sceneObject in sceneObjects)
         {
             if (sceneObject.name == "GameWrapper")
             {
-                Debug.Log($"Trying to enable {gameController}");
-                (sceneObject.GetComponent(gameController) as MonoBehaviour).enabled = true;
+                (sceneObject.GetComponent(gameController.ToString()) as MonoBehaviour).enabled = true;
             }
 
         }

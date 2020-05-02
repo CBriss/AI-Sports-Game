@@ -19,15 +19,24 @@ public class BoatGame : MonoBehaviour, IGame
     public bool activeGame = false;
     public GameObject playButton;
 
+    public GameController gameController;
+
     public void Start()
     {
         Loader.LoaderCallback();
     }
+
+    public void SetGameController(GameController gameController)
+    {
+        this.gameController = gameController;
+    }
+
     public void StartGame()
     {
         playButton.SetActive(false);
         background = GameObject.Find("background");
         InvokeRepeating("AddObstacle", 0.25f, obstacleSpawnPeriod);
+        gameController.StartGame();
         activeGame = true;
     }
 
@@ -177,7 +186,7 @@ public class BoatGame : MonoBehaviour, IGame
         {
             Destroy(obstacle);
         }
-        SceneManager.LoadScene("MenuScene");
+        Loader.Load(Loader.Scenes.MainMenuScene.ToString());
     }
 
 }
