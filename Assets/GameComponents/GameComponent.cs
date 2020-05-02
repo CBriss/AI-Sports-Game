@@ -7,6 +7,12 @@ public class GameComponent : MonoBehaviour
     public float endY;
     public NeuralNet brain;
 
+    private Camera camera;
+
+    private void Awake()
+    {
+        camera = Camera.main;
+    }
     void Start()
     {
         //Set Size
@@ -31,15 +37,24 @@ public class GameComponent : MonoBehaviour
 
     void Update()
     {
-        template.movementController.Move(gameObject);
+        template.componentController.UpdateComponent(this);
         endX = transform.position.x + template.colliderSize.x;
         endY = transform.position.y + template.colliderSize.y;
 
         
     }
 
+    public void SetPosition(Vector2 newPosition, bool clamptoScreen)
+    {
+        Vector3 normalizedBoatPos = camera.WorldToViewportPoint(newPosition);
+        if (clamptoScreen)
+        {
+            normalizedBoatPos.x = Mathf.Clamp01(normalizedBoatPos.x);
+            normalizedBoatPos.y = Mathf.Clamp01(normalizedBoatPos.y);
+        }
+        gameObject.transform.position = camera.ViewportToWorldPoint(normalizedBoatPos);
+    }
 
-    // Note, these will likely be bettwe in the Game, not here
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (gameObject.tag == "Player" && collision.gameObject.tag == "Obstacle")

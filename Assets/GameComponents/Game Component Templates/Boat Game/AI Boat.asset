@@ -18,5 +18,6 @@ MonoBehaviour:
   imageSize: {x: 0.125, y: 0.125}
   colliderSize: {x: 3, y: 5}
   hasBrain: 1
-  brainShape: 050000000f00000005000000
-  movementController: {fileID: 11400000, guid: f685c022f22509345b1ad7414ffb50bb, type: 2}
+  brainShape: 060000000f00000004000000
+  componentController: {fileID: 11400000, guid: f685c022f22509345b1ad7414ffb50bb,
+    type: 2}

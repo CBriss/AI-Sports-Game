@@ -591,7 +591,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1084499475}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34b517d5745bf1a40a45cdcfef13c238, type: 3}
   m_Name: 
@@ -600,7 +600,7 @@ MonoBehaviour:
   generationCount: 1
   UI: {fileID: 2024007002270626767, guid: 1278e8a7de5a9ec41bc30ba9b276131b, type: 3}
   useSeedBrain: 0
-  mutationPercentage: 15
+  mutationPercentage: 0.1
   mutationAmount: 0.05
 --- !u!114 &1244298861 stripped
 MonoBehaviour:

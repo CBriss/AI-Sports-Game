@@ -13,6 +13,6 @@ public class GameComponentTemplate : ScriptableObject
     [SerializeField] public bool hasBrain;
     [SerializeField] public int[] brainShape;
 
-    [SerializeField] public MovementController movementController;
+    [SerializeField] public ComponentController componentController;
 
 }
