@@ -10,6 +10,8 @@ public class GeneticAlgorithm : GameController
     public IGame game;
     public GameObject UI;
     private GameObject InstanceUI;
+    public GameComponentTemplate playerTemplate;
+    public GameComponentTemplate obstacleTemplate;
     public bool useSeedBrain;
     public float mutationPercentage;
     public float mutationAmount;
@@ -43,6 +45,16 @@ public class GeneticAlgorithm : GameController
             InstanceUI.GetComponentInChildren<Text>().text = "Generation: " + generationCount +
                 "\n" + "Current Champion's Score: " + (bestIndividual != null ? bestIndividual.score.ToString() : "0");
         }
+    }
+
+    public override GameComponentTemplate GetPlayerTemplate()
+    {
+        return playerTemplate;
+    }
+
+    public override GameComponentTemplate GetObstacleTemplate()
+    {
+        return obstacleTemplate;
     }
 
     void MakeGenerationZero()

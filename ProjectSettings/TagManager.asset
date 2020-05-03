@@ -9,6 +9,7 @@ TagManager:
   - BlackSquare
   - GraphDot
   - Boat
+  - Border
   layers:
   - Default
   - TransparentFX

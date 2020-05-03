@@ -8,8 +8,6 @@ public class BoatGame : MonoBehaviour, IGame
 {
     public GameObject background;
     public GameObject gameComponentPrefab;
-    public GameComponentTemplate playerTemplate;
-    public GameComponentTemplate obstacleTemplate;
     public List<Player> activePlayers = new List<Player>();
     public List<Player> inactivePlayers = new List<Player>();
     public float obstacleSpawnPeriod = 0.25f;
@@ -80,7 +78,7 @@ public class BoatGame : MonoBehaviour, IGame
     public Player AddPlayer(Vector3 normalizedPosition)
     {
         GameObject playerObject = Instantiate(gameComponentPrefab);
-        playerObject.GetComponent<GameComponent>().template = playerTemplate;
+        playerObject.GetComponent<GameComponent>().template = gameController.GetPlayerTemplate();
         if (playerObject != null)
         {
             playerObject.transform.position = normalizedPosition;
@@ -96,7 +94,7 @@ public class BoatGame : MonoBehaviour, IGame
     public Player AddPlayer(Vector3 normalizedPosition, NeuralNet brain)
     {
         GameObject playerObject = Instantiate(gameComponentPrefab);
-        playerObject.GetComponent<GameComponent>().template = playerTemplate;
+        playerObject.GetComponent<GameComponent>().template = gameController.GetPlayerTemplate();
         playerObject.GetComponent<GameComponent>().brain = brain.Clone();
         if (playerObject != null)
         {
@@ -120,7 +118,7 @@ public class BoatGame : MonoBehaviour, IGame
     public void AddObstacle(Vector3 normalizedPosition)
     {
         GameObject obstacle = Instantiate(gameComponentPrefab);
-        obstacle.GetComponent<GameComponent>().template = obstacleTemplate;
+        obstacle.GetComponent<GameComponent>().template = gameController.GetObstacleTemplate();
         obstacle.layer = obstacleLayer;
         if (obstacle != null)
         {
@@ -170,12 +168,13 @@ public class BoatGame : MonoBehaviour, IGame
     {
         foreach(Player player in activePlayers)
         {
-            Vector3 pos = Camera.main.WorldToViewportPoint(player.playerObject.transform.position);
-            float heightOnScreen = pos.y;
+            //Vector3 pos = Camera.main.WorldToViewportPoint(player.playerObject.transform.position);
             float newDistanceTraveled = 10.0f;
+            /*
             if(pos.x <= 0.01f || pos.x >= 0.99f || pos.y <= 0.01f || pos.y >= 0.99f){
                 player.playerObject.SetActive(false);
             }
+            */
             player.score += Mathf.RoundToInt(Mathf.Ceil((newDistanceTraveled)));
         }
     }

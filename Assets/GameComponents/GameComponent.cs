@@ -57,7 +57,7 @@ public class GameComponent : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (gameObject.tag == "Player" && collision.gameObject.tag == "Obstacle")
+        if (gameObject.tag == "Player" && (collision.gameObject.tag == "Obstacle" || collision.gameObject.tag == "Border" ))
         {
             gameObject.SetActive(false);
         }

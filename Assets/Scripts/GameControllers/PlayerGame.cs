@@ -4,6 +4,9 @@ public class PlayerGame : GameController
 {
     public IGame game;
 
+    public GameComponentTemplate playerTemplate;
+    public GameComponentTemplate obstacleTemplate;
+
     public void Start()
     {
         game = gameObject.GetComponent<IGame>();
@@ -20,5 +23,15 @@ public class PlayerGame : GameController
 
     public override void Update()
     {
+    }
+
+    public override GameComponentTemplate GetPlayerTemplate()
+    {
+        return playerTemplate;
+    }
+    
+    public override GameComponentTemplate GetObstacleTemplate()
+    {
+        return obstacleTemplate;
     }
 }
