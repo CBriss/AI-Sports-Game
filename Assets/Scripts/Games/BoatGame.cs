@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class BoatGame : MonoBehaviour, IGame
 {
@@ -15,7 +12,7 @@ public class BoatGame : MonoBehaviour, IGame
     public int obstacleLayer;
 
     public bool activeGame = false;
-    public GameObject playButton;
+    public GameObject StartUI;
 
     public GameController gameController;
 
@@ -31,7 +28,7 @@ public class BoatGame : MonoBehaviour, IGame
 
     public void StartGame()
     {
-        playButton.SetActive(false);
+        StartUI.SetActive(false);
         background = GameObject.Find("background");
         InvokeRepeating("AddObstacle", 0.25f, obstacleSpawnPeriod);
         gameController.StartGame();

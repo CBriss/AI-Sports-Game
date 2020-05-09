@@ -3,8 +3,6 @@
 public class GameComponent : MonoBehaviour
 {
     public GameComponentTemplate template;
-    public float endX;
-    public float endY;
     public NeuralNet brain;
 
     private Camera camera;
@@ -37,11 +35,7 @@ public class GameComponent : MonoBehaviour
 
     void Update()
     {
-        template.componentController.UpdateComponent(this);
-        endX = transform.position.x + template.colliderSize.x;
-        endY = transform.position.y + template.colliderSize.y;
-
-        
+        template.componentController.UpdateComponent(this);   
     }
 
     public void SetPosition(Vector2 newPosition, bool clamptoScreen)
@@ -61,6 +55,9 @@ public class GameComponent : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
+
+        // TODO
+        // Trigger an event instead
     }
 
     void OnBecameInvisible()
