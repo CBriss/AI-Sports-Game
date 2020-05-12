@@ -7,6 +7,9 @@ public class PlayerGame : GameController
     public GameComponentTemplate playerTemplate;
     public GameComponentTemplate obstacleTemplate;
 
+    public GameObject gameControllerUI;
+    public GameObject instanceUI;
+
     public void Start()
     {
         game = gameObject.GetComponent<IGame>();

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class GameComponent : MonoBehaviour
 {
@@ -6,6 +7,8 @@ public class GameComponent : MonoBehaviour
     public NeuralNet brain;
 
     private Camera camera;
+
+    public static event Action<GameObject, GameObject> OnComponentCollision = delegate { };
 
     private void Awake()
     {
@@ -51,13 +54,7 @@ public class GameComponent : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (gameObject.tag == "Player" && (collision.gameObject.tag == "Obstacle" || collision.gameObject.tag == "Border" ))
-        {
-            gameObject.SetActive(false);
-        }
-
-        // TODO
-        // Trigger an event instead
+        OnComponentCollision(gameObject, collision.gameObject);
     }
 
     void OnBecameInvisible()

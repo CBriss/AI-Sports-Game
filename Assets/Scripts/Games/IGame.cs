@@ -7,8 +7,7 @@ public interface IGame
     void StartGame();
     bool IsActive();
     void SetGameController(GameController gameController);
-    Player AddPlayer(Vector3 normalizedPostion);
-    Player AddPlayer(Vector3 normalizedPostion, NeuralNet brain);
+    Player AddPlayer(Vector3 normalizedPostion, NeuralNet brain = null);
     void AddObstacle();
     void AddObstacle(Vector3 normalizedPostion);
     List<Player> GetActivePlayers();

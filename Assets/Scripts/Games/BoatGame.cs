@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class BoatGame : MonoBehaviour, IGame
 {
@@ -17,9 +16,13 @@ public class BoatGame : MonoBehaviour, IGame
 
     public GameController gameController;
 
+    public GameObject playerContainer;
+    public GameObject obstacleContainer;
+
     public void Start()
     {
         Loader.LoaderCallback();
+        GameComponent.OnComponentCollision += ManageCollisions;
     }
 
     public void SetGameController(GameController gameController)
@@ -73,37 +76,22 @@ public class BoatGame : MonoBehaviour, IGame
         }
     }
 
-    public Player AddPlayer(Vector3 normalizedPosition)
+    public Player AddPlayer(Vector3 normalizedPosition, NeuralNet brain = null)
     {
         GameObject playerObject = Instantiate(gameComponentPrefab);
-        playerObject.GetComponent<GameComponent>().template = gameController.GetPlayerTemplate();
-        if (playerObject != null)
-        {
-            playerObject.transform.position = normalizedPosition;
-            playerObject.layer = playerLayer;
-            playerObject.SetActive(true);
-            Player player = new Player(playerObject);
-            activePlayers.Add(player);
-            return player;
-        }
-        return null;
-    }
+        if (playerObject == null)
+            return null;
 
-    public Player AddPlayer(Vector3 normalizedPosition, NeuralNet brain)
-    {
-        GameObject playerObject = Instantiate(gameComponentPrefab);
         playerObject.GetComponent<GameComponent>().template = gameController.GetPlayerTemplate();
-        playerObject.GetComponent<GameComponent>().brain = brain.Clone();
-        if (playerObject != null)
-        {
-            playerObject.transform.position = normalizedPosition;
-            playerObject.layer = playerLayer;
-            playerObject.SetActive(true);
-            Player player = new Player(playerObject);
-            activePlayers.Add(player);
-            return player;
-        }
-        return null;
+        if (brain != null)
+            playerObject.GetComponent<GameComponent>().brain = brain.Clone();
+        playerObject.transform.position = normalizedPosition;
+        playerObject.layer = playerLayer;
+        playerObject.transform.SetParent(playerContainer.transform);
+        playerObject.SetActive(true);
+        Player player = new Player(playerObject);
+        activePlayers.Add(player);
+        return player;
     }
 
     public void AddObstacle()
@@ -118,6 +106,7 @@ public class BoatGame : MonoBehaviour, IGame
         GameObject obstacle = Instantiate(gameComponentPrefab);
         obstacle.GetComponent<GameComponent>().template = gameController.GetObstacleTemplate();
         obstacle.layer = obstacleLayer;
+        obstacle.transform.SetParent(obstacleContainer.transform);
         if (obstacle != null)
         {
             obstacle.transform.position = normalizedPosition;
@@ -166,13 +155,7 @@ public class BoatGame : MonoBehaviour, IGame
     {
         foreach(Player player in activePlayers)
         {
-            //Vector3 pos = Camera.main.WorldToViewportPoint(player.playerObject.transform.position);
             float newDistanceTraveled = 10.0f;
-            /*
-            if(pos.x <= 0.01f || pos.x >= 0.99f || pos.y <= 0.01f || pos.y >= 0.99f){
-                player.playerObject.SetActive(false);
-            }
-            */
             player.score += Mathf.RoundToInt(Mathf.Ceil((newDistanceTraveled)));
         }
     }
@@ -184,6 +167,14 @@ public class BoatGame : MonoBehaviour, IGame
             Destroy(obstacle);
         }
         Loader.Load(SceneLoader.Scenes.MainMenuScene.ToString());
+    }
+
+    private void ManageCollisions(GameObject gameObject, GameObject collidedObject)
+    {
+        if (gameObject.tag == "Player" && (collidedObject.gameObject.tag == "Obstacle" || collidedObject.gameObject.tag == "Border"))
+        {
+            gameObject.SetActive(false);
+        }
     }
 
 }

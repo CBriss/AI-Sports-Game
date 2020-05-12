@@ -1,7 +1,5 @@
-﻿using System.Threading;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SceneLoader : MonoBehaviour
 {
@@ -17,6 +15,8 @@ public class SceneLoader : MonoBehaviour
     public enum GameControllers
     {
         GeneticAlgorithm,
+        SpawnChildren,
+        BrainTest,
         PlayerGame
     }
 
@@ -48,22 +48,8 @@ public class SceneLoader : MonoBehaviour
             Loader.Load(selectedScene.ToString());
     }
 
-    /*
     public void LoadMenu()
     {
         Loader.Load(Scenes.MainMenuScene.ToString());
     }
-    public void LoadNeuralNetGame()
-    {
-        Loader.Load(Scenes.NeuralNetworkTest.ToString());
-    }
-
-    public void LoadBoatGame(string gameController)
-    {
-        Loader.Load(
-            Scenes.BoatGameScene.ToString(),
-            (GameControllers)System.Enum.Parse(typeof(GameControllers), gameController)
-        );
-    }*/
-
 }
