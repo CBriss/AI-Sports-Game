@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BoatGame : MonoBehaviour, IGame
 {
@@ -182,7 +183,7 @@ public class BoatGame : MonoBehaviour, IGame
         {
             Destroy(obstacle);
         }
-        Loader.Load(Loader.Scenes.MainMenuScene.ToString());
+        Loader.Load(SceneLoader.Scenes.MainMenuScene.ToString());
     }
 
 }

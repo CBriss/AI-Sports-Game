@@ -4,28 +4,14 @@ using UnityEngine.SceneManagement;
 
 public static class Loader
 {
-    public enum Scenes
-    {
-        BoatGameScene,
-        MainMenuScene,
-        NeuralNetworkTest
-    }
-
-    public enum GameControllers
-    {
-        GeneticAlgorithm,
-        PlayerGame
-    }
-
     private static Action onLoaderCallback;
-
 
     public static void Load(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
     }
 
-    public static void Load(string sceneName, GameControllers gameController)
+    public static void Load(string sceneName, string gameController)
     {
         onLoaderCallback = () =>
         {
@@ -45,14 +31,14 @@ public static class Loader
         onLoaderCallback = null;
     }
 
-    private static void LoadGameScene(Scene scene, GameControllers gameController)
+    private static void LoadGameScene(Scene scene, string gameController)
     {
         GameObject[] sceneObjects = scene.GetRootGameObjects();
         foreach (GameObject sceneObject in sceneObjects)
         {
             if (sceneObject.name == "GameWrapper")
             {
-                (sceneObject.GetComponent(gameController.ToString()) as MonoBehaviour).enabled = true;
+                (sceneObject.GetComponent(gameController) as MonoBehaviour).enabled = true;
             }
 
         }
