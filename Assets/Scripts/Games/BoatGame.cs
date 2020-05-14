@@ -19,10 +19,14 @@ public class BoatGame : MonoBehaviour, IGame
     public GameObject playerContainer;
     public GameObject obstacleContainer;
 
+    public static event Action<IGame> OnGameStart = delegate { };
+    public static event Action<IGame> OnGameOver = delegate { };
+
     public void Start()
     {
         Loader.LoaderCallback();
         GameComponent.OnComponentCollision += ManageCollisions;
+        OnGameStart(this);
     }
 
     public void SetGameController(GameController gameController)
@@ -167,6 +171,7 @@ public class BoatGame : MonoBehaviour, IGame
             Destroy(obstacle);
         }
         Loader.Load(SceneLoader.Scenes.MainMenuScene.ToString());
+        OnGameOver(this);
     }
 
     private void ManageCollisions(GameObject gameObject, GameObject collidedObject)

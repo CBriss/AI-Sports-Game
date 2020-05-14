@@ -18,7 +18,6 @@ public class GeneticAlgorithm : GameController
     {
         game = gameObject.GetComponent<IGame>();
         game.SetGameController(this);
-        templateUI.gameObject.SetActive(false);
     }
 
     public override void StartGame()

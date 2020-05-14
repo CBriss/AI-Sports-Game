@@ -4,6 +4,9 @@ using UnityEngine;
 
 public interface IGame
 {
+    static event Action<IGame> OnGameStart;
+    static event Action<IGame> OnGameOver;
+
     void StartGame();
     bool IsActive();
     void SetGameController(GameController gameController);

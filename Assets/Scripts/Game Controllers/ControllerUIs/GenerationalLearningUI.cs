@@ -3,9 +3,11 @@ using UnityEngine.UI;
 
 public class GenerationalLearningUI : GameControllerUI
 {
+    [SerializeField]
+    private GameObject UICanvas;
     public override void InitalizeUI()
     {
-        gameObject.SetActive(true);
+        UICanvas.SetActive(true);
         GameObject.Find("Save Best Panel").SetActive(false);
     }
 
