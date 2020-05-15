@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BoatGame : MonoBehaviour, IGame
@@ -19,14 +20,14 @@ public class BoatGame : MonoBehaviour, IGame
     public GameObject playerContainer;
     public GameObject obstacleContainer;
 
-    public static event Action<IGame> OnGameStart = delegate { };
-    public static event Action<IGame> OnGameOver = delegate { };
+    public event Action OnGameStart = delegate { };
+    public event Action OnGameOver = delegate { };
 
     public void Start()
     {
         Loader.LoaderCallback();
         GameComponent.OnComponentCollision += ManageCollisions;
-        OnGameStart(this);
+        OnGameStart();
     }
 
     public void SetGameController(GameController gameController)
@@ -100,7 +101,7 @@ public class BoatGame : MonoBehaviour, IGame
 
     public void AddObstacle()
     {
-        Vector3 normalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(Random.Range(-0.10f, 1.10f), 1.1f));
+        Vector3 normalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(UnityEngine.Random.Range(-0.10f, 1.10f), 1.1f));
         normalizedPosition.z = 0;
         AddObstacle(normalizedPosition);
     }
@@ -166,12 +167,13 @@ public class BoatGame : MonoBehaviour, IGame
 
     public void GameOver()
     {
-        foreach(GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
+        OnGameOver();
+        foreach (GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
         {
             Destroy(obstacle);
         }
         Loader.Load(SceneLoader.Scenes.MainMenuScene.ToString());
-        OnGameOver(this);
+        
     }
 
     private void ManageCollisions(GameObject gameObject, GameObject collidedObject)

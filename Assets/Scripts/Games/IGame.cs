@@ -1,12 +1,11 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public interface IGame
 {
-    static event Action<IGame> OnGameStart;
-    static event Action<IGame> OnGameOver;
-
+    event Action OnGameStart;
+    event Action OnGameOver;
     void StartGame();
     bool IsActive();
     void SetGameController(GameController gameController);

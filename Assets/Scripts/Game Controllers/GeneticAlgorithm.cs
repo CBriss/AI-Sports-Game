@@ -18,6 +18,9 @@ public class GeneticAlgorithm : GameController
     {
         game = gameObject.GetComponent<IGame>();
         game.SetGameController(this);
+
+        game.OnGameStart += StartGame;
+        game.OnGameOver += RestartGame;
     }
 
     public override void StartGame()
@@ -28,20 +31,16 @@ public class GeneticAlgorithm : GameController
         templateUI.UpdateUI(generationCount.ToString(), (bestIndividual != null ? bestIndividual.score.ToString() : "0"));
     }
 
-    public override void Update()
-    {
-        if (!game.IsActive())
-            return;
+    public override void Update() {}
 
-        if (game.GetActivePlayers().Count <= 0)
-        {
-            game.ClearActivePlayers();
-            game.ClearObstacles();
-            NewGeneration(game.GetInactivePlayers());
-            game.ClearInactivePlayers();
-            generationCount += 1;
-            templateUI.UpdateUI(generationCount.ToString(), (bestIndividual != null ? bestIndividual.score.ToString() : "0"));
-        }
+    public void RestartGame()
+    {
+        game.ClearActivePlayers();
+        game.ClearObstacles();
+        NewGeneration(game.GetInactivePlayers());
+        game.ClearInactivePlayers();
+        generationCount += 1;
+        templateUI.UpdateUI(generationCount.ToString(), (bestIndividual != null ? bestIndividual.score.ToString() : "0"));
     }
 
     public override GameComponentTemplate GetPlayerTemplate()
