@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class GameControllerUI : MonoBehaviour
 {
-    public abstract void InitalizeUI();
+    public abstract void Start();
     public abstract void UpdateUI(params string[] textValues);
 }

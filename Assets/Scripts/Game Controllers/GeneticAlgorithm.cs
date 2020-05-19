@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,40 +8,45 @@ public class GeneticAlgorithm : GameController
     public int populationSize;
     public Player bestIndividual;
     public int generationCount;
-    public IGame game;
-    public GameControllerUI templateUI;
-    public GameComponentTemplate playerTemplate;
-    public GameComponentTemplate obstacleTemplate;
     public float mutationPercentage;
     public float mutationAmount;
+
+    public IGame game;
+    public GameObject UIPrefab;
+    public GameComponentTemplate playerTemplate;
+    public GameComponentTemplate obstacleTemplate;
+
+    public static event Action<string[]> OnUpdateUI;
 
     public void Start()
     {
         game = gameObject.GetComponent<IGame>();
-        game.SetGameController(this);
+        game.SetPlayerTemplate(playerTemplate);
+        game.SetObstacleTemplate(obstacleTemplate);
 
-        game.OnGameStart += StartGame;
-        game.OnGameOver += RestartGame;
+        game.OnGameStart += StartGameController;
+        game.OnGameOver += HandleGameOver;
+        
+        Instantiate(UIPrefab);
     }
 
-    public override void StartGame()
+    public override void StartGameController()
     {
         generationCount = 1;
         MakeGenerationZero();
-        templateUI.InitalizeUI();
-        templateUI.UpdateUI(generationCount.ToString(), (bestIndividual != null ? bestIndividual.score.ToString() : "0"));
+        string[] UIString = { generationCount.ToString(), (bestIndividual != null ? bestIndividual.score.ToString() : "0") };
+        OnUpdateUI(UIString);
     }
 
-    public override void Update() {}
-
-    public void RestartGame()
+    public override void HandleGameOver()
     {
         game.ClearActivePlayers();
         game.ClearObstacles();
         NewGeneration(game.GetInactivePlayers());
         game.ClearInactivePlayers();
         generationCount += 1;
-        templateUI.UpdateUI(generationCount.ToString(), (bestIndividual != null ? bestIndividual.score.ToString() : "0"));
+        string[] UIString = { generationCount.ToString(), (bestIndividual != null ? bestIndividual.score.ToString() : "0") };
+        OnUpdateUI(UIString);
     }
 
     public override GameComponentTemplate GetPlayerTemplate()
@@ -53,12 +59,12 @@ public class GeneticAlgorithm : GameController
         return obstacleTemplate;
     }
 
-    void MakeGenerationZero()
+    public void MakeGenerationZero()
     {
         for (int i = 0; i < populationSize; i++)
         {
             Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(
-                new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.1f, 0.5f), 0)
+                new Vector3(UnityEngine.Random.Range(0.1f, 0.9f), UnityEngine.Random.Range(0.1f, 0.5f), 0)
             );
             newPlayerNormalizedPosition.z = 0;
             game.AddPlayer(newPlayerNormalizedPosition);
@@ -75,14 +81,15 @@ public class GeneticAlgorithm : GameController
             if(bestIndividual != null)
                 Destroy(bestIndividual.playerObject);
             bestIndividual = parents[0];
-            bestIndividual.playerObject.GetComponent<GameComponent>().brain.SaveToFile("Assets/Saved Brains/bestBoat.txt");
+            game.RemoveFromInactivePlayers(bestIndividual);
+            // bestIndividual.playerObject.GetComponent<GameComponent>().brain.SaveToFile("Assets/Saved Brains/bestBoat.txt");
         }
 
         // Create new population with those genes and a mutation chance
         for (int i = 0; i < populationSize; i++)
         {
             Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(
-                new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.1f, 0.5f), 0)
+                new Vector3(UnityEngine.Random.Range(0.1f, 0.9f), UnityEngine.Random.Range(0.1f, 0.5f), 0)
             );
             newPlayerNormalizedPosition.z = 0;
             Player newPlayer = game.AddPlayer(newPlayerNormalizedPosition);
@@ -116,16 +123,5 @@ public class GeneticAlgorithm : GameController
             }
         }
         return currentBest;
-    }
-
-    public void OpenSaveMenu()
-    {
-        GameObject.Find("Save Best Panel").SetActive(true);
-        GameObject.Find("Best Boat Score Text").GetComponent<Text>().text = bestIndividual.score.ToString();
-    }
-
-    public void SaveToFile()
-    {
-        bestIndividual.playerObject.GetComponent<GameComponent>().brain.SaveToFile(GameObject.Find("Best Boat Name Input").GetComponent<Text>().text);
     }
 }

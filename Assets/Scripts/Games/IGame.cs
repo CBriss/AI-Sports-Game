@@ -8,7 +8,8 @@ public interface IGame
     event Action OnGameOver;
     void StartGame();
     bool IsActive();
-    void SetGameController(GameController gameController);
+    void SetPlayerTemplate(GameComponentTemplate playerTemplate);
+    void SetObstacleTemplate(GameComponentTemplate obstacleTemplate);
     Player AddPlayer(Vector3 normalizedPostion, NeuralNet brain = null);
     void AddObstacle();
     void AddObstacle(Vector3 normalizedPostion);
@@ -17,6 +18,7 @@ public interface IGame
     void Clear();
     void ClearActivePlayers();
     void ClearInactivePlayers();
+    void RemoveFromInactivePlayers(Player player);
     void ClearObstacles();
     void UpdateScores();
     void GameOver();

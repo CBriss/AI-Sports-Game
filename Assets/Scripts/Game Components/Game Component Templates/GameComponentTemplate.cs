@@ -15,4 +15,5 @@ public class GameComponentTemplate : ScriptableObject
 
     [SerializeField] public ComponentController componentController;
 
+    [SerializeField] public GameObject prefabObject;
 }

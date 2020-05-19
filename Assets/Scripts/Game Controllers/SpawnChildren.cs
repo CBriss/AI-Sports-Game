@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SpawnChildren : GeneticAlgorithm
 {
-    void MakeGenerationZero()
+    public new void MakeGenerationZero()
     {
         NeuralNet seedBrain;
         seedBrain = new NeuralNet("Assets/Saved Brains/bestBoat.txt");

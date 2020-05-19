@@ -21,3 +21,5 @@ MonoBehaviour:
   brainShape: 080000001400000004000000
   componentController: {fileID: 11400000, guid: f073ebe1f4ba4584bb0a0f5228775b99,
     type: 2}
+  prefabObject: {fileID: 2187530176264077803, guid: 1c16c68ba3252dd4fb09ac45bdfa5289,
+    type: 3}

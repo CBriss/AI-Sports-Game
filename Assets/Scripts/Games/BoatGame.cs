@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class BoatGame : MonoBehaviour, IGame
 {
     public GameObject background;
-    public GameObject gameComponentPrefab;
     public List<Player> activePlayers = new List<Player>();
     public List<Player> inactivePlayers = new List<Player>();
     public float obstacleSpawnPeriod = 0.25f;
-    public int playerLayer;
-    public int obstacleLayer;
-
     public bool activeGame = false;
     public GameObject StartUI;
 
-    public GameController gameController;
-
     public GameObject playerContainer;
+    public GameComponentTemplate playerTemplate;
+    public int playerLayer;
+
     public GameObject obstacleContainer;
+    public GameComponentTemplate obstacleTemplate;
+    public int obstacleLayer;
 
     public event Action OnGameStart = delegate { };
     public event Action OnGameOver = delegate { };
@@ -27,12 +27,21 @@ public class BoatGame : MonoBehaviour, IGame
     {
         Loader.LoaderCallback();
         GameComponent.OnComponentCollision += ManageCollisions;
-        OnGameStart();
     }
 
-    public void SetGameController(GameController gameController)
+    public void OnDestroy()
     {
-        this.gameController = gameController;
+        GameComponent.OnComponentCollision -= ManageCollisions;
+    }
+
+    public void SetPlayerTemplate(GameComponentTemplate playerTemplate)
+    {
+        this.playerTemplate = playerTemplate;
+    }
+
+    public void SetObstacleTemplate(GameComponentTemplate obstacleTemplate)
+    {
+        this.obstacleTemplate = obstacleTemplate;
     }
 
     public void StartGame()
@@ -40,19 +49,21 @@ public class BoatGame : MonoBehaviour, IGame
         StartUI.SetActive(false);
         background = GameObject.Find("background");
         InvokeRepeating("AddObstacle", 0.25f, obstacleSpawnPeriod);
-        gameController.StartGame();
         activeGame = true;
+        OnGameStart();
     }
 
     public bool IsActive()
     {
         return activeGame;
     }
+
     public void Clear(){
         ClearActivePlayers();
         ClearInactivePlayers();
         ClearObstacles();
     }
+
     void Update()
     {
         if (!activeGame)
@@ -76,18 +87,17 @@ public class BoatGame : MonoBehaviour, IGame
             return;
         if (activePlayers.Count <= 0)
         {
-            activeGame = false;
             GameOver();
         }
     }
 
     public Player AddPlayer(Vector3 normalizedPosition, NeuralNet brain = null)
     {
-        GameObject playerObject = Instantiate(gameComponentPrefab);
+        GameObject playerObject = Instantiate(playerTemplate.prefabObject);
         if (playerObject == null)
             return null;
 
-        playerObject.GetComponent<GameComponent>().template = gameController.GetPlayerTemplate();
+        playerObject.GetComponent<GameComponent>().template = playerTemplate;
         if (brain != null)
             playerObject.GetComponent<GameComponent>().brain = brain.Clone();
         playerObject.transform.position = normalizedPosition;
@@ -108,8 +118,8 @@ public class BoatGame : MonoBehaviour, IGame
 
     public void AddObstacle(Vector3 normalizedPosition)
     {
-        GameObject obstacle = Instantiate(gameComponentPrefab);
-        obstacle.GetComponent<GameComponent>().template = gameController.GetObstacleTemplate();
+        GameObject obstacle = Instantiate(obstacleTemplate.prefabObject);
+        obstacle.GetComponent<GameComponent>().template = obstacleTemplate;
         obstacle.layer = obstacleLayer;
         obstacle.transform.SetParent(obstacleContainer.transform);
         if (obstacle != null)
@@ -148,6 +158,11 @@ public class BoatGame : MonoBehaviour, IGame
         inactivePlayers = new List<Player>();
     }
 
+    public void RemoveFromInactivePlayers(Player player)
+    {
+        inactivePlayers.Remove(player);
+    }
+
     public void ClearObstacles()
     {
         foreach(GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
@@ -167,18 +182,16 @@ public class BoatGame : MonoBehaviour, IGame
 
     public void GameOver()
     {
-        OnGameOver();
         foreach (GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
         {
             Destroy(obstacle);
         }
-        Loader.Load(SceneLoader.Scenes.MainMenuScene.ToString());
-        
+        OnGameOver();
     }
 
     private void ManageCollisions(GameObject gameObject, GameObject collidedObject)
     {
-        if (gameObject.tag == "Player" && (collidedObject.gameObject.tag == "Obstacle" || collidedObject.gameObject.tag == "Border"))
+        if (gameObject.CompareTag("Player") && (collidedObject.gameObject.CompareTag("Obstacle") || collidedObject.gameObject.CompareTag("Border")))
         {
             gameObject.SetActive(false);
         }
