@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SpawnChildren : GeneticAlgorithm
 {
-    void MakeGenerationZero()
+    public new void MakeGenerationZero()
     {
         NeuralNet seedBrain;
-        seedBrain = new NeuralNet("Assets/Saved Brains/bestBoat.txt");
+        seedBrain = new NeuralNet("Assets/Saved Brains/20880.txt");
         for (int i = 0; i < populationSize; i++)
         {
             Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(

@@ -1,18 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine.UI;
 
-public class PlayerGameUI : MonoBehaviour
+public class PlayerGameUI : GameControllerUI
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
-        
+        PlayerGame.OnUpdateUI += UpdateUI;
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void UpdateUI(params string[] textValues)
     {
-        
+        gameObject.GetComponentInChildren<Text>().text = "Score: " + textValues[0];
+    }
+
+    public void OnDestroy()
+    {
+        PlayerGame.OnUpdateUI -= UpdateUI;
     }
 }

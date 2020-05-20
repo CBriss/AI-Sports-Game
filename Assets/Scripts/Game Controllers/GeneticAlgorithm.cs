@@ -1,145 +1,144 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
 public class GeneticAlgorithm : GameController
 {
-    public int populationSize;
-    public Player bestIndividual;
-    public int generationCount;
-    public IGame game;
-    public GameControllerUI templateUI;
-    public GameComponentTemplate playerTemplate;
-    public GameComponentTemplate obstacleTemplate;
-    public float mutationPercentage;
-    public float mutationAmount;
+  public int populationSize;
+  public Player bestIndividual;
+  public int generationCount;
+  public float mutationPercentage;
+  public float mutationAmount;
 
-    public void Start()
+  public IGame game;
+  public GameObject UIPrefab;
+  public GameComponentTemplate playerTemplate;
+  public GameComponentTemplate obstacleTemplate;
+
+  public static event Action<string[]> OnUpdateUI;
+
+  public void Start()
+  {
+    game = gameObject.GetComponent<IGame>();
+    game.SetPlayerTemplate(playerTemplate);
+    game.SetObstacleTemplate(obstacleTemplate);
+
+    game.OnGameStart += StartGameController;
+    game.OnGameOver += HandleGameOver;
+
+    Instantiate(UIPrefab);
+  }
+
+  public override void StartGameController()
+  {
+    generationCount = 1;
+    MakeGenerationZero();
+    string[] UIString = { generationCount.ToString(), (bestIndividual != null ? bestIndividual.score.ToString() : "0") };
+    OnUpdateUI(UIString);
+  }
+
+  public override void HandleGameOver()
+  {
+    game.ClearActivePlayers();
+    game.ClearObstacles();
+    NewGeneration(game.GetInactivePlayers());
+    game.ClearInactivePlayers();
+    generationCount += 1;
+    string[] UIString = { generationCount.ToString(), (bestIndividual != null ? bestIndividual.score.ToString() : "0") };
+    OnUpdateUI(UIString);
+  }
+
+  public override GameComponentTemplate GetPlayerTemplate()
+  {
+    return playerTemplate;
+  }
+
+  public override GameComponentTemplate GetObstacleTemplate()
+  {
+    return obstacleTemplate;
+  }
+
+  public void MakeGenerationZero()
+  {
+    for (int i = 0; i < populationSize; i++)
     {
-        game = gameObject.GetComponent<IGame>();
-        game.SetGameController(this);
-
-        game.OnGameStart += StartGame;
-        game.OnGameOver += RestartGame;
+      Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(
+                new Vector3(UnityEngine.Random.Range(0.1f, 0.9f), UnityEngine.Random.Range(0.1f, 0.5f), 0)
+      );
+      newPlayerNormalizedPosition.z = 0;
+      game.AddPlayer(newPlayerNormalizedPosition);
     }
+  }
 
-    public override void StartGame()
+  void NewGeneration(List<Player> deadIndividuals)
+  {
+    // Determine Generation Parents
+    //List<Player> parents = DetermineBestParents(deadIndividuals);
+
+    List<Player> sortedParents = deadIndividuals.OrderByDescending(p => p.score).ToList();
+    Debug.Log(sortedParents[0].score);
+    if (bestIndividual == null || sortedParents[0].score > bestIndividual.score)
     {
-        generationCount = 1;
-        MakeGenerationZero();
-        templateUI.InitalizeUI();
-        templateUI.UpdateUI(generationCount.ToString(), (bestIndividual != null ? bestIndividual.score.ToString() : "0"));
+      if (bestIndividual != null)
+        Destroy(bestIndividual.playerObject);
+      bestIndividual = sortedParents[0];
+      game.RemoveFromInactivePlayers(bestIndividual);
     }
-
-    public override void Update() {}
-
-    public void RestartGame()
+    //Replace bottom half of the population with the best genes and some mutation
+    for (int i = 0; i < populationSize; i++)
     {
-        game.ClearActivePlayers();
-        game.ClearObstacles();
-        NewGeneration(game.GetInactivePlayers());
-        game.ClearInactivePlayers();
-        generationCount += 1;
-        templateUI.UpdateUI(generationCount.ToString(), (bestIndividual != null ? bestIndividual.score.ToString() : "0"));
-    }
-
-    public override GameComponentTemplate GetPlayerTemplate()
-    {
-        return playerTemplate;
-    }
-
-    public override GameComponentTemplate GetObstacleTemplate()
-    {
-        return obstacleTemplate;
-    }
-
-    void MakeGenerationZero()
-    {
-        for (int i = 0; i < populationSize; i++)
-        {
-            Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(
-                new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.1f, 0.9f), 0)
-            );
-            newPlayerNormalizedPosition.z = 0;
-            game.AddPlayer(newPlayerNormalizedPosition);
-        }
-    }
-
-    void NewGeneration(List<Player> deadIndividuals)
-    {
-        // Determine Generation Parents
-        //List<Player> parents = DetermineBestParents(deadIndividuals);
-        
-        List<Player> sortedParents = deadIndividuals.OrderByDescending(p=>p.score).ToList();
-        Debug.Log(sortedParents[0].score);
-        if (bestIndividual == null || sortedParents[0].score > bestIndividual.score)
-        {
-            if(bestIndividual != null)
-                Destroy(bestIndividual.playerObject);
-            bestIndividual = sortedParents[0];
-            bestIndividual.playerObject.GetComponent<GameComponent>().brain.SaveToFile("Assets/Scripts/bestBoat.txt");
-        }
-        //Replace bottom half of the population with the best genes and some mutation
-        for (int i = 0; i < populationSize; i++)
-        {
-            Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(
-                new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.1f, 0.9f), 0)
-            );
-            newPlayerNormalizedPosition.z = 0;
-            Player newPlayer = game.AddPlayer(newPlayerNormalizedPosition);
-            //bottom half get a breed of the two best
-            if(i >= populationSize/2){
-                newPlayer.playerObject.GetComponent<GameComponent>().brain =
-                    sortedParents[0].playerObject.GetComponent<GameComponent>().brain.Breed(
-                    sortedParents[1].playerObject.GetComponent<GameComponent>().brain,
-                    mutationPercentage,
-                    mutationAmount
-                );
-            }else{
-                //top half breed with each other
-                newPlayer.playerObject.GetComponent<GameComponent>().brain =
-                    sortedParents[i].playerObject.GetComponent<GameComponent>().brain.Breed(
-                    sortedParents[i+1].playerObject.GetComponent<GameComponent>().brain,
-                    mutationPercentage,
-                    mutationAmount
-                );
-            }
-            
-        }
-    }
-
-    private List<Player> DetermineBestParents(List<Player> deadIndividuals)
+      Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(
+                new Vector3(UnityEngine.Random.Range(0.1f, 0.9f), UnityEngine.Random.Range(0.1f, 0.5f), 0)
+      );
+      newPlayerNormalizedPosition.z = 0;
+      Player newPlayer = game.AddPlayer(newPlayerNormalizedPosition);
+      //bottom half get a breed of the two best
+      if (i >= populationSize / 2)
       {
-        return new List<Player>{
+        newPlayer.playerObject.GetComponent<GameComponent>().brain =
+            sortedParents[0].playerObject.GetComponent<GameComponent>().brain.Breed(
+            sortedParents[1].playerObject.GetComponent<GameComponent>().brain,
+            mutationPercentage,
+            mutationAmount
+        );
+      }
+      else
+      {
+        //top half breed with each other
+        newPlayer.playerObject.GetComponent<GameComponent>().brain =
+            sortedParents[i].playerObject.GetComponent<GameComponent>().brain.Breed(
+            sortedParents[i + 1].playerObject.GetComponent<GameComponent>().brain,
+            mutationPercentage,
+            mutationAmount
+        );
+      }
+
+    }
+  }
+
+  private List<Player> DetermineBestParents(List<Player> deadIndividuals)
+  {
+    return new List<Player>{
                 FindBestIndividual(deadIndividuals.GetRange(0, deadIndividuals.Count/2)),
                 FindBestIndividual(deadIndividuals.GetRange(deadIndividuals.Count/2, deadIndividuals.Count-deadIndividuals.Count/2))
             };
+  }
+
+  private Player FindBestIndividual(List<Player> deadIndividuals)
+  {
+    Player currentBest = deadIndividuals[0];
+    int currentHighScore = currentBest.score;
+    foreach (Player player in deadIndividuals)
+    {
+      int currentScore = player.score;
+      if (currentScore > currentHighScore)
+      {
+        currentBest = player;
+        currentHighScore = currentScore;
       }
-
-    private Player FindBestIndividual(List<Player> deadIndividuals)
-    {
-        Player currentBest = deadIndividuals[0];
-        int currentHighScore = currentBest.score;
-        foreach (Player player in deadIndividuals)
-        {
-            int currentScore = player.score;
-            if(currentScore > currentHighScore){
-                currentBest = player;
-                currentHighScore = currentScore;
-            }
-        }
-        return currentBest;
     }
-
-    public void OpenSaveMenu()
-    {
-        GameObject.Find("Save Best Panel").SetActive(true);
-        GameObject.Find("Best Boat Score Text").GetComponent<Text>().text = bestIndividual.score.ToString();
-    }
-
-    public void SaveToFile()
-    {
-        bestIndividual.playerObject.GetComponent<GameComponent>().brain.SaveToFile(GameObject.Find("Best Boat Name Input").GetComponent<Text>().text);
-    }
+    return currentBest;
+  }
 }
