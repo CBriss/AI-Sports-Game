@@ -11,6 +11,7 @@ public class PlayerGame : GameController
     public GameComponentTemplate playerTemplate;
     public GameComponentTemplate obstacleTemplate;
 
+    public GameObject startMenuPrefab;
     public GameObject UIPrefab;
 
     public static event Action<string[]> OnUpdateUI;
@@ -24,6 +25,8 @@ public class PlayerGame : GameController
         game.OnGameStart += StartGameController;
         game.OnGameOver += HandleGameOver;
 
+        GameObject startMenu = Instantiate(startMenuPrefab);
+        startMenu.transform.SetParent(gameObject.transform);
         Instantiate(UIPrefab);
     }
 

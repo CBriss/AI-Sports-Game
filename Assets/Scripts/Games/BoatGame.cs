@@ -10,7 +10,6 @@ public class BoatGame : MonoBehaviour, IGame
     public List<Player> inactivePlayers = new List<Player>();
     public float obstacleSpawnPeriod = 0.25f;
     public bool activeGame = false;
-    public GameObject StartUI;
 
     public GameObject playerContainer;
     public GameComponentTemplate playerTemplate;
@@ -46,7 +45,6 @@ public class BoatGame : MonoBehaviour, IGame
 
     public void StartGame()
     {
-        StartUI.SetActive(false);
         background = GameObject.Find("background");
         InvokeRepeating("AddObstacle", 0.25f, obstacleSpawnPeriod);
         activeGame = true;
