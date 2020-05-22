@@ -1,11 +1,25 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 
 public class SpawnChildren : GeneticAlgorithm
 {
+    public string seedBoatFileName;
+
+    public void OnEnable()
+    {
+        LoadBrainButton.OnBrainSelected += SetSeedBoat;
+    }
+
+    public void SetSeedBoat(string fileName)
+    {
+        seedBoatFileName = fileName;
+        GetComponentInParent<IGame>().StartGame();
+    }
+
     public new void MakeGenerationZero()
     {
         NeuralNet seedBrain;
-        seedBrain = new NeuralNet("Assets/Saved Brains/20880.txt");
+        seedBrain = new NeuralNet("Assets/Saved Brains/" + seedBoatFileName);
         for (int i = 0; i < populationSize; i++)
         {
             Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(
@@ -14,5 +28,10 @@ public class SpawnChildren : GeneticAlgorithm
             newPlayerNormalizedPosition.z = 0;
             game.AddPlayer(newPlayerNormalizedPosition, seedBrain);
         }
+    }
+
+    public void OnDisable()
+    {
+        LoadBrainButton.OnBrainSelected -= SetSeedBoat;
     }
 }

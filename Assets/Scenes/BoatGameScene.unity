@@ -758,7 +758,8 @@ MonoBehaviour:
   generationCount: 1
   mutationPercentage: 0.05
   mutationAmount: 0.05
-  startMenuPrefab: {fileID: 0}
+  startMenuPrefab: {fileID: 6998817744174480359, guid: 38180de62945a934fa8b0900daa61fe3,
+    type: 3}
   UIPrefab: {fileID: 6991521079479931751, guid: a2625926f183c3d4ebae19ea4aafb064,
     type: 3}
   playerTemplate: {fileID: 11400000, guid: b43d3f217e956f64781fd080b2e1dde8, type: 2}

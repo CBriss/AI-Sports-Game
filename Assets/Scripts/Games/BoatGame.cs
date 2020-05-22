@@ -184,6 +184,7 @@ public class BoatGame : MonoBehaviour, IGame
         {
             Destroy(obstacle);
         }
+        Debug.Log("Calling Game Over");
         OnGameOver();
     }
 

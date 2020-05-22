@@ -42,12 +42,12 @@ public partial class NeuralNet
                 networkShape = new int[shape.Length];
                 for (int i = 0; i < shape.Length; i++)
                 {
-                networkShape[i] = int.Parse(shape[i]);
+                    networkShape[i] = int.Parse(shape[i]);
                 }
 
                 if (readStream.ReadLine().Equals("Biases"))
                 {
-                ReadBiasesFromFile(readStream);
+                    ReadBiasesFromFile(readStream);
                 }
                 ReadWeightsFromFile(readStream);
             }

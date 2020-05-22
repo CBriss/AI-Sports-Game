@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -16,7 +17,7 @@ public class LoadBrainStart : MonoBehaviour
         DirectoryInfo dir = new DirectoryInfo("Assets/Saved Brains");
         FileInfo[] info = dir.GetFiles("*.txt");
 
-        Vector3 offsetPos = new Vector3(0.0f, 20.0f, 0.0f);
+        Vector3 offsetPos = new Vector3(0.0f, -20.0f, 0.0f);
 
         foreach (FileInfo f in info)
         {
@@ -31,5 +32,17 @@ public class LoadBrainStart : MonoBehaviour
 
             newButton.GetComponentInChildren<TextMeshProUGUI>().text = fileString;
         }
+
+        LoadBrainButton.OnBrainSelected += HideMenu;
+    }
+
+    public void OnDestroy()
+    {
+        LoadBrainButton.OnBrainSelected -= HideMenu;
+    }
+
+    public void HideMenu(string brainName)
+    {
+        gameObject.SetActive(false);
     }
 }

@@ -53,7 +53,7 @@ public partial class NeuralNet
             {
                 currentLayer = int.Parse(fileLine.Split(' ')[1]);
             }
-            else if (!fileLine.Equals("Biaes"))
+            else if (!fileLine.Equals("Biases"))
             {
                 string[] inputBiases = fileLine.Split(',');
                 biases[currentLayer] = new float[inputBiases.Length];
