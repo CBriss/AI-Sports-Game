@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "new AI obstable coord avoiding", menuName = "Game Components/Movement/AI Avoid Obstacles With Coord")]
+[CreateAssetMenu(fileName = "new AI obstable coord avoiding", menuName = "Game Pieces/Movement/AI Avoid Obstacles With Coord")]
 public class AI_AvoidObstaclesWithCoords : GamePieceController
 {
     [SerializeField]

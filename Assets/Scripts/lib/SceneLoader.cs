@@ -8,6 +8,7 @@ public class SceneLoader : MonoBehaviour
     public enum Scenes
     {
         BoatGameScene,
+        SportGameScene,
         MainMenuScene,
         NeuralNetworkTest
     }

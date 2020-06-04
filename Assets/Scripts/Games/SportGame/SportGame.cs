@@ -43,6 +43,7 @@ public class SportGame : MonoBehaviour, IGame
     public void StartGame()
     {
         activeGame = true;
+        AddObstacle();
         OnGameStart();
     }
 

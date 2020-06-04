@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7058287745db35547a23056fe03dda20, type: 3}
-  m_Name: AI_Boat_Ray_4_Directions
+  m_Name: AI_Boat_Ray_8_Directions
   m_EditorClassIdentifier: 
   health: 1
   tagName: Player
@@ -18,9 +18,10 @@ MonoBehaviour:
   imageSize: {x: 0.125, y: 0.125}
   colliderSize: {x: 3, y: 5}
   hasBrain: 1
-  brainShape: 040000000f00000004000000
-  componentController: {fileID: 11400000, guid: f685c022f22509345b1ad7414ffb50bb,
+  brainShape: 080000001400000004000000
+  componentController: {fileID: 11400000, guid: f073ebe1f4ba4584bb0a0f5228775b99,
     type: 2}
   prefabObject: {fileID: 2187530176264077803, guid: 1c16c68ba3252dd4fb09ac45bdfa5289,
     type: 3}
-  staticPhysics: 1
+  hasPhysics: 0
+  movableByPhysics: 0

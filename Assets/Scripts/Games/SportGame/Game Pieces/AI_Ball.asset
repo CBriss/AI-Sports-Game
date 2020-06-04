@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7058287745db35547a23056fe03dda20, type: 3}
-  m_Name: AI_Immovable
+  m_Name: AI_Ball
   m_EditorClassIdentifier: 
   health: 1
   tagName: Obstacle
   image: {fileID: 21300000, guid: 22095c915c3cf1d4a8520ccb68766719, type: 3}
   imageSize: {x: 2.07, y: 1.71}
-  colliderSize: {x: 0, y: 0}
+  colliderSize: {x: 1, y: 1}
   hasBrain: 0
   brainShape: 
   componentController: {fileID: 11400000, guid: 1a2c690e9407ca04f8664be1401a616d,
     type: 2}
   prefabObject: {fileID: 2187530176264077803, guid: 1c16c68ba3252dd4fb09ac45bdfa5289,
     type: 3}
-  hasPhysics: 0
-  movableByPhysics: 0
+  hasPhysics: 1
+  movableByPhysics: 1

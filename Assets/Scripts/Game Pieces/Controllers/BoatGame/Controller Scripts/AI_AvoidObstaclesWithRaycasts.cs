@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "new AI obstable raycast avoiding", menuName = "Game Components/Movement/AI Avoid Obstacles With Raycasts")]
+[CreateAssetMenu(fileName = "new AI obstable raycast avoiding", menuName = "Game Pieces/Movement/AI Avoid Obstacles With Raycasts")]
 public class AI_AvoidObstaclesWithRaycasts : GamePieceController
 {
     public float movementSpeed;
