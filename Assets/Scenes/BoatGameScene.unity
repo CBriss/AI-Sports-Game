@@ -346,7 +346,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -691,7 +691,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1084499475}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 984f8db4f4b4c1f4abc477851bb3e98c, type: 3}
   m_Name: 
@@ -742,6 +742,7 @@ MonoBehaviour:
     type: 3}
   UIPrefab: {fileID: 2021289740264171419, guid: 54a08a1917bd39146909ab0f9ea71b90,
     type: 3}
+  seedBoatFileName: 
 --- !u!114 &1084499481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -764,6 +765,7 @@ MonoBehaviour:
     type: 3}
   playerTemplate: {fileID: 11400000, guid: b43d3f217e956f64781fd080b2e1dde8, type: 2}
   obstacleTemplate: {fileID: 11400000, guid: 3e8f49511eb592744aa4cc56f7d8cfbf, type: 2}
+  seedBoatFileName: 
 --- !u!114 &1244298861 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 188494010565913274, guid: 0de588a4c551ca945afefcb349c6848c,

@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoatGame : MonoBehaviour, IGame
+public class SportGame : MonoBehaviour, IGame
 {
-    public GameObject background;
     public List<Player> activePlayers = new List<Player>();
     public List<Player> inactivePlayers = new List<Player>();
-    public float obstacleSpawnPeriod = 0.25f;
     public bool activeGame = false;
 
     public GameObject playerContainer;
@@ -44,8 +42,6 @@ public class BoatGame : MonoBehaviour, IGame
 
     public void StartGame()
     {
-        background = GameObject.Find("background");
-        InvokeRepeating("AddObstacle", 0.25f, obstacleSpawnPeriod);
         activeGame = true;
         OnGameStart();
     }
@@ -55,7 +51,8 @@ public class BoatGame : MonoBehaviour, IGame
         return activeGame;
     }
 
-    public void Clear(){
+    public void Clear()
+    {
         ClearActivePlayers();
         ClearInactivePlayers();
         ClearObstacles();
@@ -65,27 +62,12 @@ public class BoatGame : MonoBehaviour, IGame
     {
         if (!activeGame)
             return;
-        for (int i = 0; i < activePlayers.Count; i++)
-        {
-            Player player = activePlayers[i];
-            if (!player.playerObject.activeSelf)
-            {
-                activePlayers.Remove(player);
-                inactivePlayers.Add(player);
-                i--;
-            }
-        }
-        UpdateScores();
     }
-    
+
     void LateUpdate()
     {
         if (!activeGame)
             return;
-        if (activePlayers.Count <= 0)
-        {
-            GameOver();
-        }
     }
 
     public Player AddPlayer(Vector3 normalizedPosition, NeuralNet brain = null)
@@ -125,6 +107,7 @@ public class BoatGame : MonoBehaviour, IGame
             obstacle.SetActive(true);
         }
     }
+
     public List<Player> GetActivePlayers()
     {
         return activePlayers;
@@ -137,7 +120,7 @@ public class BoatGame : MonoBehaviour, IGame
 
     public void ClearActivePlayers()
     {
-        foreach(Player player in activePlayers)
+        foreach (Player player in activePlayers)
         {
             Destroy(player.playerObject);
         }
@@ -147,7 +130,7 @@ public class BoatGame : MonoBehaviour, IGame
 
     public void ClearInactivePlayers()
     {
-        foreach(Player player in inactivePlayers)
+        foreach (Player player in inactivePlayers)
         {
             Destroy(player.playerObject);
         }
@@ -162,37 +145,22 @@ public class BoatGame : MonoBehaviour, IGame
 
     public void ClearObstacles()
     {
-        foreach(GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
-        {
-            Destroy(obstacle);
-        }
-    }
-    
-    public void UpdateScores()
-    {
-        foreach(Player player in activePlayers)
-        {
-            float newDistanceTraveled = 10.0f;
-            player.score += Mathf.RoundToInt(Mathf.Ceil((newDistanceTraveled)));
-        }
-    }
-
-    public void GameOver()
-    {
         foreach (GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
         {
             Destroy(obstacle);
         }
-        Debug.Log("Calling Game Over");
-        OnGameOver();
+    }
+
+    public void UpdateScores()
+    {
+    }
+
+    public void GameOver()
+    {
     }
 
     private void ManageCollisions(GameObject gameObject, GameObject collidedObject)
     {
-        if (gameObject.CompareTag("Player") && (collidedObject.gameObject.CompareTag("Obstacle") || collidedObject.gameObject.CompareTag("Border")))
-        {
-            gameObject.SetActive(false);
-        }
     }
 
 }

@@ -8,8 +8,8 @@ public class PlayerGame : GameController
 {
     public IGame game;
 
-    public GameComponentTemplate playerTemplate;
-    public GameComponentTemplate obstacleTemplate;
+    public GamePieceTemplate playerTemplate;
+    public GamePieceTemplate obstacleTemplate;
 
     public GameObject startMenuPrefab;
     public GameObject UIPrefab;
@@ -52,12 +52,12 @@ public class PlayerGame : GameController
         SceneManager.LoadScene(SceneLoader.Scenes.MainMenuScene.ToString());
     }
 
-    public override GameComponentTemplate GetPlayerTemplate()
+    public override GamePieceTemplate GetPlayerTemplate()
     {
         return playerTemplate;
     }
     
-    public override GameComponentTemplate GetObstacleTemplate()
+    public override GamePieceTemplate GetObstacleTemplate()
     {
         return obstacleTemplate;
     }

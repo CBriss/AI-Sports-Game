@@ -23,3 +23,4 @@ MonoBehaviour:
     type: 2}
   prefabObject: {fileID: 2187530176264077803, guid: 1c16c68ba3252dd4fb09ac45bdfa5289,
     type: 3}
+  staticPhysics: 1

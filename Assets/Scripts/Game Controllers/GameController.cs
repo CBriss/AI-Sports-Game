@@ -5,6 +5,6 @@ public abstract class GameController : MonoBehaviour
 {
     public abstract void StartGameController();
     public abstract void HandleGameOver();
-    public abstract GameComponentTemplate GetPlayerTemplate();
-    public abstract GameComponentTemplate GetObstacleTemplate();
+    public abstract GamePieceTemplate GetPlayerTemplate();
+    public abstract GamePieceTemplate GetObstacleTemplate();
 }

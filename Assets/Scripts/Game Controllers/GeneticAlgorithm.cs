@@ -15,8 +15,8 @@ public class GeneticAlgorithm : GameController
     public IGame game;
     public GameObject startMenuPrefab;
     public GameObject UIPrefab;
-    public GameComponentTemplate playerTemplate;
-    public GameComponentTemplate obstacleTemplate;
+    public GamePieceTemplate playerTemplate;
+    public GamePieceTemplate obstacleTemplate;
 
     public static event Action<string[]> OnUpdateUI;
 
@@ -53,12 +53,12 @@ public class GeneticAlgorithm : GameController
         OnUpdateUI(UIString);
     }
 
-    public override GameComponentTemplate GetPlayerTemplate()
+    public override GamePieceTemplate GetPlayerTemplate()
     {
         return playerTemplate;
     }
 
-    public override GameComponentTemplate GetObstacleTemplate()
+    public override GamePieceTemplate GetObstacleTemplate()
     {
         return obstacleTemplate;
     }
@@ -100,9 +100,9 @@ public class GeneticAlgorithm : GameController
             //bottom half get a breed of the two best
             if (i >= populationSize / 2)
             {
-            newPlayer.playerObject.GetComponent<GameComponent>().brain =
-                sortedParents[0].playerObject.GetComponent<GameComponent>().brain.Breed(
-                sortedParents[1].playerObject.GetComponent<GameComponent>().brain,
+            newPlayer.playerObject.GetComponent<GamePiece>().brain =
+                sortedParents[0].playerObject.GetComponent<GamePiece>().brain.Breed(
+                sortedParents[1].playerObject.GetComponent<GamePiece>().brain,
                 mutationPercentage,
                 mutationAmount
             );
@@ -110,9 +110,9 @@ public class GeneticAlgorithm : GameController
             else
             {
             //top half breed with each other
-            newPlayer.playerObject.GetComponent<GameComponent>().brain =
-                sortedParents[i].playerObject.GetComponent<GameComponent>().brain.Breed(
-                sortedParents[i + 1].playerObject.GetComponent<GameComponent>().brain,
+            newPlayer.playerObject.GetComponent<GamePiece>().brain =
+                sortedParents[i].playerObject.GetComponent<GamePiece>().brain.Breed(
+                sortedParents[i + 1].playerObject.GetComponent<GamePiece>().brain,
                 mutationPercentage,
                 mutationAmount
             );

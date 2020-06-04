@@ -8,8 +8,8 @@ public interface IGame
     event Action OnGameOver;
     void StartGame();
     bool IsActive();
-    void SetPlayerTemplate(GameComponentTemplate playerTemplate);
-    void SetObstacleTemplate(GameComponentTemplate obstacleTemplate);
+    void SetPlayerTemplate(GamePieceTemplate playerTemplate);
+    void SetObstacleTemplate(GamePieceTemplate obstacleTemplate);
     Player AddPlayer(Vector3 normalizedPostion, NeuralNet brain = null);
     void AddObstacle();
     void AddObstacle(Vector3 normalizedPostion);

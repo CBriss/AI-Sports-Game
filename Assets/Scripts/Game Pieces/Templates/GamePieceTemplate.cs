@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "new game component", menuName = "Game Components/Game Component")]
-public class GameComponentTemplate : ScriptableObject
+[CreateAssetMenu(fileName = "new game piece", menuName = "Game Pieces/Game Piece")]
+public class GamePieceTemplate : ScriptableObject
 {
     [SerializeField] public int health;
     [SerializeField] public string tagName;
@@ -13,7 +13,10 @@ public class GameComponentTemplate : ScriptableObject
     [SerializeField] public bool hasBrain;
     [SerializeField] public int[] brainShape;
 
-    [SerializeField] public ComponentController componentController;
+    [SerializeField] public GamePieceController componentController;
 
     [SerializeField] public GameObject prefabObject;
+
+    [SerializeField] public bool hasPhysics;
+    [SerializeField] public bool movableByPhysics;
 }

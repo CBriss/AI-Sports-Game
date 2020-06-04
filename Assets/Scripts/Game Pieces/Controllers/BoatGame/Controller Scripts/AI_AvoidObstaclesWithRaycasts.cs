@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "new AI obstable raycast avoiding", menuName = "Game Components/Movement/AI Avoid Obstacles With Raycasts")]
-public class AI_AvoidObstaclesWithRaycasts : ComponentController
+public class AI_AvoidObstaclesWithRaycasts : GamePieceController
 {
     public float movementSpeed;
 
@@ -16,20 +16,20 @@ public class AI_AvoidObstaclesWithRaycasts : ComponentController
 
     int layerMask;
 
-    public override void UpdateComponent(GameComponent gameComponent)
+    public override void UpdateComponent(GamePiece GamePiece)
     {
-        Move(gameComponent);
+        Move(GamePiece);
     }
 
-    public void Move(GameComponent gameComponent)
+    public void Move(GamePiece GamePiece)
     {
         float[] input = new float[numberOfRays];
         
-        layerMask  = 1 << gameComponent.gameObject.layer;
+        layerMask  = 1 << GamePiece.gameObject.layer;
         layerMask = ~layerMask;
 
-        Vector2 size = gameComponent.GetComponent<Renderer>().bounds.size;
-        Vector2 objectPosition = gameComponent.transform.position;
+        Vector2 size = GamePiece.GetComponent<Renderer>().bounds.size;
+        Vector2 objectPosition = GamePiece.transform.position;
 
         Vector2 topOfObject = new Vector2(objectPosition.x, objectPosition.y + size.y / 2);
         Vector2 bottomOfObject = new Vector2(objectPosition.x, objectPosition.y - size.y / 2);
@@ -49,9 +49,9 @@ public class AI_AvoidObstaclesWithRaycasts : ComponentController
                 input[i] = SendRay(bottomOfObject, vectors[i], Color.red);
         }
 
-        gameComponent.GetComponent<GameComponent>().brain.FeedForward(input);
+        GamePiece.GetComponent<GamePiece>().brain.FeedForward(input);
         
-        float[] directions = gameComponent.GetComponent<GameComponent>().brain.Outputs();
+        float[] directions = GamePiece.GetComponent<GamePiece>().brain.Outputs();
 
         float biggestInput = 0.0f;
         int indexOfBiggest = 0;
@@ -81,7 +81,7 @@ public class AI_AvoidObstaclesWithRaycasts : ComponentController
             default:
                 break;
         }
-        gameComponent.SetPosition(objectPosition, true);
+        GamePiece.SetPosition(objectPosition, true);
     }
 
     public float SendRay(Vector2 originalPos, Vector2 rayDirection, Color color)

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "new AI obstable coord avoiding", menuName = "Game Components/Movement/AI Avoid Obstacles With Coord")]
-public class AI_AvoidObstaclesWithCoords : ComponentController
+public class AI_AvoidObstaclesWithCoords : GamePieceController
 {
     [SerializeField]
     private float movementSpeed;
@@ -10,20 +10,20 @@ public class AI_AvoidObstaclesWithCoords : ComponentController
     [SerializeField]
     private bool clampToScreen;
 
-    public override void UpdateComponent(GameComponent gameComponent)
+    public override void UpdateComponent(GamePiece GamePiece)
     {
-        Move(gameComponent);
+        Move(GamePiece);
     }
 
-    public void Move(GameComponent gameComponent)
+    public void Move(GamePiece GamePiece)
     {
         GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
-        Vector2 objectPosition = gameComponent.transform.position;
+        Vector2 objectPosition = GamePiece.transform.position;
         Vector2 normalizedPosition = Camera.main.WorldToViewportPoint(objectPosition);
 
         if (nearestObstaclesCount > 0)
         {
-            GameObject[] nearestObstacles = FindNearest(gameComponent, obstacles, nearestObstaclesCount);
+            GameObject[] nearestObstacles = FindNearest(GamePiece, obstacles, nearestObstaclesCount);
             float[] input = new float[2 + (2 * nearestObstaclesCount)];
             input[0] = normalizedPosition.x;
             input[1] = normalizedPosition.y;
@@ -45,10 +45,10 @@ public class AI_AvoidObstaclesWithCoords : ComponentController
                     input[2 + i + 1] = normalizedObstaclePos.y;
                 }
             }
-            gameComponent.GetComponent<GameComponent>().brain.FeedForward(input);
+            GamePiece.GetComponent<GamePiece>().brain.FeedForward(input);
         }
 
-        float[] directions = gameComponent.GetComponent<GameComponent>().brain.Outputs();
+        float[] directions = GamePiece.GetComponent<GamePiece>().brain.Outputs();
 
         float biggestInput = 0.0f;
         int indexOfBiggest = 0;
@@ -79,11 +79,11 @@ public class AI_AvoidObstaclesWithCoords : ComponentController
                 break;
         }
 
-        gameComponent.SetPosition(objectPosition, clampToScreen);
+        GamePiece.SetPosition(objectPosition, clampToScreen);
     }
 
 
-    public GameObject[] FindNearest(GameComponent gameObject, GameObject[] objects, int n)
+    public GameObject[] FindNearest(GamePiece gameObject, GameObject[] objects, int n)
     {
         GameObject[] closestObjects = new GameObject[n];
         for (int i = 0; i < n; i++)

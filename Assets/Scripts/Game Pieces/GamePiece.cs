@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
-public class GameComponent : MonoBehaviour
+public class GamePiece : MonoBehaviour
 {
-    public GameComponentTemplate template;
+    public GamePieceTemplate template;
     public NeuralNet brain;
 
     private Camera camera;
@@ -22,7 +22,12 @@ public class GameComponent : MonoBehaviour
         // Create Collider
         BoxCollider2D collider = gameObject.AddComponent<BoxCollider2D>();
         collider.size = template.colliderSize;
-        collider.isTrigger = true;
+        if(!template.hasPhysics)
+            collider.isTrigger = true;
+
+        // Set RigidBody to Dynamic if movable by physics
+        if (template.movableByPhysics)
+            gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
 
         // Set image
         gameObject.GetComponent<SpriteRenderer>().sprite = template.image;
