@@ -5,7 +5,11 @@ using UnityEngine;
 public class SportGame : MonoBehaviour, IGame
 {
     public List<Player> activePlayers = new List<Player>();
-    public List<Player> inactivePlayers = new List<Player>();
+    public List<Player> team1 = new List<Player>();
+    public List<Player> team2 = new List<Player>();
+
+    public GameObject ball;
+
     public bool activeGame = false;
 
     public GameObject playerContainer;
@@ -71,6 +75,13 @@ public class SportGame : MonoBehaviour, IGame
             return;
     }
 
+    public Player AddPlayer(NeuralNet brain = null)
+    {
+        Vector3 normalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(UnityEngine.Random.Range(0.3f, 0.7f), 0.3f));
+        normalizedPosition.z = 0;
+        return AddPlayer(normalizedPosition);
+    }
+
     public Player AddPlayer(Vector3 normalizedPosition, NeuralNet brain = null)
     {
         GameObject playerObject = Instantiate(playerTemplate.prefabObject);
@@ -86,12 +97,13 @@ public class SportGame : MonoBehaviour, IGame
         playerObject.SetActive(true);
         Player player = new Player(playerObject);
         activePlayers.Add(player);
+        team1.Add(player);
         return player;
     }
 
     public void AddObstacle()
     {
-        Vector3 normalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(UnityEngine.Random.Range(-0.10f, 1.10f), 1.1f));
+        Vector3 normalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, 0.5f));
         normalizedPosition.z = 0;
         AddObstacle(normalizedPosition);
     }
@@ -107,6 +119,7 @@ public class SportGame : MonoBehaviour, IGame
             obstacle.transform.position = normalizedPosition;
             obstacle.SetActive(true);
         }
+        ball = obstacle;
     }
 
     public List<Player> GetActivePlayers()
@@ -116,7 +129,7 @@ public class SportGame : MonoBehaviour, IGame
 
     public List<Player> GetInactivePlayers()
     {
-        return inactivePlayers;
+        return new List<Player>();
     }
 
     public void ClearActivePlayers()
@@ -127,22 +140,13 @@ public class SportGame : MonoBehaviour, IGame
         }
 
         activePlayers = new List<Player>();
+        team1 = new List<Player>();
+        team2 = new List<Player>();
     }
 
-    public void ClearInactivePlayers()
-    {
-        foreach (Player player in inactivePlayers)
-        {
-            Destroy(player.playerObject);
-        }
+    public void ClearInactivePlayers() {}
 
-        inactivePlayers = new List<Player>();
-    }
-
-    public void RemoveFromInactivePlayers(Player player)
-    {
-        inactivePlayers.Remove(player);
-    }
+    public void RemoveFromInactivePlayers(Player player) {}
 
     public void ClearObstacles()
     {
@@ -158,10 +162,17 @@ public class SportGame : MonoBehaviour, IGame
 
     public void GameOver()
     {
+        ClearActivePlayers();
+        Debug.Log("Calling Game Over");
+        OnGameOver();
     }
 
     private void ManageCollisions(GameObject gameObject, GameObject collidedObject)
     {
+        if (gameObject.GetInstanceID() == ball.GetInstanceID() && collidedObject.gameObject.CompareTag("Border"))
+        {
+            GameOver();
+        }
     }
 
 }

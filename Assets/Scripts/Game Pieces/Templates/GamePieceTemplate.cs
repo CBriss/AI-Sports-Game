@@ -8,8 +8,9 @@ public class GamePieceTemplate : ScriptableObject
 
     [SerializeField] public Sprite image;
     [SerializeField] public Vector2 imageSize;
-    [SerializeField] public Vector2 colliderSize;
-    
+    [SerializeField] public Vector2 size;
+    [SerializeField] public bool useComplexCollider;
+
     [SerializeField] public bool hasBrain;
     [SerializeField] public int[] brainShape;
 

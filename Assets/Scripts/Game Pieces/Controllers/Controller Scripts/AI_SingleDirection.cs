@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "new single direction", menuName = "Game Pieces/Movement/AI Single Direction")]
+[CreateAssetMenu(fileName = "new single direction", menuName = "Game Pieces/Controller/AI Single Direction")]
 public class AI_SingleDirection : GamePieceController
 {
     public float movementSpeed;
     public Vector2 direction;
+
+    public bool clampToScreen;
 
     public override void UpdateComponent(GamePiece GamePiece)
     {
@@ -13,6 +15,6 @@ public class AI_SingleDirection : GamePieceController
     public void Move(GamePiece GamePiece)
     {
         Vector2 pos = GamePiece.transform.position;
-        GamePiece.transform.position = pos + direction * movementSpeed * Time.deltaTime;
+        GamePiece.SetPosition(pos + direction * movementSpeed * Time.deltaTime, clampToScreen);
     }
 }

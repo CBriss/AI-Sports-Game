@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "new AI obstable coord avoiding", menuName = "Game Pieces/Movement/AI Avoid Obstacles With Coord")]
-public class AI_AvoidObstaclesWithCoords : GamePieceController
+[CreateAssetMenu(fileName = "new AI obstable coord tracking", menuName = "Game Pieces/Controller/AI Track Obstacles With Coord")]
+public class AI_TrackObstaclesWithCoords : GamePieceController
 {
     [SerializeField]
     private float movementSpeed;

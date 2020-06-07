@@ -42,9 +42,7 @@ public class PlayerGame : GameController
 
     public override void StartGameController()
     {
-        Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, 0.5f));
-        newPlayerNormalizedPosition.z = 0;
-        game.AddPlayer(newPlayerNormalizedPosition);
+        game.AddPlayer();
     }
 
     public override void HandleGameOver()

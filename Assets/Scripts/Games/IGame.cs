@@ -10,6 +10,7 @@ public interface IGame
     bool IsActive();
     void SetPlayerTemplate(GamePieceTemplate playerTemplate);
     void SetObstacleTemplate(GamePieceTemplate obstacleTemplate);
+    Player AddPlayer(NeuralNet brain = null);
     Player AddPlayer(Vector3 normalizedPostion, NeuralNet brain = null);
     void AddObstacle();
     void AddObstacle(Vector3 normalizedPostion);

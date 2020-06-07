@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "new player keys movement", menuName = "Game Pieces/Movement/Player Keys Movement")]
-public class Player_MovementWithKeys : GamePieceController
+[CreateAssetMenu(fileName = "new player keys movement", menuName = "Game Pieces/Controller/Player Keys Movement")]
+public class Player_BasicMovement_Keys : GamePieceController
 {
     [SerializeField]
     private KeyCode up_key;

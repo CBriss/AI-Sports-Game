@@ -17,21 +17,30 @@ public class GamePiece : MonoBehaviour
     void Start()
     {
         //Set Size
-        gameObject.GetComponent<RectTransform>().sizeDelta = template.colliderSize;
-
-        // Create Collider
-        BoxCollider2D collider = gameObject.AddComponent<BoxCollider2D>();
-        collider.size = template.colliderSize;
-        if(!template.hasPhysics)
-            collider.isTrigger = true;
-
-        // Set RigidBody to Dynamic if movable by physics
-        if (template.movableByPhysics)
-            gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+        gameObject.GetComponent<RectTransform>().sizeDelta = template.size;
 
         // Set image
         gameObject.GetComponent<SpriteRenderer>().sprite = template.image;
         gameObject.GetComponent<SpriteRenderer>().transform.localScale = template.imageSize;
+
+        // Create Collider
+        if (template.useComplexCollider)
+        {
+            PolygonCollider2D collider = gameObject.AddComponent<PolygonCollider2D>();
+            if (!template.hasPhysics)
+                collider.isTrigger = true;
+        }
+        else
+        {
+            BoxCollider2D collider = gameObject.AddComponent<BoxCollider2D>();
+            collider.size = template.size;
+            if (!template.hasPhysics)
+                collider.isTrigger = true;
+        }
+
+        // Set RigidBody to Dynamic if movable by physics
+        if (template.movableByPhysics)
+            gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
 
         // Set Tag
         gameObject.tag = template.tagName;
@@ -43,7 +52,7 @@ public class GamePiece : MonoBehaviour
 
     void Update()
     {
-        template.componentController.UpdateComponent(this);   
+        template.componentController.UpdateComponent(this);
     }
 
     public void SetPosition(Vector2 newPosition, bool clamptoScreen)

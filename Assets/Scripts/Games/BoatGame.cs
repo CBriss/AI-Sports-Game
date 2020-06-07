@@ -87,6 +87,12 @@ public class BoatGame : MonoBehaviour, IGame
             GameOver();
         }
     }
+    public Player AddPlayer(NeuralNet brain = null)
+    {
+        Vector3 normalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(UnityEngine.Random.Range(0.3f, 0.7f), 0.3f));
+        normalizedPosition.z = 0;
+        return AddPlayer(normalizedPosition);
+    }
 
     public Player AddPlayer(Vector3 normalizedPosition, NeuralNet brain = null)
     {
