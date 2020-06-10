@@ -16,7 +16,7 @@ MonoBehaviour:
   tagName: Player
   image: {fileID: 21300000, guid: 0ef360c006be2f1418b04d5f0d684f50, type: 3}
   imageSize: {x: 0.125, y: 0.125}
-  size: {x: 1, y: 1}
+  size: {x: 3, y: 4}
   useComplexCollider: 0
   hasBrain: 1
   brainShape: 080000001400000004000000
