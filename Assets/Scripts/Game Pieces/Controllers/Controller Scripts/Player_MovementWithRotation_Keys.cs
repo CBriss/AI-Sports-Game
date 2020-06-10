@@ -15,6 +15,7 @@ public class Player_MovementWithRotation_Keys: GamePieceController
     {
         Move(GamePiece);
     }
+
     public void Move(GamePiece GamePiece)
     {
         Vector2 objectPosition = GamePiece.transform.position;

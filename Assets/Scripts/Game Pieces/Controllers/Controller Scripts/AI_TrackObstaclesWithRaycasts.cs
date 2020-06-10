@@ -16,6 +16,9 @@ public class AI_TrackObstaclesWithRaycasts : GamePieceController
 
     int layerMask;
 
+    [SerializeField] private bool rotate;
+    [SerializeField] private float rotationSpeed;
+
     public override void UpdateComponent(GamePiece GamePiece)
     {
         Move(GamePiece);
@@ -53,18 +56,11 @@ public class AI_TrackObstaclesWithRaycasts : GamePieceController
         
         float[] directions = GamePiece.GetComponent<GamePiece>().brain.Outputs();
 
-        float biggestInput = 0.0f;
-        int indexOfBiggest = 0;
-        for (int i = 0; i < directions.Length; i++)
-        {
-            if (directions[i] > biggestInput)
-            {
-                biggestInput = directions[i];
-                indexOfBiggest = i;
-            }
-        }
 
-        switch (indexOfBiggest)
+        Vector3 objectRotation = new Vector3(0, 0, 0);
+        Vector2 objectMovement = new Vector3(0, 0);
+
+        switch (ChooseDirection(directions))
         {
             case 0:
                 objectPosition.y += movementSpeed * Time.deltaTime;
@@ -73,15 +69,23 @@ public class AI_TrackObstaclesWithRaycasts : GamePieceController
                 objectPosition.y -= movementSpeed * Time.deltaTime;
                 break;
             case 2:
-                objectPosition.x -= movementSpeed * Time.deltaTime;
+                if(rotate)
+                    objectRotation.z += rotationSpeed * Time.deltaTime;
+                else
+                    objectPosition.x -= movementSpeed * Time.deltaTime;
                 break;
             case 3:
-                objectPosition.x += movementSpeed * Time.deltaTime;
+                if(rotate)
+                    objectRotation.z -= rotationSpeed * Time.deltaTime;
+                else
+                    objectPosition.x += movementSpeed * Time.deltaTime;
                 break;
             default:
                 break;
         }
-        GamePiece.SetPosition(objectPosition, true);
+        objectMovement = GamePiece.transform.TransformDirection(objectMovement);
+        GamePiece.SetPosition(objectPosition + objectMovement, true);
+        GamePiece.transform.Rotate(objectRotation);
     }
 
     public float SendRay(Vector2 originalPos, Vector2 rayDirection, Color color)
@@ -94,4 +98,20 @@ public class AI_TrackObstaclesWithRaycasts : GamePieceController
         }
         return 0;
     }
+
+    private int ChooseDirection(float[] directions)
+    {
+        float biggestInput = 0.0f;
+        int indexOfBiggest = 0;
+        for (int i = 0; i < directions.Length; i++)
+        {
+            if (directions[i] > biggestInput)
+            {
+                biggestInput = directions[i];
+                indexOfBiggest = i;
+            }
+        }
+        return indexOfBiggest;
+    }
+
 }

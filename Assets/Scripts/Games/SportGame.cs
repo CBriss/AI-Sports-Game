@@ -11,6 +11,7 @@ public class SportGame : MonoBehaviour, IGame
     public GameObject ball;
 
     public bool activeGame = false;
+    public bool multipleGames = false;
 
     public GameObject playerContainer;
     public GamePieceTemplate playerTemplate;
@@ -169,7 +170,7 @@ public class SportGame : MonoBehaviour, IGame
 
     private void ManageCollisions(GameObject gameObject, GameObject collidedObject)
     {
-        if (gameObject.GetInstanceID() == ball.GetInstanceID() && collidedObject.gameObject.CompareTag("Border"))
+        if (gameObject.GetInstanceID() == ball.GetInstanceID() && collidedObject.gameObject.CompareTag("Goal"))
         {
             GameOver();
         }

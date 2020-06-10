@@ -10,6 +10,7 @@ TagManager:
   - GraphDot
   - Boat
   - Border
+  - Goal
   layers:
   - Default
   - TransparentFX

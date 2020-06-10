@@ -10,7 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fed681d9cf725d647961e1be9caf09c7, type: 3}
-  m_Name: AI_Obstacle_Avoiding_RayCast_8_Directions
+  m_Name: AI_Pusher_4_Direction_Raycasts
   m_EditorClassIdentifier: 
   movementSpeed: 5
-  numberOfRays: 8
+  numberOfRays: 4
+  rotate: 1
+  rotationSpeed: 300
