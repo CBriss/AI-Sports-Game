@@ -21,6 +21,7 @@ public class BoatGame : MonoBehaviour, IGame
     public event Action OnGameStart = delegate { };
     public event Action OnGameOver = delegate { };
 
+
     public void Start()
     {
         Loader.LoaderCallback();
@@ -30,35 +31,6 @@ public class BoatGame : MonoBehaviour, IGame
     public void OnDestroy()
     {
         GamePiece.OnComponentCollision -= ManageCollisions;
-    }
-
-    public void SetPlayerTemplate(GamePieceTemplate playerTemplate)
-    {
-        this.playerTemplate = playerTemplate;
-    }
-
-    public void SetObstacleTemplate(GamePieceTemplate obstacleTemplate)
-    {
-        this.obstacleTemplate = obstacleTemplate;
-    }
-
-    public void StartGame()
-    {
-        background = GameObject.Find("background");
-        InvokeRepeating("AddObstacle", 0.25f, obstacleSpawnPeriod);
-        activeGame = true;
-        OnGameStart();
-    }
-
-    public bool IsActive()
-    {
-        return activeGame;
-    }
-
-    public void Clear(){
-        ClearActivePlayers();
-        ClearInactivePlayers();
-        ClearObstacles();
     }
 
     void Update()
@@ -77,7 +49,7 @@ public class BoatGame : MonoBehaviour, IGame
         }
         UpdateScores();
     }
-    
+
     void LateUpdate()
     {
         if (!activeGame)
@@ -87,6 +59,35 @@ public class BoatGame : MonoBehaviour, IGame
             GameOver();
         }
     }
+
+
+    /*****************
+    * Start and End  *
+    *****************/
+    public void StartGame()
+    {
+        InvokeRepeating("AddObstacle", 0.25f, obstacleSpawnPeriod);
+        OnGameStart();
+        activeGame = true;
+    }
+
+    public void GameOver()
+    {
+        CancelInvoke();
+        ClearObstacles();
+        Debug.Log("Calling Game Over");
+        OnGameOver();
+    }
+
+
+    /*****************
+    * Player Methods *
+    *****************/
+    public void SetPlayerTemplate(GamePieceTemplate playerTemplate)
+    {
+        this.playerTemplate = playerTemplate;
+    }
+
     public Player AddPlayer(NeuralNet brain = null)
     {
         Vector3 normalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(UnityEngine.Random.Range(0.3f, 0.7f), 0.3f));
@@ -112,6 +113,48 @@ public class BoatGame : MonoBehaviour, IGame
         return player;
     }
 
+    public List<Player> GetActivePlayers()
+    {
+        return activePlayers;
+    }
+
+    public void ClearActivePlayers()
+    {
+        foreach (Player player in activePlayers)
+        {
+            Destroy(player.playerObject);
+        }
+        activePlayers = new List<Player>();
+    }
+
+    public List<Player> GetInactivePlayers()
+    {
+        return inactivePlayers;
+    }
+ 
+    public void ClearInactivePlayers()
+    {
+        foreach (Player player in inactivePlayers)
+        {
+            Destroy(player.playerObject);
+        }
+
+        inactivePlayers = new List<Player>();
+    }
+
+    public void RemoveFromInactivePlayers(Player player)
+    {
+        inactivePlayers.Remove(player);
+    }
+
+    /*******************
+    * Obstacle Methods *
+    *******************/
+    public void SetObstacleTemplate(GamePieceTemplate obstacleTemplate)
+    {
+        this.obstacleTemplate = obstacleTemplate;
+    }
+
     public void AddObstacle()
     {
         Vector3 normalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(UnityEngine.Random.Range(-0.10f, 1.10f), 1.1f));
@@ -131,47 +174,30 @@ public class BoatGame : MonoBehaviour, IGame
             obstacle.SetActive(true);
         }
     }
-    public List<Player> GetActivePlayers()
-    {
-        return activePlayers;
-    }
-
-    public List<Player> GetInactivePlayers()
-    {
-        return inactivePlayers;
-    }
-
-    public void ClearActivePlayers()
-    {
-        foreach(Player player in activePlayers)
-        {
-            Destroy(player.playerObject);
-        }
-
-        activePlayers = new List<Player>();
-    }
-
-    public void ClearInactivePlayers()
-    {
-        foreach(Player player in inactivePlayers)
-        {
-            Destroy(player.playerObject);
-        }
-
-        inactivePlayers = new List<Player>();
-    }
-
-    public void RemoveFromInactivePlayers(Player player)
-    {
-        inactivePlayers.Remove(player);
-    }
 
     public void ClearObstacles()
     {
-        foreach(GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
+        foreach (GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
         {
             Destroy(obstacle);
         }
+    }
+
+    /*******************
+    *       Misc       *
+    *******************/
+    public void Clear()
+    {
+        ClearActivePlayers();
+        ClearInactivePlayers();
+        ClearObstacles();
+    }
+
+    public void SetTimer(float timer) { }
+
+    public bool IsActive()
+    {
+        return activeGame;
     }
     
     public void UpdateScores()
@@ -181,16 +207,6 @@ public class BoatGame : MonoBehaviour, IGame
             float newDistanceTraveled = 10.0f;
             player.score += Mathf.RoundToInt(Mathf.Ceil((newDistanceTraveled)));
         }
-    }
-
-    public void GameOver()
-    {
-        foreach (GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
-        {
-            Destroy(obstacle);
-        }
-        Debug.Log("Calling Game Over");
-        OnGameOver();
     }
 
     private void ManageCollisions(GameObject gameObject, GameObject collidedObject)

@@ -345,6 +345,7 @@ MonoBehaviour:
     type: 3}
   playerTemplate: {fileID: 11400000, guid: b43d3f217e956f64781fd080b2e1dde8, type: 2}
   obstacleTemplate: {fileID: 11400000, guid: e14e6710258fb1c4f9a3d2a42ffca1b4, type: 2}
+  gameTimer: 0
   seedBoatFileName: 
 --- !u!114 &218100077
 MonoBehaviour:
@@ -405,6 +406,7 @@ MonoBehaviour:
     type: 3}
   playerTemplate: {fileID: 11400000, guid: eab179cafeda91044910d9bbbbe01b8d, type: 2}
   obstacleTemplate: {fileID: 11400000, guid: e14e6710258fb1c4f9a3d2a42ffca1b4, type: 2}
+  gameTimer: 1.5
 --- !u!4 &218100080
 Transform:
   m_ObjectHideFlags: 0
@@ -435,6 +437,9 @@ MonoBehaviour:
   ball: {fileID: 0}
   activeGame: 0
   multipleGames: 0
+  timedGame: 0
+  gameTime: 0
+  currentTimer: 0
   playerContainer: {fileID: 321623288}
   playerTemplate: {fileID: 0}
   playerLayer: 9

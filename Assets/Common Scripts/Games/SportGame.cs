@@ -1,17 +1,21 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SportGame : MonoBehaviour, IGame
 {
     public List<Player> activePlayers = new List<Player>();
-    public List<Player> team1 = new List<Player>();
-    public List<Player> team2 = new List<Player>();
+    public List<Player> inactivePlayers = new List<Player>();
+    public List<Player> team_1 = new List<Player>();
+    public List<Player> team_2 = new List<Player>();
 
     public GameObject ball;
 
     public bool activeGame = false;
     public bool multipleGames = false;
+    public bool timedGame = false;
+    public float gameTime;
+    public float currentTimer;
 
     public GameObject playerContainer;
     public GamePieceTemplate playerTemplate;
@@ -35,35 +39,6 @@ public class SportGame : MonoBehaviour, IGame
         GamePiece.OnComponentCollision -= ManageCollisions;
     }
 
-    public void SetPlayerTemplate(GamePieceTemplate playerTemplate)
-    {
-        this.playerTemplate = playerTemplate;
-    }
-
-    public void SetObstacleTemplate(GamePieceTemplate obstacleTemplate)
-    {
-        this.obstacleTemplate = obstacleTemplate;
-    }
-
-    public void StartGame()
-    {
-        activeGame = true;
-        AddObstacle();
-        OnGameStart();
-    }
-
-    public bool IsActive()
-    {
-        return activeGame;
-    }
-
-    public void Clear()
-    {
-        ClearActivePlayers();
-        ClearInactivePlayers();
-        ClearObstacles();
-    }
-
     void Update()
     {
         if (!activeGame)
@@ -72,8 +47,49 @@ public class SportGame : MonoBehaviour, IGame
 
     void LateUpdate()
     {
-        if (!activeGame)
-            return;
+        if (activeGame && timedGame)
+        {
+            if (currentTimer > 0)
+                currentTimer -= Time.deltaTime;
+            else if (currentTimer <= 0)
+                GameOver();
+            Debug.Log("Timer: " + Mathf.Round(currentTimer));
+        }
+    }
+
+    /*****************
+    * Start and End  *
+    *****************/
+    public void StartGame()
+    {
+        AddObstacle();
+        OnGameStart();
+        activeGame = true;
+    }
+
+    public void GameOver()
+    {
+        ClearObstacles();
+        for (int i = 0; i < activePlayers.Count; i++)
+        {
+            Player player = activePlayers[i];
+            activePlayers.Remove(player);
+            inactivePlayers.Add(player);
+            i--;
+        }
+        ClearActivePlayers();
+        Debug.Log("Calling Game Over");
+
+        currentTimer = gameTime;
+        OnGameOver();
+    }
+
+    /*****************
+    * Player Methods *
+    *****************/
+    public void SetPlayerTemplate(GamePieceTemplate playerTemplate)
+    {
+        this.playerTemplate = playerTemplate;
     }
 
     public Player AddPlayer(NeuralNet brain = null)
@@ -98,10 +114,53 @@ public class SportGame : MonoBehaviour, IGame
         playerObject.SetActive(true);
         Player player = new Player(playerObject);
         activePlayers.Add(player);
-        team1.Add(player);
+        team_1.Add(player);
         return player;
     }
 
+    public List<Player> GetActivePlayers()
+    {
+        return activePlayers;
+    }
+
+    public void ClearActivePlayers()
+    {
+        foreach (Player player in activePlayers)
+        {
+            Destroy(player.playerObject);
+        }
+        activePlayers = new List<Player>();
+        team_1 = new List<Player>();
+    }
+
+    public List<Player> GetInactivePlayers()
+    {
+        return inactivePlayers;
+    }
+
+    public void ClearInactivePlayers()
+    {
+        foreach (Player player in inactivePlayers)
+        {
+            Destroy(player.playerObject);
+        }
+
+        inactivePlayers = new List<Player>();
+    }
+
+    public void RemoveFromInactivePlayers(Player player)
+    {
+        inactivePlayers.Remove(player);
+        team_1.Remove(player);
+    }
+
+    /*******************
+    * Obstacle Methods *
+    *******************/
+    public void SetObstacleTemplate(GamePieceTemplate obstacleTemplate)
+    {
+        this.obstacleTemplate = obstacleTemplate;
+    }
     public void AddObstacle()
     {
         Vector3 normalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(0.5f, 0.5f));
@@ -123,32 +182,6 @@ public class SportGame : MonoBehaviour, IGame
         ball = obstacle;
     }
 
-    public List<Player> GetActivePlayers()
-    {
-        return activePlayers;
-    }
-
-    public List<Player> GetInactivePlayers()
-    {
-        return new List<Player>();
-    }
-
-    public void ClearActivePlayers()
-    {
-        foreach (Player player in activePlayers)
-        {
-            Destroy(player.playerObject);
-        }
-
-        activePlayers = new List<Player>();
-        team1 = new List<Player>();
-        team2 = new List<Player>();
-    }
-
-    public void ClearInactivePlayers() {}
-
-    public void RemoveFromInactivePlayers(Player player) {}
-
     public void ClearObstacles()
     {
         foreach (GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
@@ -157,21 +190,37 @@ public class SportGame : MonoBehaviour, IGame
         }
     }
 
-    public void UpdateScores()
-    {
-    }
 
-    public void GameOver()
+    /*******************
+    *       Misc       *
+    *******************/
+    public void Clear()
     {
         ClearActivePlayers();
-        Debug.Log("Calling Game Over");
-        OnGameOver();
+        ClearInactivePlayers();
+        ClearObstacles();
+    }
+
+    public void SetTimer(float timer)
+    {
+        timedGame = true;
+        gameTime = timer;
+    }
+
+    public bool IsActive()
+    {
+        return activeGame;
+    }
+
+    public void UpdateScores()
+    {
     }
 
     private void ManageCollisions(GameObject gameObject, GameObject collidedObject)
     {
         if (gameObject.GetInstanceID() == ball.GetInstanceID() && collidedObject.gameObject.CompareTag("Goal"))
         {
+            UpdateScores();
             GameOver();
         }
     }

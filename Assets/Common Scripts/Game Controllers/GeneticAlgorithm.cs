@@ -16,6 +16,7 @@ public class GeneticAlgorithm : GameController
     public GameObject UIPrefab;
     public GamePieceTemplate playerTemplate;
     public GamePieceTemplate obstacleTemplate;
+    public float gameTimer = -1;
 
     public static event Action<string[]> OnUpdateUI;
 
@@ -24,6 +25,9 @@ public class GeneticAlgorithm : GameController
         game = gameObject.GetComponent<IGame>();
         game.SetPlayerTemplate(playerTemplate);
         game.SetObstacleTemplate(obstacleTemplate);
+
+        if(gameTimer > 0)
+            game.SetTimer(gameTimer);
 
         game.OnGameStart += StartGameController;
         game.OnGameOver += HandleGameOver;
@@ -116,8 +120,8 @@ public class GeneticAlgorithm : GameController
                 mutationAmount
             );
             }
-
         }
+        game.StartGame();
     }
 
     private List<Player> DetermineBestParents(List<Player> deadIndividuals)
