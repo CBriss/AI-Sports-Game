@@ -42,7 +42,7 @@ public class GenerationalLearningUI : GameControllerUI
     {
         string playerName = saveFileInput.GetComponent<TMP_InputField>().text;
         GeneticAlgorithm geneticAlgorithm = FindObjectOfType<GeneticAlgorithm>();
-        GameObject playerObject = geneticAlgorithm.bestIndividual.playerObject;
+        GameObject playerObject = geneticAlgorithm.bestIndividual.PlayerObject;
         playerObject.GetComponent<GamePiece>().brain.SaveToFile("Assets/Saved Brains/"+playerName+".txt");
         // bestIndividual.playerObject.GetComponent<GameComponent>().brain.SaveToFile("Assets/Saved Brains/bestBoat.txt");
         Debug.Log("Saved!");

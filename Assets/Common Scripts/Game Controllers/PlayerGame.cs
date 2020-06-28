@@ -32,17 +32,21 @@ public class PlayerGame : GameController
 
     public void LateUpdate()
     {
-        List<Player> players = game.GetActivePlayers();
-        if (players.Any())
+        if (game.IsActive())
         {
-            string[] UIString = { players[0].score.ToString() };
-            OnUpdateUI(UIString);
+            List<Player> players = game.GetSimulations(true, false)[0].GetActivePlayers();
+            if (players.Any())
+            {
+                string[] UIString = { players[0].Score.ToString() };
+                OnUpdateUI(UIString);
+            }
         }
     }
 
     public override void StartGameController()
     {
-        game.AddPlayer();
+        game.AddSimulation(1);
+        StartCoroutine(game.StartAllSimulations());
     }
 
     public override void HandleGameOver()

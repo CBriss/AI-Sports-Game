@@ -1,22 +1,16 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoatGame : MonoBehaviour, IGame
+public class BoatGame : GameBase, IGame
 {
     public GameObject background;
+
     public List<Player> activePlayers = new List<Player>();
     public List<Player> inactivePlayers = new List<Player>();
     public float obstacleSpawnPeriod = 0.25f;
     public bool activeGame = false;
-
-    public GameObject playerContainer;
-    public GamePieceTemplate playerTemplate;
-    public int playerLayer;
-
-    public GameObject obstacleContainer;
-    public GamePieceTemplate obstacleTemplate;
-    public int obstacleLayer;
 
     public event Action OnGameStart = delegate { };
     public event Action OnGameOver = delegate { };
@@ -40,7 +34,7 @@ public class BoatGame : MonoBehaviour, IGame
         for (int i = 0; i < activePlayers.Count; i++)
         {
             Player player = activePlayers[i];
-            if (!player.playerObject.activeSelf)
+            if (!player.PlayerObject.activeSelf)
             {
                 activePlayers.Remove(player);
                 inactivePlayers.Add(player);
@@ -80,22 +74,43 @@ public class BoatGame : MonoBehaviour, IGame
     }
 
 
+    /*********************
+   * Simulation Methods *
+   *********************/
+    public IEnumerator StartAllSimulations()
+    {
+        for (int i = 0; i < simulations.Count; i++)
+        {
+            Simulation simulation = simulations[i];
+            for (int j = 0; j < simulation.playerCount; j++)
+            {
+                Player newPlayer = AddPlayer(simulation);
+                for (int k = i; k >= 0; k--)
+                {
+                    simulations[k].IgnoreCollisionsWith(newPlayer.PlayerObject);
+                }
+            }
+            GameObject newObstacke = AddObstacle(simulation);
+            for (int k = i; k >= 0; k--)
+            {
+                simulations[k].IgnoreCollisionsWith(newObstacke);
+            }
+        }
+        yield return new WaitForSeconds(1);
+    }
+
+
     /*****************
     * Player Methods *
     *****************/
-    public void SetPlayerTemplate(GamePieceTemplate playerTemplate)
-    {
-        this.playerTemplate = playerTemplate;
-    }
-
-    public Player AddPlayer(NeuralNet brain = null)
+    public Player AddPlayer(Simulation simulation, NeuralNet brain = null)
     {
         Vector3 normalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(UnityEngine.Random.Range(0.3f, 0.7f), 0.3f));
         normalizedPosition.z = 0;
-        return AddPlayer(normalizedPosition);
+        return AddPlayer(normalizedPosition, simulation, brain);
     }
 
-    public Player AddPlayer(Vector3 normalizedPosition, NeuralNet brain = null)
+    public Player AddPlayer(Vector3 normalizedPosition, Simulation simulation, NeuralNet brain = null)
     {
         GameObject playerObject = Instantiate(playerTemplate.prefabObject);
         if (playerObject == null)
@@ -108,7 +123,8 @@ public class BoatGame : MonoBehaviour, IGame
         playerObject.layer = playerLayer;
         playerObject.transform.SetParent(playerContainer.transform);
         playerObject.SetActive(true);
-        Player player = new Player(playerObject);
+        Player player = new Player(playerObject, simulation);
+        simulation.AddPlayer(player);
         activePlayers.Add(player);
         return player;
     }
@@ -122,7 +138,7 @@ public class BoatGame : MonoBehaviour, IGame
     {
         foreach (Player player in activePlayers)
         {
-            Destroy(player.playerObject);
+            Destroy(player.PlayerObject);
         }
         activePlayers = new List<Player>();
     }
@@ -136,7 +152,7 @@ public class BoatGame : MonoBehaviour, IGame
     {
         foreach (Player player in inactivePlayers)
         {
-            Destroy(player.playerObject);
+            Destroy(player.PlayerObject);
         }
 
         inactivePlayers = new List<Player>();
@@ -150,19 +166,14 @@ public class BoatGame : MonoBehaviour, IGame
     /*******************
     * Obstacle Methods *
     *******************/
-    public void SetObstacleTemplate(GamePieceTemplate obstacleTemplate)
-    {
-        this.obstacleTemplate = obstacleTemplate;
-    }
-
-    public void AddObstacle()
+    public GameObject AddObstacle(Simulation simulation)
     {
         Vector3 normalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(UnityEngine.Random.Range(-0.10f, 1.10f), 1.1f));
         normalizedPosition.z = 0;
-        AddObstacle(normalizedPosition);
+        return AddObstacle(normalizedPosition, simulation);
     }
 
-    public void AddObstacle(Vector3 normalizedPosition)
+    public GameObject AddObstacle(Vector3 normalizedPosition, Simulation simulation)
     {
         GameObject obstacle = Instantiate(obstacleTemplate.prefabObject);
         obstacle.GetComponent<GamePiece>().template = obstacleTemplate;
@@ -173,6 +184,8 @@ public class BoatGame : MonoBehaviour, IGame
             obstacle.transform.position = normalizedPosition;
             obstacle.SetActive(true);
         }
+        simulation.AddObstacle(obstacle);
+        return obstacle;
     }
 
     public void ClearObstacles()
@@ -186,32 +199,20 @@ public class BoatGame : MonoBehaviour, IGame
     /*******************
     *       Misc       *
     *******************/
-    public void Clear()
-    {
-        ClearActivePlayers();
-        ClearInactivePlayers();
-        ClearObstacles();
-    }
-
     public void SetTimer(float timer) { }
-
-    public bool IsActive()
-    {
-        return activeGame;
-    }
     
     public void UpdateScores()
     {
         foreach(Player player in activePlayers)
         {
             float newDistanceTraveled = 10.0f;
-            player.score += Mathf.RoundToInt(Mathf.Ceil((newDistanceTraveled)));
+            player.Score += Mathf.RoundToInt(Mathf.Ceil((newDistanceTraveled)));
         }
     }
 
     private void ManageCollisions(GameObject gameObject, GameObject collidedObject)
     {
-        if (gameObject.CompareTag("Player") && (collidedObject.gameObject.CompareTag("Obstacle") || collidedObject.gameObject.CompareTag("Border")))
+        if (gameObject.CompareTag("Player") && (collidedObject.CompareTag("Obstacle") || collidedObject.CompareTag("Border")))
         {
             gameObject.SetActive(false);
         }

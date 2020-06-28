@@ -2,12 +2,17 @@
 
 public class Player
 {
-    public GameObject playerObject { get; }
-    public int score { get; set; }
+    public GameObject PlayerObject { get; }
+    public int Score { get; set; }
 
-    public Player(GameObject playerGameObject)
+    public Simulation simulation;
+
+    public Player(GameObject playerObject, Simulation simulation)
     {
-        playerObject = playerGameObject;
-        score = 0;
+        PlayerObject = playerObject;
+        this.simulation = simulation;
+        Score = 0;
     }
+
+
 }

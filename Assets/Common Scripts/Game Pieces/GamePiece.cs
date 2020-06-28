@@ -71,6 +71,11 @@ public class GamePiece : MonoBehaviour
         OnComponentCollision(gameObject, collision.gameObject);
     }
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        OnComponentCollision(gameObject, collision.gameObject);
+    }
+
     void OnBecameInvisible()
     {
         if (gameObject.tag == "Obstacle")

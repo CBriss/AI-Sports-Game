@@ -396,7 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34b517d5745bf1a40a45cdcfef13c238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  populationSize: 50
+  populationSize: 10
   generationCount: 1
   mutationPercentage: 0.1
   mutationAmount: 0.05
@@ -406,7 +406,7 @@ MonoBehaviour:
     type: 3}
   playerTemplate: {fileID: 11400000, guid: eab179cafeda91044910d9bbbbe01b8d, type: 2}
   obstacleTemplate: {fileID: 11400000, guid: e14e6710258fb1c4f9a3d2a42ffca1b4, type: 2}
-  gameTimer: 1.5
+  gameTimer: 5
 --- !u!4 &218100080
 Transform:
   m_ObjectHideFlags: 0
@@ -434,9 +434,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1f5f62cbddcc194283dbc367c9ff4aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ball: {fileID: 0}
-  activeGame: 0
-  multipleGames: 0
   timedGame: 0
   gameTime: 0
   currentTimer: 0
@@ -446,6 +443,8 @@ MonoBehaviour:
   obstacleContainer: {fileID: 1162592847}
   obstacleTemplate: {fileID: 0}
   obstacleLayer: 8
+  timeScale: 1
+  active: 0
 --- !u!1 &321623288
 GameObject:
   m_ObjectHideFlags: 0
@@ -1040,7 +1039,7 @@ GameObject:
   - component: {fileID: 1165237763}
   - component: {fileID: 1165237762}
   m_Layer: 10
-  m_Name: Right Border
+  m_Name: Team 2 Net
   m_TagString: Goal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1444,7 +1443,7 @@ GameObject:
   - component: {fileID: 1976671358}
   - component: {fileID: 1976671357}
   m_Layer: 10
-  m_Name: Left Border
+  m_Name: Team 1 Net
   m_TagString: Goal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

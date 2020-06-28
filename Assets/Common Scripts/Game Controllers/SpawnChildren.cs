@@ -26,7 +26,7 @@ public class SpawnChildren : GeneticAlgorithm
                 new Vector3(Random.Range(0.1f, 0.9f), Random.Range(0.1f, 0.5f), 0)
             );
             newPlayerNormalizedPosition.z = 0;
-            game.AddPlayer(newPlayerNormalizedPosition, seedBrain);
+            //game.AddPlayer(newPlayerNormalizedPosition, seedBrain);
         }
     }
 

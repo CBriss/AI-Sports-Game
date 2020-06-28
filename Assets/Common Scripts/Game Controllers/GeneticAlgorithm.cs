@@ -41,18 +41,32 @@ public class GeneticAlgorithm : GameController
     {
         generationCount = 1;
         MakeGenerationZero();
-        string[] UIString = { generationCount.ToString(), (bestIndividual != null ? bestIndividual.score.ToString() : "0") };
+        StartCoroutine(game.StartAllSimulations());
+        string[] UIString = { generationCount.ToString(), (bestIndividual != null ? bestIndividual.Score.ToString() : "0") };
         OnUpdateUI(UIString);
     }
 
     public override void HandleGameOver()
     {
-        game.ClearActivePlayers();
-        game.ClearObstacles();
-        NewGeneration(game.GetInactivePlayers());
-        game.ClearInactivePlayers();
+        List<Player> previousGeneration = new List<Player>();
+        foreach(Simulation simulation in game.GetSimulations(true, true).ToArray())
+        {
+            simulation.ClearActivePlayers();
+            simulation.ClearObstacles();
+            previousGeneration.AddRange(simulation.GetInactivePlayers());
+
+            Debug.Log(simulation.GetInactivePlayers().Count);
+
+            simulation.ClearInactivePlayers();
+
+            Debug.Log(simulation.GetInactivePlayers().Count);
+
+            game.RemoveSimulation(simulation);
+        }
+
+        NewGeneration(previousGeneration);
         generationCount += 1;
-        string[] UIString = { generationCount.ToString(), (bestIndividual != null ? bestIndividual.score.ToString() : "0") };
+        string[] UIString = { generationCount.ToString(), (bestIndividual != null ? bestIndividual.Score.ToString() : "0") };
         OnUpdateUI(UIString);
     }
 
@@ -70,56 +84,50 @@ public class GeneticAlgorithm : GameController
     {
         for (int i = 0; i < populationSize; i++)
         {
-            Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(
-                    new Vector3(UnityEngine.Random.Range(0.1f, 0.9f), UnityEngine.Random.Range(0.1f, 0.5f), 0)
-            );
-            newPlayerNormalizedPosition.z = 0;
-            game.AddPlayer(newPlayerNormalizedPosition);
+            game.AddSimulation(1);
         }
     }
 
     void NewGeneration(List<Player> deadIndividuals)
     {
         // Determine Generation Parents
-        //List<Player> parents = DetermineBestParents(deadIndividuals);
-
-        List<Player> sortedParents = deadIndividuals.OrderByDescending(p => p.score).ToList();
-        Debug.Log(sortedParents[0].score);
-        if (bestIndividual == null || sortedParents[0].score > bestIndividual.score)
+        List<Player> sortedParents = deadIndividuals.OrderByDescending(p => p.Score).ToList();
+        Debug.Log(sortedParents[0].Score);
+        if (bestIndividual == null || sortedParents[0].Score > bestIndividual.Score)
         {
             if (bestIndividual != null)
-            Destroy(bestIndividual.playerObject);
+            Destroy(bestIndividual.PlayerObject);
             bestIndividual = sortedParents[0];
-            game.RemoveFromInactivePlayers(bestIndividual);
+            bestIndividual.simulation.RemoveFromInactivePlayers(bestIndividual);
         }
+
         //Replace bottom half of the population with the best genes and some mutation
-        for (int i = 0; i < populationSize; i++)
+        for (int i=0; i < populationSize; i++)
         {
-            Vector3 newPlayerNormalizedPosition = Camera.main.ViewportToWorldPoint(
-                    new Vector3(UnityEngine.Random.Range(0.1f, 0.9f), UnityEngine.Random.Range(0.1f, 0.5f), 0)
-            );
-            newPlayerNormalizedPosition.z = 0;
-            Player newPlayer = game.AddPlayer(newPlayerNormalizedPosition);
-            //bottom half get a breed of the two best
+            Simulation simulation = game.GetSimulations(false, true)[i];
+            NeuralNet newBrain = new NeuralNet(sortedParents[0].PlayerObject.GetComponent<GamePiece>().brain.networkShape);
+            
             if (i >= populationSize / 2)
             {
-            newPlayer.playerObject.GetComponent<GamePiece>().brain =
-                sortedParents[0].playerObject.GetComponent<GamePiece>().brain.Breed(
-                sortedParents[1].playerObject.GetComponent<GamePiece>().brain,
+                //bottom half get a breed of the two best
+                newBrain =
+                sortedParents[0].PlayerObject.GetComponent<GamePiece>().brain.Breed(
+                sortedParents[1].PlayerObject.GetComponent<GamePiece>().brain,
                 mutationPercentage,
                 mutationAmount
             );
             }
             else
             {
-            //top half breed with each other
-            newPlayer.playerObject.GetComponent<GamePiece>().brain =
-                sortedParents[i].playerObject.GetComponent<GamePiece>().brain.Breed(
-                sortedParents[i + 1].playerObject.GetComponent<GamePiece>().brain,
+                //top half breed with each other
+                newBrain =
+                sortedParents[i].PlayerObject.GetComponent<GamePiece>().brain.Breed(
+                sortedParents[i + 1].PlayerObject.GetComponent<GamePiece>().brain,
                 mutationPercentage,
                 mutationAmount
             );
             }
+            Player newPlayer = game.AddPlayer(simulation, newBrain);
         }
         game.StartGame();
     }
@@ -135,10 +143,10 @@ public class GeneticAlgorithm : GameController
     private Player FindBestIndividual(List<Player> deadIndividuals)
     {
         Player currentBest = deadIndividuals[0];
-        int currentHighScore = currentBest.score;
+        int currentHighScore = currentBest.Score;
         foreach (Player player in deadIndividuals)
         {
-            int currentScore = player.score;
+            int currentScore = player.Score;
             if (currentScore > currentHighScore)
             {
             currentBest = player;

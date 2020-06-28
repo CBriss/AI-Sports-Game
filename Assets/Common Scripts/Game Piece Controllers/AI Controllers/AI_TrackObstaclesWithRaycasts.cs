@@ -39,17 +39,17 @@ public class AI_TrackObstaclesWithRaycasts : GamePieceController
         Vector2 leftOfObject = new Vector2(objectPosition.x - size.x / 2, objectPosition.y);
         Vector2 rightOfObject = new Vector2(objectPosition.x + size.x / 2, objectPosition.y);
 
-        input[0] = SendRay(topOfObject, Vector2.up, Color.yellow);
-        input[1] = SendRay(bottomOfObject, Vector2.down, Color.red);
-        input[2] = SendRay(leftOfObject, Vector2.left, Color.blue);
-        input[3] = SendRay(rightOfObject, Vector2.right, Color.green);
+        input[0] = Rays.SendRay(topOfObject, Vector2.up, Color.yellow, layerMask);
+        input[1] = Rays.SendRay(bottomOfObject, Vector2.down, Color.red, layerMask);
+        input[2] = Rays.SendRay(leftOfObject, Vector2.left, Color.blue, layerMask);
+        input[3] = Rays.SendRay(rightOfObject, Vector2.right, Color.green, layerMask);
 
         for(int i=0; i < numberOfRays; i++)
         {
             if (i <= 2)
-                input[i] = SendRay(topOfObject, vectors[i], Color.yellow);
+                input[i] = Rays.SendRay(topOfObject, vectors[i], Color.yellow, layerMask);
             else
-                input[i] = SendRay(bottomOfObject, vectors[i], Color.red);
+                input[i] = Rays.SendRay(bottomOfObject, vectors[i], Color.red, layerMask);
         }
 
         GamePiece.GetComponent<GamePiece>().brain.FeedForward(input);
@@ -86,17 +86,6 @@ public class AI_TrackObstaclesWithRaycasts : GamePieceController
         objectMovement = GamePiece.transform.TransformDirection(objectMovement);
         GamePiece.SetPosition(objectPosition + objectMovement, true);
         GamePiece.transform.Rotate(objectRotation);
-    }
-
-    public float SendRay(Vector2 originalPos, Vector2 rayDirection, Color color)
-    {
-        RaycastHit2D hit = Physics2D.Raycast(originalPos, rayDirection, Mathf.Infinity, layerMask);
-        if (hit.collider != null)
-        {
-            Debug.DrawLine(originalPos, hit.collider.transform.position, color);
-            return hit.distance;
-        }
-        return 0;
     }
 
     private int ChooseDirection(float[] directions)

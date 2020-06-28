@@ -17,7 +17,7 @@ public class BrainTest : PlayerGame
 
     public override void StartGameController()
     {
-        game.AddPlayer(new NeuralNet("Assets/Saved Brains/" + seedBoatFileName));
+        //game.AddPlayer(new NeuralNet("Assets/Saved Brains/" + seedBoatFileName));
     }
 
     public void OnDisable()
