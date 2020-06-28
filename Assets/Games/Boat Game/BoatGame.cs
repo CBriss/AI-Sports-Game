@@ -68,7 +68,6 @@ public class BoatGame : GameBase, IGame
     public void GameOver()
     {
         CancelInvoke();
-        ClearObstacles();
         Debug.Log("Calling Game Over");
         OnGameOver();
     }
@@ -129,40 +128,6 @@ public class BoatGame : GameBase, IGame
         return player;
     }
 
-    public List<Player> GetActivePlayers()
-    {
-        return activePlayers;
-    }
-
-    public void ClearActivePlayers()
-    {
-        foreach (Player player in activePlayers)
-        {
-            Destroy(player.PlayerObject);
-        }
-        activePlayers = new List<Player>();
-    }
-
-    public List<Player> GetInactivePlayers()
-    {
-        return inactivePlayers;
-    }
- 
-    public void ClearInactivePlayers()
-    {
-        foreach (Player player in inactivePlayers)
-        {
-            Destroy(player.PlayerObject);
-        }
-
-        inactivePlayers = new List<Player>();
-    }
-
-    public void RemoveFromInactivePlayers(Player player)
-    {
-        inactivePlayers.Remove(player);
-    }
-
     /*******************
     * Obstacle Methods *
     *******************/
@@ -186,14 +151,6 @@ public class BoatGame : GameBase, IGame
         }
         simulation.AddObstacle(obstacle);
         return obstacle;
-    }
-
-    public void ClearObstacles()
-    {
-        foreach (GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
-        {
-            Destroy(obstacle);
-        }
     }
 
     /*******************
