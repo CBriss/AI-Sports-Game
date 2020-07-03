@@ -396,7 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34b517d5745bf1a40a45cdcfef13c238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  populationSize: 10
+  populationSize: 2
   generationCount: 1
   mutationPercentage: 0.1
   mutationAmount: 0.05
@@ -406,7 +406,7 @@ MonoBehaviour:
     type: 3}
   playerTemplate: {fileID: 11400000, guid: eab179cafeda91044910d9bbbbe01b8d, type: 2}
   obstacleTemplate: {fileID: 11400000, guid: e14e6710258fb1c4f9a3d2a42ffca1b4, type: 2}
-  gameTimer: 5
+  gameTimer: 3
 --- !u!4 &218100080
 Transform:
   m_ObjectHideFlags: 0
@@ -434,17 +434,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1f5f62cbddcc194283dbc367c9ff4aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timedGame: 0
-  gameTime: 0
-  currentTimer: 0
+  active: 0
   playerContainer: {fileID: 321623288}
   playerTemplate: {fileID: 0}
   playerLayer: 9
   obstacleContainer: {fileID: 1162592847}
   obstacleTemplate: {fileID: 0}
   obstacleLayer: 8
+  timedGame: 0
+  gameTime: 0
+  currentTimer: 0
   timeScale: 1
-  active: 0
 --- !u!1 &321623288
 GameObject:
   m_ObjectHideFlags: 0

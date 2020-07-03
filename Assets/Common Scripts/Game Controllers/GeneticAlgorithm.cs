@@ -49,17 +49,16 @@ public class GeneticAlgorithm : GameController
     public override void HandleGameOver()
     {
         List<Player> previousGeneration = new List<Player>();
-        foreach(Simulation simulation in game.GetSimulations(true, true).ToArray())
+        foreach (Simulation simulation in game.GetSimulations(true, true).ToArray())
         {
             simulation.ClearActivePlayers();
             simulation.ClearObstacles();
-            previousGeneration.AddRange(simulation.GetInactivePlayers());
 
-            Debug.Log(simulation.GetInactivePlayers().Count);
+            Player[] players = new Player[simulation.GetInactivePlayers().Count];
+            simulation.GetInactivePlayers().CopyTo(players);
+            previousGeneration.AddRange(players);
 
             simulation.ClearInactivePlayers();
-
-            Debug.Log(simulation.GetInactivePlayers().Count);
 
             game.RemoveSimulation(simulation);
         }
@@ -104,7 +103,7 @@ public class GeneticAlgorithm : GameController
         //Replace bottom half of the population with the best genes and some mutation
         for (int i=0; i < populationSize; i++)
         {
-            Simulation simulation = game.GetSimulations(false, true)[i];
+            Simulation simulation = game.AddSimulation(1);
             NeuralNet newBrain = new NeuralNet(sortedParents[0].PlayerObject.GetComponent<GamePiece>().brain.networkShape);
             
             if (i >= populationSize / 2)

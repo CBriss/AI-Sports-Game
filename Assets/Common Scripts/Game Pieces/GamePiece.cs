@@ -6,7 +6,7 @@ public class GamePiece : MonoBehaviour
     public GamePieceTemplate template;
     public NeuralNet brain;
 
-    private Camera camera;
+    public Camera camera;
 
     public static event Action<GameObject, GameObject> OnComponentCollision = delegate { };
 

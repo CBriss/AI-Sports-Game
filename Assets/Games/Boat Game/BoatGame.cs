@@ -10,7 +10,6 @@ public class BoatGame : GameBase, IGame
     public List<Player> activePlayers = new List<Player>();
     public List<Player> inactivePlayers = new List<Player>();
     public float obstacleSpawnPeriod = 0.25f;
-    public bool activeGame = false;
 
     public event Action OnGameStart = delegate { };
     public event Action OnGameOver = delegate { };
@@ -29,7 +28,7 @@ public class BoatGame : GameBase, IGame
 
     void Update()
     {
-        if (!activeGame)
+        if (!active)
             return;
         for (int i = 0; i < activePlayers.Count; i++)
         {
@@ -46,7 +45,7 @@ public class BoatGame : GameBase, IGame
 
     void LateUpdate()
     {
-        if (!activeGame)
+        if (!active)
             return;
         if (activePlayers.Count <= 0)
         {
@@ -61,14 +60,22 @@ public class BoatGame : GameBase, IGame
     public void StartGame()
     {
         InvokeRepeating("AddObstacle", 0.25f, obstacleSpawnPeriod);
+        active = true;
         OnGameStart();
-        activeGame = true;
     }
 
     public void GameOver()
     {
+        foreach (Simulation simulation in simulations)
+        {
+            if (simulation.active)
+            {
+                simulation.active = false;
+            }
+        }
+        active = false;
         CancelInvoke();
-        Debug.Log("Calling Game Over");
+        Debug.Log("Game Over");
         OnGameOver();
     }
 
@@ -78,24 +85,37 @@ public class BoatGame : GameBase, IGame
    *********************/
     public IEnumerator StartAllSimulations()
     {
+        Player lastPlayerAdded = null;
         for (int i = 0; i < simulations.Count; i++)
         {
             Simulation simulation = simulations[i];
             for (int j = 0; j < simulation.playerCount; j++)
             {
-                Player newPlayer = AddPlayer(simulation);
-                for (int k = i; k >= 0; k--)
+                lastPlayerAdded = AddPlayer(simulation);
+            }
+            AddObstacle(simulation);
+        }
+
+        yield return new WaitUntil(() => lastPlayerAdded.PlayerObject.GetComponent<Collider2D>());
+
+        foreach (Simulation simulation in simulations)
+        {
+            foreach (Simulation otherSimulation in simulations)
+            {
+                if (otherSimulation != simulation)
                 {
-                    simulations[k].IgnoreCollisionsWith(newPlayer.PlayerObject);
+                    foreach (Player player in simulation.GetActivePlayers())
+                    {
+                        otherSimulation.IgnoreCollisionsWith(player.PlayerObject);
+                    }
+
+                    foreach (GameObject obstacle in simulation.GetObstacles())
+                    {
+                        otherSimulation.IgnoreCollisionsWith(obstacle);
+                    }
                 }
             }
-            GameObject newObstacke = AddObstacle(simulation);
-            for (int k = i; k >= 0; k--)
-            {
-                simulations[k].IgnoreCollisionsWith(newObstacke);
-            }
         }
-        yield return new WaitForSeconds(1);
     }
 
 

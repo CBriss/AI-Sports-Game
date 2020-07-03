@@ -86,8 +86,8 @@ public class Simulation
         foreach (Player player in activePlayers)
         {
             Object.Destroy(player.PlayerObject);
-            activePlayers.Remove(player);
         }
+        activePlayers.Clear();
     }
 
     public void ClearInactivePlayers()
@@ -95,8 +95,8 @@ public class Simulation
         foreach (Player player in inactivePlayers)
         {
             Object.Destroy(player.PlayerObject);
-            inactivePlayers.Remove(player);
         }
+        inactivePlayers.Clear();
     }
 
     public void RemoveFromActivePlayers(Player player)
@@ -114,8 +114,8 @@ public class Simulation
         foreach (GameObject obstacle in obstacles)
         {
             Object.Destroy(obstacle);
-            obstacles.Remove(obstacle);
         }
+        obstacles.Clear();
     }
 
 

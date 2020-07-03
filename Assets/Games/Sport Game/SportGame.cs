@@ -22,7 +22,6 @@ public class SportGame : GameBase, IGame
     {
         Loader.LoaderCallback();
         GamePiece.OnComponentCollision += ManageCollisions;
-
         fixedDeltaTime = Time.fixedDeltaTime;
     }
 
@@ -50,7 +49,9 @@ public class SportGame : GameBase, IGame
             if (currentTimer > 0)
                 currentTimer -= Time.deltaTime;
             else if (currentTimer <= 0)
+            {
                 GameOver();
+            }
         }
 
         foreach(Simulation simulation in simulations)
@@ -71,12 +72,26 @@ public class SportGame : GameBase, IGame
     public void StartGame()
     {
         active = true;
+
+        if (timedGame)
+            currentTimer = gameTime;
+
         OnGameStart();
     }
 
     public void GameOver()
     {
+        foreach (Simulation simulation in simulations)
+        {
+            if (simulation.active)
+            {
+                simulation.SetAllPlayersInactive();
+                simulation.active = false;
+            }
+        }
         currentTimer = gameTime;
+        Debug.Log("Game Over");
+        active = false;
         OnGameOver();
     }
 
