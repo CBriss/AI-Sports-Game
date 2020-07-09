@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2187530176264077804}
   - component: {fileID: 5370535899622376481}
   - component: {fileID: 8722893151099546719}
+  - component: {fileID: 407545555566786599}
   m_Layer: 0
   m_Name: GameComponent
   m_TagString: Bot
@@ -121,3 +122,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   template: {fileID: 11400000, guid: e04319a9627321b46a0b5351205cc4ea, type: 2}
+  camera: {fileID: 0}
+--- !u!114 &407545555566786599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2187530176264077803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 747491848be65b44ea4dc4339666ce11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

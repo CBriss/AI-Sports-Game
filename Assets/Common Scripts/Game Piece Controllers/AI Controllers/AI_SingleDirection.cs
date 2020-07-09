@@ -8,13 +8,9 @@ public class AI_SingleDirection : GamePieceController
 
     public bool clampToScreen;
 
-    public override void UpdateComponent(GamePiece GamePiece)
+    public override void UpdateComponent(GamePiece gamePiece)
     {
-        Move(GamePiece);
-    }
-    public void Move(GamePiece GamePiece)
-    {
-        Vector2 pos = GamePiece.transform.position;
-        GamePiece.SetPosition(pos + direction * movementSpeed * Time.deltaTime, clampToScreen);
+        Vector2 pos = gamePiece.transform.position;
+        gamePiece.SetPosition(pos + direction * movementSpeed * Time.deltaTime, clampToScreen);
     }
 }

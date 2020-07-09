@@ -660,15 +660,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 396b9f4777e7641499183fce8f8cbbd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  background: {fileID: 1637887112}
-  obstacleSpawnPeriod: 0.75
-  activeGame: 0
+  active: 0
   playerContainer: {fileID: 1875370604}
   playerTemplate: {fileID: 0}
   playerLayer: 9
   obstacleContainer: {fileID: 1969886366}
   obstacleTemplate: {fileID: 0}
   obstacleLayer: 8
+  background: {fileID: 1637887112}
+  obstacleSpawnPeriod: 0.75
 --- !u!4 &1084499477
 Transform:
   m_ObjectHideFlags: 0
@@ -709,12 +709,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1084499475}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34b517d5745bf1a40a45cdcfef13c238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  populationSize: 300
+  populationSize: 20
   generationCount: 1
   mutationPercentage: 0.1
   mutationAmount: 0.05

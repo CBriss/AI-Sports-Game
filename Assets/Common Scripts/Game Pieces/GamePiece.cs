@@ -4,6 +4,7 @@ using UnityEngine;
 public class GamePiece : MonoBehaviour
 {
     public GamePieceTemplate template;
+    public GamePieceMovement movement;
     public NeuralNet brain;
 
     public Camera camera;
@@ -13,6 +14,7 @@ public class GamePiece : MonoBehaviour
     private void Awake()
     {
         camera = Camera.main;
+        movement = gameObject.GetComponent<GamePieceMovement>();
     }
     void Start()
     {

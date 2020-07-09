@@ -17,4 +17,6 @@ MonoBehaviour:
   left_key: 276
   right_key: 275
   movementSpeed: 15
+  rotationSpeed: 200
   clampToScreen: 1
+  rotate: 0

@@ -18,21 +18,52 @@ public class AI_TrackObstaclesWithRaycasts : GamePieceController
 
     [SerializeField] private bool rotate;
     [SerializeField] private float rotationSpeed;
+    [SerializeField] private bool clampToScreen;
 
-    public override void UpdateComponent(GamePiece GamePiece)
+    public override void UpdateComponent(GamePiece gamePiece)
     {
-        Move(GamePiece);
+        float[] input = DrawRays(gamePiece);
+        gamePiece.GetComponent<GamePiece>().brain.FeedForward(input);
+        float[] directions = gamePiece.GetComponent<GamePiece>().brain.Outputs();
+        Move(gamePiece, directions);
     }
 
-    public void Move(GamePiece GamePiece)
+    public void Move(GamePiece gamePiece, float[] directions)
+    {
+        switch (ChooseDirection(directions))
+        {
+            case 0:
+                gamePiece.movement.MoveForward(gamePiece, movementSpeed, clampToScreen);
+                break;
+            case 1:
+                gamePiece.movement.MoveBackward(gamePiece, movementSpeed, clampToScreen);
+                break;
+            case 2:
+                if(rotate)
+                    gamePiece.movement.Rotate(gamePiece, "LEFT", rotationSpeed);
+                else
+                    gamePiece.movement.MoveLeft(gamePiece, movementSpeed, clampToScreen);
+                break;
+            case 3:
+                if(rotate)
+                    gamePiece.movement.Rotate(gamePiece, "RIGHT", rotationSpeed);
+                else
+                    gamePiece.movement.MoveRight(gamePiece, movementSpeed, clampToScreen);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private float[] DrawRays(GamePiece gamePiece)
     {
         float[] input = new float[numberOfRays];
-        
-        layerMask  = 1 << GamePiece.gameObject.layer;
+
+        layerMask = 1 << gamePiece.gameObject.layer;
         layerMask = ~layerMask;
 
-        Vector2 size = GamePiece.GetComponent<Renderer>().bounds.size;
-        Vector2 objectPosition = GamePiece.transform.position;
+        Vector2 size = gamePiece.GetComponent<Renderer>().bounds.size;
+        Vector2 objectPosition = gamePiece.transform.position;
 
         Vector2 topOfObject = new Vector2(objectPosition.x, objectPosition.y + size.y / 2);
         Vector2 bottomOfObject = new Vector2(objectPosition.x, objectPosition.y - size.y / 2);
@@ -44,7 +75,7 @@ public class AI_TrackObstaclesWithRaycasts : GamePieceController
         input[2] = Rays.SendRay(leftOfObject, Vector2.left, Color.blue, layerMask);
         input[3] = Rays.SendRay(rightOfObject, Vector2.right, Color.green, layerMask);
 
-        for(int i=0; i < numberOfRays; i++)
+        for (int i = 0; i < numberOfRays; i++)
         {
             if (i <= 2)
                 input[i] = Rays.SendRay(topOfObject, vectors[i], Color.yellow, layerMask);
@@ -52,40 +83,7 @@ public class AI_TrackObstaclesWithRaycasts : GamePieceController
                 input[i] = Rays.SendRay(bottomOfObject, vectors[i], Color.red, layerMask);
         }
 
-        GamePiece.GetComponent<GamePiece>().brain.FeedForward(input);
-        
-        float[] directions = GamePiece.GetComponent<GamePiece>().brain.Outputs();
-
-
-        Vector3 objectRotation = new Vector3(0, 0, 0);
-        Vector2 objectMovement = new Vector3(0, 0);
-
-        switch (ChooseDirection(directions))
-        {
-            case 0:
-                objectPosition.y += movementSpeed * Time.deltaTime;
-                break;
-            case 1:
-                objectPosition.y -= movementSpeed * Time.deltaTime;
-                break;
-            case 2:
-                if(rotate)
-                    objectRotation.z += rotationSpeed * Time.deltaTime;
-                else
-                    objectPosition.x -= movementSpeed * Time.deltaTime;
-                break;
-            case 3:
-                if(rotate)
-                    objectRotation.z -= rotationSpeed * Time.deltaTime;
-                else
-                    objectPosition.x += movementSpeed * Time.deltaTime;
-                break;
-            default:
-                break;
-        }
-        objectMovement = GamePiece.transform.TransformDirection(objectMovement);
-        GamePiece.SetPosition(objectPosition + objectMovement, true);
-        GamePiece.transform.Rotate(objectRotation);
+        return input;
     }
 
     private int ChooseDirection(float[] directions)

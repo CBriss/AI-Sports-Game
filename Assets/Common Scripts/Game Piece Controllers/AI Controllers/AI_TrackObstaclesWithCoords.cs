@@ -6,6 +6,10 @@ public class AI_TrackObstaclesWithCoords : GamePieceController
     [SerializeField]
     private float movementSpeed;
     [SerializeField]
+    private float rotationSpeed;
+    [SerializeField]
+    private bool rotate;
+    [SerializeField]
     private int nearestObstaclesCount = 2;
     [SerializeField]
     private bool clampToScreen;
@@ -15,75 +19,43 @@ public class AI_TrackObstaclesWithCoords : GamePieceController
         Move(GamePiece);
     }
 
-    public void Move(GamePiece GamePiece)
+    public void Move(GamePiece gamePiece)
     {
         GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
-        Vector2 objectPosition = GamePiece.transform.position;
-        Vector2 normalizedPosition = Camera.main.WorldToViewportPoint(objectPosition);
 
         if (nearestObstaclesCount > 0)
         {
-            GameObject[] nearestObstacles = FindNearest(GamePiece, obstacles, nearestObstaclesCount);
-            float[] input = new float[2 + (2 * nearestObstaclesCount)];
-            input[0] = normalizedPosition.x;
-            input[1] = normalizedPosition.y;
-            for (int i = 0; i < nearestObstaclesCount; i++)
-            {
-                GameObject nearestObstacle = nearestObstacles[i];
-                Vector2 normalizedObstaclePos;
-                if (nearestObstacle != null && nearestObstacles.Length > 0)
-                {
-                    normalizedObstaclePos = Camera.main.WorldToViewportPoint(nearestObstacle.transform.position);
-
-                    input[2 + i] = normalizedObstaclePos.x;
-                    input[2 + i + 1] = normalizedObstaclePos.y;
-                }
-                else
-                {
-                    normalizedObstaclePos = new Vector3(0.0f, 0.0f, 0.0f);
-                    input[2 + i] = normalizedObstaclePos.x;
-                    input[2 + i + 1] = normalizedObstaclePos.y;
-                }
-            }
-            GamePiece.GetComponent<GamePiece>().brain.FeedForward(input);
+            GameObject[] nearestObstacles = FindNearestObstacles(gamePiece, obstacles, nearestObstaclesCount);
+            float[] input = GenerateBrainInput(gamePiece, nearestObstacles);
+            gamePiece.GetComponent<GamePiece>().brain.FeedForward(input);
         }
 
-        float[] directions = GamePiece.GetComponent<GamePiece>().brain.Outputs();
-
-        float biggestInput = 0.0f;
-        int indexOfBiggest = 0;
-        for (int i = 0; i < directions.Length; i++)
-        {
-            if (directions[i] > biggestInput)
-            {
-                biggestInput = directions[i];
-                indexOfBiggest = i;
-            }
-        }
-
-        switch (indexOfBiggest)
+        switch (ChooseDirection(gamePiece.GetComponent<GamePiece>().brain.Outputs()))
         {
             case 0:
-                objectPosition.y += movementSpeed * Time.deltaTime;
+                gamePiece.movement.MoveForward(gamePiece, movementSpeed, clampToScreen);
                 break;
             case 1:
-                objectPosition.y -= movementSpeed * Time.deltaTime;
+                gamePiece.movement.MoveBackward(gamePiece, movementSpeed, clampToScreen);
                 break;
             case 2:
-                objectPosition.x -= movementSpeed * Time.deltaTime;
+                if (rotate)
+                    gamePiece.movement.Rotate(gamePiece, "LEFT", rotationSpeed);
+                else
+                    gamePiece.movement.MoveLeft(gamePiece, movementSpeed, clampToScreen);
                 break;
             case 3:
-                objectPosition.x += movementSpeed * Time.deltaTime;
+                if (rotate)
+                    gamePiece.movement.Rotate(gamePiece, "RIGHT", rotationSpeed);
+                else
+                    gamePiece.movement.MoveRight(gamePiece, movementSpeed, clampToScreen);
                 break;
             default:
                 break;
         }
-
-        GamePiece.SetPosition(objectPosition, clampToScreen);
     }
 
-
-    public GameObject[] FindNearest(GamePiece gameObject, GameObject[] objects, int n)
+    public GameObject[] FindNearestObstacles(GamePiece gameObject, GameObject[] objects, int n)
     {
         GameObject[] closestObjects = new GameObject[n];
         for (int i = 0; i < n; i++)
@@ -113,7 +85,6 @@ public class AI_TrackObstaclesWithCoords : GamePieceController
                         closestObject = currentObject;
                         distance = newDistance;
                     }
-
                 }
             }
             closestObjects[i] = closestObject;
@@ -122,6 +93,46 @@ public class AI_TrackObstaclesWithCoords : GamePieceController
         return closestObjects;
     }
 
+    private float[] GenerateBrainInput(GamePiece gamePiece, GameObject[] nearestObstacles)
+    {
+        Vector2 objectPosition = gamePiece.transform.position;
+        Vector2 normalizedPosition = Camera.main.WorldToViewportPoint(objectPosition);
+        float[] input = new float[2 + (2 * nearestObstaclesCount)];
+        input[0] = normalizedPosition.x;
+        input[1] = normalizedPosition.y;
+        for (int i = 0; i < nearestObstaclesCount; i++)
+        {
+            GameObject nearestObstacle = nearestObstacles[i];
+            Vector2 normalizedObstaclePos;
+            if (nearestObstacle != null && nearestObstacles.Length > 0)
+            {
+                normalizedObstaclePos = Camera.main.WorldToViewportPoint(nearestObstacle.transform.position);
 
+                input[2 + i] = normalizedObstaclePos.x;
+                input[2 + i + 1] = normalizedObstaclePos.y;
+            }
+            else
+            {
+                normalizedObstaclePos = new Vector3(0.0f, 0.0f, 0.0f);
+                input[2 + i] = normalizedObstaclePos.x;
+                input[2 + i + 1] = normalizedObstaclePos.y;
+            }
+        }
+        return input;
+    }
 
+    private int ChooseDirection(float[] directions)
+    {
+        float biggestInput = 0.0f;
+        int indexOfBiggest = 0;
+        for (int i = 0; i < directions.Length; i++)
+        {
+            if (directions[i] > biggestInput)
+            {
+                biggestInput = directions[i];
+                indexOfBiggest = i;
+            }
+        }
+        return indexOfBiggest;
+    }
 }

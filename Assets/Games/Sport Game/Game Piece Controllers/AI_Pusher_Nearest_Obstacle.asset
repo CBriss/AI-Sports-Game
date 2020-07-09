@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: AI_Pusher_Nearest_Obstacle
   m_EditorClassIdentifier: 
   movementSpeed: 4
+  rotationSpeed: 300
+  rotate: 1
   nearestObstaclesCount: 1
   clampToScreen: 1

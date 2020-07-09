@@ -20,7 +20,7 @@ MonoBehaviour:
   useComplexCollider: 1
   hasBrain: 1
   brainShape: 040000001400000004000000
-  componentController: {fileID: 11400000, guid: 472412d971e6cf546b810194a4a81e28,
+  componentController: {fileID: 11400000, guid: 25f54b22ec2a89a4494e4ad81240b6f2,
     type: 2}
   prefabObject: {fileID: 2187530176264077803, guid: 1c16c68ba3252dd4fb09ac45bdfa5289,
     type: 3}
