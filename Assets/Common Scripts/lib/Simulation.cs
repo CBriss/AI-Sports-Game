@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Simulation
@@ -8,12 +9,8 @@ public class Simulation
     public List<GameObject> obstacles = new List<GameObject>();
 
     public int playerCount;
-    public bool active = true;
 
-    public Simulation(int playerCount)
-    {
-        this.playerCount = playerCount;
-    }
+    public bool active = true;
 
     /****************
     * Adding Pieces *
@@ -21,6 +18,7 @@ public class Simulation
     public void AddPlayer(Player player)
     {
         activePlayers.Add(player);
+        playerCount++;
     }
 
     public void AddObstacle(GameObject obstacle)
@@ -56,6 +54,11 @@ public class Simulation
     /*************
     * Get Pieces *
     *************/
+    public List<Player> GetPlayers()
+    {
+        return activePlayers.Concat(inactivePlayers).ToList();
+    }
+    
     public List<Player> GetActivePlayers()
     {
         return activePlayers;
@@ -86,6 +89,7 @@ public class Simulation
         foreach (Player player in activePlayers)
         {
             Object.Destroy(player.PlayerObject);
+            playerCount--;
         }
         activePlayers.Clear();
     }
@@ -95,6 +99,7 @@ public class Simulation
         foreach (Player player in inactivePlayers)
         {
             Object.Destroy(player.PlayerObject);
+            playerCount--;
         }
         inactivePlayers.Clear();
     }
@@ -102,11 +107,13 @@ public class Simulation
     public void RemoveFromActivePlayers(Player player)
     {
         activePlayers.Remove(player);
+        playerCount--;
     }
 
     public void RemoveFromInactivePlayers(Player player)
     {
         inactivePlayers.Remove(player);
+        playerCount--;
     }
 
     public void ClearObstacles()

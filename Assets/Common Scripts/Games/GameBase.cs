@@ -17,16 +17,11 @@ public class GameBase : MonoBehaviour
     /*********************
     * Simulation Methods *
     *********************/
-    public Simulation AddSimulation(int playerCount)
-    {
-        Simulation newSimulation = new Simulation(playerCount);
-        simulations.Add(newSimulation);
-        return newSimulation;
-    }
-
     public Simulation AddSimulation()
     {
-        return new Simulation(1);
+        Simulation newSimulation = new Simulation();
+        simulations.Add(newSimulation);
+        return newSimulation;
     }
 
     public void RemoveSimulation(Simulation simulation)

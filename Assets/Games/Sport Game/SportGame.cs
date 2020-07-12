@@ -48,18 +48,14 @@ public class SportGame : GameBase, IGame
         {
             if (currentTimer > 0)
                 currentTimer -= Time.deltaTime;
-            else if (currentTimer <= 0)
-            {
+            else
                 GameOver();
-            }
         }
 
         foreach(Simulation simulation in simulations)
         {
             if (simulation.active)
-            {
                 return;
-            }
         }
         GameOver();
 
@@ -105,10 +101,7 @@ public class SportGame : GameBase, IGame
         for (int i=0; i < simulations.Count; i++)
         {
             Simulation simulation = simulations[i];
-            for(int j=0; j < simulation.playerCount; j++)
-            {
-                lastPlayerAdded = AddPlayer(simulation);
-            }
+            lastPlayerAdded = simulation.GetActivePlayers()[simulation.GetActivePlayers().Count -1];
             AddObstacle(simulation);
         }
 
@@ -141,7 +134,7 @@ public class SportGame : GameBase, IGame
     {
         Vector3 normalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(UnityEngine.Random.Range(0.2f, 0.8f), UnityEngine.Random.Range(0.2f, 0.8f)));
         normalizedPosition.z = 0;
-        return AddPlayer(normalizedPosition, simulation);
+        return AddPlayer(normalizedPosition, simulation, brain);
     }
 
     public Player AddPlayer(Vector3 normalizedPosition, Simulation simulation, NeuralNet brain = null)

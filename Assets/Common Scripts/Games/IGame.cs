@@ -17,7 +17,7 @@ public interface IGame
     /*********************
     * Simulation Methods *
     *********************/
-    Simulation AddSimulation(int playerCount);
+    Simulation AddSimulation();
     void RemoveSimulation(Simulation simulation);
     List<Simulation> GetSimulations(bool includeActive, bool includeInactive);
     void ClearSimulations(bool active, bool inactive);
@@ -43,5 +43,4 @@ public interface IGame
     void Clear();
     void SetTimer(float timer);
     bool IsActive();
-    Simulation AddSimulation();
 }

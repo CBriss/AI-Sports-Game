@@ -35,12 +35,15 @@ public class GeneticAlgorithm : GameController
         GameObject startMenu = Instantiate(startMenuPrefab);
         startMenu.transform.SetParent(gameObject.transform);
         Instantiate(UIPrefab);
+
+        generationCount = 1;
     }
 
     public override void StartGameController()
     {
-        generationCount = 1;
-        MakeGenerationZero();
+        if(generationCount == 1)
+            MakeGenerationZero();
+
         StartCoroutine(game.StartAllSimulations());
         string[] UIString = { generationCount.ToString(), (bestIndividual != null ? bestIndividual.Score.ToString() : "0") };
         OnUpdateUI(UIString);
@@ -51,20 +54,15 @@ public class GeneticAlgorithm : GameController
         List<Player> previousGeneration = new List<Player>();
         foreach (Simulation simulation in game.GetSimulations(true, true).ToArray())
         {
-            simulation.ClearActivePlayers();
-            simulation.ClearObstacles();
-
-            Player[] players = new Player[simulation.GetInactivePlayers().Count];
-            simulation.GetInactivePlayers().CopyTo(players);
+            Player[] players = new Player[simulation.GetPlayers().Count];
+            simulation.GetPlayers().CopyTo(players);
             previousGeneration.AddRange(players);
-
-            simulation.ClearInactivePlayers();
-
+            simulation.Clear();
             game.RemoveSimulation(simulation);
         }
 
-        NewGeneration(previousGeneration);
         generationCount += 1;
+        NewGeneration(previousGeneration);
         string[] UIString = { generationCount.ToString(), (bestIndividual != null ? bestIndividual.Score.ToString() : "0") };
         OnUpdateUI(UIString);
     }
@@ -81,9 +79,11 @@ public class GeneticAlgorithm : GameController
 
     public void MakeGenerationZero()
     {
+        Debug.Log("Making Generation Zero");
         for (int i = 0; i < populationSize; i++)
         {
-            game.AddSimulation(1);
+            Simulation simulation = game.AddSimulation();
+            game.AddPlayer(simulation);
         }
     }
 
@@ -95,7 +95,7 @@ public class GeneticAlgorithm : GameController
         if (bestIndividual == null || sortedParents[0].Score > bestIndividual.Score)
         {
             if (bestIndividual != null)
-            Destroy(bestIndividual.PlayerObject);
+                Destroy(bestIndividual.PlayerObject);
             bestIndividual = sortedParents[0];
             bestIndividual.simulation.RemoveFromInactivePlayers(bestIndividual);
         }
@@ -103,7 +103,7 @@ public class GeneticAlgorithm : GameController
         //Replace bottom half of the population with the best genes and some mutation
         for (int i=0; i < populationSize; i++)
         {
-            Simulation simulation = game.AddSimulation(1);
+            Simulation simulation = game.AddSimulation();
             NeuralNet newBrain = new NeuralNet(sortedParents[0].PlayerObject.GetComponent<GamePiece>().brain.networkShape);
             
             if (i >= populationSize / 2)
@@ -121,10 +121,10 @@ public class GeneticAlgorithm : GameController
                 //top half breed with each other
                 newBrain =
                 sortedParents[i].PlayerObject.GetComponent<GamePiece>().brain.Breed(
-                sortedParents[i + 1].PlayerObject.GetComponent<GamePiece>().brain,
-                mutationPercentage,
-                mutationAmount
-            );
+                    sortedParents[i + 1].PlayerObject.GetComponent<GamePiece>().brain,
+                    mutationPercentage,
+                    mutationAmount
+                );
             }
             Player newPlayer = game.AddPlayer(simulation, newBrain);
         }

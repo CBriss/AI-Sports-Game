@@ -59,7 +59,7 @@ public class BoatGame : GameBase, IGame
     *****************/
     public void StartGame()
     {
-        InvokeRepeating("AddObstacle", 0.25f, obstacleSpawnPeriod);
+        InvokeRepeating("AddObstacles", 0.25f, obstacleSpawnPeriod);
         active = true;
         OnGameStart();
     }
@@ -86,14 +86,9 @@ public class BoatGame : GameBase, IGame
     public IEnumerator StartAllSimulations()
     {
         Player lastPlayerAdded = null;
-        for (int i = 0; i < simulations.Count; i++)
+        foreach (Simulation simulation in simulations)
         {
-            Simulation simulation = simulations[i];
-            for (int j = 0; j < simulation.playerCount; j++)
-            {
-                lastPlayerAdded = AddPlayer(simulation);
-            }
-            AddObstacle(simulation);
+            lastPlayerAdded = simulation.GetActivePlayers()[simulation.GetActivePlayers().Count - 1];
         }
 
         yield return new WaitUntil(() => lastPlayerAdded.PlayerObject.GetComponent<Collider2D>());
@@ -151,6 +146,14 @@ public class BoatGame : GameBase, IGame
     /*******************
     * Obstacle Methods *
     *******************/
+    public void AddObstacles()
+    {
+        foreach (Simulation simulation in simulations)
+        {
+            AddObstacle(simulation);
+        }
+    }
+
     public GameObject AddObstacle(Simulation simulation)
     {
         Vector3 normalizedPosition = Camera.main.ViewportToWorldPoint(new Vector2(UnityEngine.Random.Range(-0.10f, 1.10f), 1.1f));

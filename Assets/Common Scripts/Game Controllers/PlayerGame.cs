@@ -45,7 +45,8 @@ public class PlayerGame : GameController
 
     public override void StartGameController()
     {
-        game.AddSimulation(1);
+        Simulation simulation = game.AddSimulation();
+        game.AddPlayer(simulation);
         StartCoroutine(game.StartAllSimulations());
     }
 
