@@ -7,15 +7,18 @@ public class GamePiece : MonoBehaviour
     public GamePieceMovement movement;
     public NeuralNet brain;
 
-    public Camera camera;
+    public Camera mainCamera;
+
+    public Player player;
 
     public static event Action<GameObject, GameObject> OnComponentCollision = delegate { };
 
     private void Awake()
     {
-        camera = Camera.main;
+        mainCamera = Camera.main;
         movement = gameObject.GetComponent<GamePieceMovement>();
     }
+
     void Start()
     {
         //Set Size
@@ -59,13 +62,13 @@ public class GamePiece : MonoBehaviour
 
     public void SetPosition(Vector2 newPosition, bool clamptoScreen)
     {
-        Vector3 normalizedBoatPos = camera.WorldToViewportPoint(newPosition);
+        Vector3 normalizedBoatPos = mainCamera.WorldToViewportPoint(newPosition);
         if (clamptoScreen)
         {
             normalizedBoatPos.x = Mathf.Clamp01(normalizedBoatPos.x);
             normalizedBoatPos.y = Mathf.Clamp01(normalizedBoatPos.y);
         }
-        gameObject.transform.position = camera.ViewportToWorldPoint(normalizedBoatPos);
+        gameObject.transform.position = mainCamera.ViewportToWorldPoint(normalizedBoatPos);
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -80,7 +83,6 @@ public class GamePiece : MonoBehaviour
 
     void OnBecameInvisible()
     {
-        if (gameObject.tag == "Obstacle")
-            gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 }

@@ -21,7 +21,6 @@ public class GamePieceMovement : MonoBehaviour
         GamePiece.SetPosition(objectPosition, clampToScreen);
     }
 
-
     public void MoveLeft(GamePiece GamePiece, float movementSpeed, bool clampToScreen)
     {
         objectPosition.x -= movementSpeed * Time.deltaTime;

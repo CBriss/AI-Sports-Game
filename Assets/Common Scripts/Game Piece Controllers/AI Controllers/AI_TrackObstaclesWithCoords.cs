@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "new AI obstable coord tracking", menuName = "Game Pieces/Controller/AI Track Obstacles With Coord")]
 public class AI_TrackObstaclesWithCoords : GamePieceController
@@ -21,11 +22,9 @@ public class AI_TrackObstaclesWithCoords : GamePieceController
 
     public void Move(GamePiece gamePiece)
     {
-        GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
-
         if (nearestObstaclesCount > 0)
         {
-            GameObject[] nearestObstacles = FindNearestObstacles(gamePiece, obstacles, nearestObstaclesCount);
+            GameObject[] nearestObstacles = FindNearestObstacles(gamePiece, gamePiece.player.simulation.GetObstacles(), nearestObstaclesCount);
             float[] input = GenerateBrainInput(gamePiece, nearestObstacles);
             gamePiece.GetComponent<GamePiece>().brain.FeedForward(input);
         }
@@ -55,7 +54,7 @@ public class AI_TrackObstaclesWithCoords : GamePieceController
         }
     }
 
-    public GameObject[] FindNearestObstacles(GamePiece gameObject, GameObject[] objects, int n)
+    public GameObject[] FindNearestObstacles(GamePiece gameObject, List<GameObject> objects, int n)
     {
         GameObject[] closestObjects = new GameObject[n];
         for (int i = 0; i < n; i++)

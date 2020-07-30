@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class GeneticAlgorithm : GameController
 {
@@ -89,6 +90,10 @@ public class GeneticAlgorithm : GameController
 
     void NewGeneration(List<Player> deadIndividuals)
     {
+        for(int i=1; i<SceneManager.sceneCount; i++)
+        {
+            SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(i));
+        }
         // Determine Generation Parents
         List<Player> sortedParents = deadIndividuals.OrderByDescending(p => p.Score).ToList();
         Debug.Log(sortedParents[0].Score);
@@ -111,20 +116,20 @@ public class GeneticAlgorithm : GameController
                 //bottom half get a breed of the two best
                 newBrain =
                 sortedParents[0].PlayerObject.GetComponent<GamePiece>().brain.Breed(
-                sortedParents[1].PlayerObject.GetComponent<GamePiece>().brain,
-                mutationPercentage,
-                mutationAmount
-            );
+                    sortedParents[1].PlayerObject.GetComponent<GamePiece>().brain,
+                    mutationPercentage,
+                    mutationAmount
+                );
             }
             else
             {
                 //top half breed with each other
                 newBrain =
                 sortedParents[i].PlayerObject.GetComponent<GamePiece>().brain.Breed(
-                sortedParents[i + 1].PlayerObject.GetComponent<GamePiece>().brain,
-                mutationPercentage,
-                mutationAmount
-            );
+                    sortedParents[i + 1].PlayerObject.GetComponent<GamePiece>().brain,
+                    mutationPercentage,
+                    mutationAmount
+                );
             }
             Player newPlayer = game.AddPlayer(simulation, newBrain);
         }

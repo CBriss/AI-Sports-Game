@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SportGame : GameBase, IGame
 {
@@ -102,16 +103,20 @@ public class SportGame : GameBase, IGame
     public IEnumerator StartAllSimulations()
     {
         Player lastPlayerAdded = null;
-        for (int i=0; i < simulations.Count; i++)
+
+        for (int i = 0; i < simulations.Count; i++)
         {
             Simulation simulation = simulations[i];
-            for(int j=0; j < simulation.playerCount; j++)
+            CreateSceneParameters csp = new CreateSceneParameters(LocalPhysicsMode.Physics2D);
+            Scene newScene = SceneManager.CreateScene("Sport Game Scene " + SceneManager.sceneCount, csp);
+            SceneManager.SetActiveScene(newScene);
+
+            for (int j = 0; j < simulation.playerCount; j++)
             {
                 lastPlayerAdded = AddPlayer(simulation);
             }
             AddObstacle(simulation);
         }
-
         yield return new WaitUntil(() => lastPlayerAdded.PlayerObject.GetComponent<Collider2D>());
 
         foreach (Simulation simulation in simulations)
@@ -155,11 +160,13 @@ public class SportGame : GameBase, IGame
             playerObject.GetComponent<GamePiece>().brain = brain.Clone();
         playerObject.transform.position = normalizedPosition;
         playerObject.layer = playerLayer;
-        playerObject.transform.SetParent(playerContainer.transform);
         playerObject.SetActive(true);
+        playerObject.transform.name = "Pusher";
         Player player = new Player(playerObject, simulation);
         simulation.AddPlayer(player);
+        player.simulation = simulation;
         pushers[player.PlayerObject] = player;
+        playerObject.GetComponent<GamePiece>().player = player;
         return player;
     }
 
@@ -178,7 +185,7 @@ public class SportGame : GameBase, IGame
         GameObject obstacle = Instantiate(obstacleTemplate.prefabObject);
         obstacle.GetComponent<GamePiece>().template = obstacleTemplate;
         obstacle.layer = obstacleLayer;
-        obstacle.transform.SetParent(obstacleContainer.transform);
+        obstacle.transform.name = "Ball";
         if (obstacle != null)
         {
             obstacle.transform.position = normalizedPosition;
@@ -186,7 +193,6 @@ public class SportGame : GameBase, IGame
         }
         balls[obstacle] = simulation;
         simulation.AddObstacle(obstacle);
-
         return obstacle;
     }
 
