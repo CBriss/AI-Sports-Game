@@ -9,6 +9,8 @@ TagManager:
   - BlackSquare
   - GraphDot
   - Boat
+  - Border
+  - Goal
   layers:
   - Default
   - TransparentFX
@@ -18,9 +20,9 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
+  - Obstacles
+  - Players
+  - Border
   - 
   - 
   - 

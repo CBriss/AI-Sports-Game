@@ -708,6 +708,7 @@ GameObject:
   m_Component:
   - component: {fileID: 621653583}
   - component: {fileID: 621653582}
+  - component: {fileID: 621653584}
   m_Layer: 0
   m_Name: MnistController
   m_TagString: Untagged
@@ -745,6 +746,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &621653584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621653581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0e06b09776770c40b4f84dd53e75bd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blackSquare: {fileID: 7806095109525428857, guid: 978412186be5a3146975dcfe56d8f85b,
+    type: 3}
+  graph: {fileID: 1293051938}
+  networkShape: 1003000032000000140000000a000000
 --- !u!1 &727487890
 GameObject:
   m_ObjectHideFlags: 0
@@ -1414,7 +1431,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000015258789, y: 0.000012397766}
+  m_AnchoredPosition: {x: 0.000015258789, y: 0.000011444092}
   m_SizeDelta: {x: 0.000015259, y: -0.000019073}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1856916789
@@ -1469,6 +1486,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2090390876}
   - component: {fileID: 2090390875}
+  - component: {fileID: 2090390877}
   m_Layer: 0
   m_Name: XorController
   m_TagString: Untagged
@@ -1504,3 +1522,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2090390877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090390874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35db86427538bcd47a575312aee60f60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graph: {fileID: 1293051938}
+  networkShape: 020000000a00000001000000
